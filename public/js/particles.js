@@ -4,20 +4,20 @@ particlesJS('particles-js', {
       value: 70,
       density: {
         enable: true,
-        value_area: 800,
+        value_area: 1000,
       },
     },
     color: {
-      value: '#4F95FF',
+      value: '#FF5733',
     },
     shape: {
-      type: 'star',
+      type: 'circle',
       stroke: {
-        width: 0,
-        color: '#161b31',
+        width: 1,
+        color: '#FFFFFF',
       },
       polygon: {
-        nb_sides: 5,
+        nb_sides: 6,
       },
       image: {
         src: 'img/github.svg',
@@ -26,7 +26,7 @@ particlesJS('particles-js', {
       },
     },
     opacity: {
-      value: 0.70,
+      value: 0.7,
       random: false,
       anim: {
         enable: false,
