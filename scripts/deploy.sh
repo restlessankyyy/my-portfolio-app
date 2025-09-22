@@ -60,6 +60,10 @@ print_status "Installing npm dependencies..."
 cd ..
 npm install --production
 
+# Build Lambda deployment package
+print_status "Building Lambda deployment package..."
+./scripts/build-lambda.sh
+
 # Initialize Terraform
 print_status "Initializing Terraform..."
 cd terraform

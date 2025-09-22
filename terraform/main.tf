@@ -6,10 +6,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
-    archive = {
-      source  = "hashicorp/archive"
-      version = "~> 2.4"
-    }
   }
 }
 
@@ -83,29 +79,9 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-# Create Lambda deployment package
-data "archive_file" "lambda_zip" {
-  type        = "zip"
-  source_dir  = "${path.module}/../"
-  output_path = "${path.module}/portfolio-lambda.zip"
-  
-  excludes = [
-    "terraform/",
-    ".git/",
-    "node_modules/",
-    ".gitignore",
-    "README.md",
-    "*.md",
-    ".terraform/",
-    "*.tf",
-    "*.tfstate*",
-    "terraform.tfvars*"
-  ]
-}
-
 # Lambda Function
 resource "aws_lambda_function" "portfolio" {
-  filename         = data.archive_file.lambda_zip.output_path
+  filename         = "${path.module}/portfolio-lambda.zip"
   function_name    = "${var.project_name}-${var.environment}-${random_string.suffix.result}"
   role            = aws_iam_role.lambda_role.arn
   handler         = "lambda.handler"
@@ -113,7 +89,7 @@ resource "aws_lambda_function" "portfolio" {
   timeout         = 30
   memory_size     = 512
 
-  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+  source_code_hash = filebase64sha256("${path.module}/portfolio-lambda.zip")
 
   environment {
     variables = {
@@ -211,4 +187,22 @@ resource "aws_lambda_permission" "api_gw" {
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${aws_apigatewayv2_api.portfolio_api.execution_arn}/*/*"
+}
+
+# API Gateway Custom Domain
+resource "aws_apigatewayv2_domain_name" "portfolio_domain" {
+  domain_name = var.domain_name
+
+  domain_name_configuration {
+    certificate_arn = var.certificate_arn
+    endpoint_type   = "REGIONAL"
+    security_policy = "TLS_1_2"
+  }
+}
+
+# API Gateway Domain Mapping
+resource "aws_apigatewayv2_api_mapping" "portfolio_mapping" {
+  api_id      = aws_apigatewayv2_api.portfolio_api.id
+  domain_name = aws_apigatewayv2_domain_name.portfolio_domain.id
+  stage       = aws_apigatewayv2_stage.portfolio_stage.id
 }

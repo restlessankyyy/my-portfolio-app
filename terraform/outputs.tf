@@ -39,3 +39,30 @@ output "deployment_info" {
     lambda_function = aws_lambda_function.portfolio.function_name
   }
 }
+
+# Custom Domain Outputs (conditional)
+output "custom_domain_name" {
+  description = "Custom domain name"
+  value       = var.domain_name != "" ? var.domain_name : null
+}
+
+output "api_gateway_domain_name" {
+  description = "API Gateway domain name for DNS configuration"
+  value       = replace(replace(aws_apigatewayv2_stage.portfolio_stage.invoke_url, "https://", ""), "/prod", "")
+}
+
+output "dns_instruction" {
+  description = "DNS configuration instruction"
+  value       = var.domain_name != "" ? "Create a CNAME record pointing ${var.domain_name} to ${replace(replace(aws_apigatewayv2_stage.portfolio_stage.invoke_url, "https://", ""), "/prod", "")}" : null
+}
+
+# Custom Domain Target for DNS
+output "custom_domain_target" {
+  description = "Target domain name for DNS CNAME record"
+  value       = var.domain_name != "" ? aws_apigatewayv2_domain_name.portfolio_domain.domain_name_configuration[0].target_domain_name : null
+}
+
+output "custom_domain_hosted_zone_id" {
+  description = "Hosted zone ID for custom domain (for Route 53 alias records)"
+  value       = var.domain_name != "" ? aws_apigatewayv2_domain_name.portfolio_domain.domain_name_configuration[0].hosted_zone_id : null
+}
