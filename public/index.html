@@ -1,803 +1,1253 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
     <!-- SEO Meta Tags -->
-    <title>Ankit Raj - Multi-Cloud Solution Architect | AWS • Azure • GCP | Stockholm</title>
-    <meta name="description" content="Ankit Raj - Multi-Cloud Solution Architect in Stockholm, Sweden. Expert in AWS, Azure, and GCP enterprise transformations. Leading cloud innovation at H&M Group.">
-    <meta name="author" content="Ankit Raj">
-    <meta name="keywords" content="Ankit Raj, Multi-Cloud Architect, AWS Solutions Architect, Azure Expert, GCP Professional, Stockholm, Sweden, H&M Group, Enterprise Cloud, Hybrid Cloud Strategy">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="English">
-    <meta name="revisit-after" content="7 days">
-    
+    <title>
+      Ankit Raj - Multi-Cloud Solution Architect | AWS • Azure • GCP | Stockholm
+    </title>
+    <meta
+      name="description"
+      content="Ankit Raj - Multi-Cloud Solution Architect in Stockholm, Sweden. Expert in AWS, Azure, and GCP enterprise transformations. Leading cloud innovation at H&M Group."
+    />
+    <meta name="author" content="Ankit Raj" />
+    <meta
+      name="keywords"
+      content="Ankit Raj, Multi-Cloud Architect, AWS Solutions Architect, Azure Expert, GCP Professional, Stockholm, Sweden, H&M Group, Enterprise Cloud, Hybrid Cloud Strategy"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+
     <!-- Open Graph / Social Media -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Ankit Raj - Multi-Cloud Solution Architect | Stockholm, Sweden">
-    <meta property="og:description" content="Multi-Cloud Solution Architect specialized in AWS, Azure, and GCP. Leading enterprise cloud transformations at H&M Group in Stockholm, Sweden.">
-    <meta property="og:image" content="img/ankit.jpg">
-    <meta property="og:url" content="https://ankitraj.cloud">
-    <meta property="og:site_name" content="Ankit Raj Portfolio">
-    <meta property="og:locale" content="en_US">
-    
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Ankit Raj - Multi-Cloud Solution Architect | Stockholm, Sweden"
+    />
+    <meta
+      property="og:description"
+      content="Multi-Cloud Solution Architect specialized in AWS, Azure, and GCP. Leading enterprise cloud transformations at H&M Group in Stockholm, Sweden."
+    />
+    <meta property="og:image" content="img/ankit.jpg" />
+    <meta property="og:url" content="https://ankitraj.cloud" />
+    <meta property="og:site_name" content="Ankit Raj Portfolio" />
+    <meta property="og:locale" content="en_US" />
+
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:creator" content="@ankit_raj24">
-    <meta name="twitter:title" content="Ankit Raj - Multi-Cloud Solution Architect | Stockholm">
-    <meta name="twitter:description" content="Multi-Cloud Solution Architect specialized in AWS, Azure, and GCP. Enterprise cloud innovation leader at H&M Group.">
-    <meta name="twitter:image" content="img/ankit.jpg">
-    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@ankit_raj24" />
+    <meta
+      name="twitter:title"
+      content="Ankit Raj - Multi-Cloud Solution Architect | Stockholm"
+    />
+    <meta
+      name="twitter:description"
+      content="Multi-Cloud Solution Architect specialized in AWS, Azure, and GCP. Enterprise cloud innovation leader at H&M Group."
+    />
+    <meta name="twitter:image" content="img/ankit.jpg" />
+
     <!-- Performance and Security -->
-    <meta name="theme-color" content="#6366f1">
-    <meta name="msapplication-TileColor" content="#6366f1">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <meta property="og:image" content="img/ankit.jpg">
-    <meta property="og:url" content="https://ankitraj.cloud">
-    
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="msapplication-TileColor" content="#6366f1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+    <meta property="og:image" content="img/ankit.jpg" />
+    <meta property="og:url" content="https://ankitraj.cloud" />
+
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:creator" content="@ankit_raj24">
-    <meta name="twitter:title" content="Ankit Raj - Cloud Developer & DevOps Engineer">
-    <meta name="twitter:description" content="Experienced Cloud Developer and DevOps Engineer specializing in modern web technologies and cloud infrastructure">
-    <meta name="twitter:image" content="img/ankit.jpg">
-    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@ankit_raj24" />
+    <meta
+      name="twitter:title"
+      content="Ankit Raj - Cloud Developer & DevOps Engineer"
+    />
+    <meta
+      name="twitter:description"
+      content="Experienced Cloud Developer and DevOps Engineer specializing in modern web technologies and cloud infrastructure"
+    />
+    <meta name="twitter:image" content="img/ankit.jpg" />
+
     <title>Ankit Raj - Cloud Developer & DevOps Engineer</title>
-    
+
     <!-- Favicon -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
     <!-- EmailJS CDN -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+    ></script>
+
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/modern-style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/modern-style.css" />
+  </head>
+  <body>
     <!-- Navigation -->
-    <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="#home" aria-label="Ankit Raj - Home">Ankit Raj</a>
-            </div>
-            <div class="nav-menu" id="nav-menu" role="menubar">
-                <a href="#home" class="nav-link" role="menuitem" aria-label="Navigate to Home section">Home</a>
-                <a href="#about" class="nav-link" role="menuitem" aria-label="Navigate to About section">About</a>
-                <a href="#experience" class="nav-link" role="menuitem" aria-label="Navigate to Experience section">Experience</a>
-                <a href="#skills" class="nav-link" role="menuitem" aria-label="Navigate to Skills section">Skills</a>
-                <a href="#projects" class="nav-link" role="menuitem" aria-label="Navigate to Projects section">Projects</a>
-                <a href="#contact" class="nav-link" role="menuitem" aria-label="Navigate to Contact section">Contact</a>
-            </div>
-            <div class="nav-toggle" id="nav-toggle" role="button" aria-label="Toggle mobile menu" tabindex="0">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                <i class="fas fa-moon"></i>
-            </button>
+    <nav
+      class="navbar"
+      id="navbar"
+      role="navigation"
+      aria-label="Main navigation"
+    >
+      <div class="nav-container">
+        <div class="nav-logo">
+          <a href="#home" aria-label="Ankit Raj - Home">Ankit Raj</a>
         </div>
+        <div class="nav-menu" id="nav-menu" role="menubar">
+          <a
+            href="#home"
+            class="nav-link"
+            role="menuitem"
+            aria-label="Navigate to Home section"
+            >Home</a
+          >
+          <a
+            href="#about"
+            class="nav-link"
+            role="menuitem"
+            aria-label="Navigate to About section"
+            >About</a
+          >
+          <a
+            href="#experience"
+            class="nav-link"
+            role="menuitem"
+            aria-label="Navigate to Experience section"
+            >Experience</a
+          >
+          <a
+            href="#skills"
+            class="nav-link"
+            role="menuitem"
+            aria-label="Navigate to Skills section"
+            >Skills</a
+          >
+          <a
+            href="#projects"
+            class="nav-link"
+            role="menuitem"
+            aria-label="Navigate to Projects section"
+            >Projects</a
+          >
+          <a
+            href="#contact"
+            class="nav-link"
+            role="menuitem"
+            aria-label="Navigate to Contact section"
+            >Contact</a
+          >
+        </div>
+        <div
+          class="nav-toggle"
+          id="nav-toggle"
+          role="button"
+          aria-label="Toggle mobile menu"
+          tabindex="0"
+        >
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+        <button
+          class="theme-toggle"
+          id="theme-toggle"
+          aria-label="Toggle dark mode"
+        >
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
     </nav>
 
     <!-- Animated Background -->
     <div id="particles-js" class="particles-bg"></div>
-    
+
     <!-- Floating Cloud Icons -->
     <div class="floating-clouds">
-        <i class="fab fa-aws floating-icon" style="--delay: 0s; --x: 10%; --y: 20%;"></i>
-        <i class="fab fa-microsoft floating-icon" style="--delay: 2s; --x: 85%; --y: 15%;"></i>
-        <i class="fab fa-google floating-icon" style="--delay: 4s; --x: 75%; --y: 70%;"></i>
-        <i class="fab fa-docker floating-icon" style="--delay: 1s; --x: 15%; --y: 75%;"></i>
-        <i class="fab fa-kubernetes floating-icon" style="--delay: 3s; --x: 90%; --y: 45%;"></i>
-        <i class="fas fa-cloud floating-icon" style="--delay: 5s; --x: 5%; --y: 50%;"></i>
+      <i
+        class="fab fa-aws floating-icon"
+        style="--delay: 0s; --x: 10%; --y: 20%"
+      ></i>
+      <i
+        class="fab fa-microsoft floating-icon"
+        style="--delay: 2s; --x: 85%; --y: 15%"
+      ></i>
+      <i
+        class="fab fa-google floating-icon"
+        style="--delay: 4s; --x: 75%; --y: 70%"
+      ></i>
+      <i
+        class="fab fa-docker floating-icon"
+        style="--delay: 1s; --x: 15%; --y: 75%"
+      ></i>
+      <i
+        class="fab fa-kubernetes floating-icon"
+        style="--delay: 3s; --x: 90%; --y: 45%"
+      ></i>
+      <i
+        class="fas fa-cloud floating-icon"
+        style="--delay: 5s; --x: 5%; --y: 50%"
+      ></i>
     </div>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero" role="banner" aria-label="Introduction">
+    <!-- Main Content -->
+    <main role="main">
+      <!-- Hero Section -->
+      <section id="home" class="hero" role="banner" aria-label="Introduction">
         <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-image" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.3">
-                    <img src="img/ankit.jpg" alt="Ankit Raj - Multi-Cloud Solution Architect" class="profile-image">
-                    <div class="image-glow" aria-hidden="true"></div>
-                    <div class="image-ring"></div>
-                    <div class="image-ring ring-2"></div>
-                </div>
-                <h1 class="hero-title animate-fade-up">
-                    Hi, I'm <span class="gradient-text animated-gradient">Ankit Raj</span>
-                </h1>
-                <p class="hero-subtitle" role="doc-subtitle">
-                    <span id="typed-text"></span><span class="cursor">|</span>
-                </p>
-                <div class="cloud-badges" style="margin: 1rem 0; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;" role="list" aria-label="Cloud platform specializations">
-                    <span class="cloud-badge aws pulse-badge" role="listitem"><i class="fab fa-aws"></i> AWS Specialist</span>
-                    <span class="cloud-badge azure pulse-badge" role="listitem"><i class="fab fa-microsoft"></i> Azure Expert</span>
-                    <span class="cloud-badge gcp pulse-badge" role="listitem"><i class="fab fa-google"></i> GCP Professional</span>
-                </div>
-                <p class="hero-description animate-fade-up" style="animation-delay: 0.3s;">
-                    Specialized in AWS, Azure, and Google Cloud Platform with expertise in designing 
-                    enterprise-grade multi-cloud solutions and leading complex digital transformations.
-                </p>
-                <div class="hero-cta">
-                    <a href="#contact" class="btn btn-primary">Get In Touch</a>
-                    <a href="./Profile.pdf" target="_blank" class="btn btn-secondary">
-                        <i class="fas fa-download"></i>
-                        Download CV
-                    </a>
-                </div>
-                <div class="hero-social">
-                    <a href="https://github.com/restlessankyyy" target="_blank" rel="noopener" aria-label="GitHub">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://linkedin.com/in/raj-ankit" target="_blank" rel="noopener" aria-label="LinkedIn">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="https://twitter.com/ankit_raj24" target="_blank" rel="noopener" aria-label="Twitter">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://medium.com/@restlessankyyy" target="_blank" rel="noopener" aria-label="Medium">
-                        <i class="fab fa-medium"></i>
-                    </a>
-                </div>
+          <div class="hero-content">
+            <div
+              class="hero-image"
+              data-tilt
+              data-tilt-max="15"
+              data-tilt-speed="400"
+              data-tilt-glare
+              data-tilt-max-glare="0.3"
+            >
+              <img
+                src="img/ankit.jpg"
+                alt="Ankit Raj - Multi-Cloud Solution Architect"
+                class="profile-image"
+              />
+              <div class="image-glow" aria-hidden="true"></div>
+              <div class="image-ring"></div>
+              <div class="image-ring ring-2"></div>
             </div>
+            <h1 class="hero-title animate-fade-up">
+              Hi, I'm
+              <span class="gradient-text animated-gradient">Ankit Raj</span>
+            </h1>
+            <p class="hero-subtitle" role="doc-subtitle">
+              <span id="typed-text"></span><span class="cursor">|</span>
+            </p>
+            <div
+              class="cloud-badges"
+              style="
+                margin: 1rem 0;
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+              "
+              role="list"
+              aria-label="Cloud platform specializations"
+            >
+              <span class="cloud-badge aws pulse-badge" role="listitem"
+                ><i class="fab fa-aws"></i> AWS Specialist</span
+              >
+              <span class="cloud-badge azure pulse-badge" role="listitem"
+                ><i class="fab fa-microsoft"></i> Azure Expert</span
+              >
+              <span class="cloud-badge gcp pulse-badge" role="listitem"
+                ><i class="fab fa-google"></i> GCP Professional</span
+              >
+            </div>
+            <p
+              class="hero-description animate-fade-up"
+              style="animation-delay: 0.3s"
+            >
+              Specialized in AWS, Azure, and Google Cloud Platform with
+              expertise in designing enterprise-grade multi-cloud solutions and
+              leading complex digital transformations.
+            </p>
+            <div class="hero-cta">
+              <a href="#contact" class="btn btn-primary">Get In Touch</a>
+              <a href="./Profile.pdf" target="_blank" class="btn btn-secondary">
+                <i class="fas fa-download"></i>
+                Download CV
+              </a>
+            </div>
+            <div class="hero-social">
+              <a
+                href="https://github.com/restlessankyyy"
+                target="_blank"
+                rel="noopener"
+                aria-label="GitHub"
+              >
+                <i class="fab fa-github"></i>
+              </a>
+              <a
+                href="https://linkedin.com/in/raj-ankit"
+                target="_blank"
+                rel="noopener"
+                aria-label="LinkedIn"
+              >
+                <i class="fab fa-linkedin"></i>
+              </a>
+              <a
+                href="https://twitter.com/ankit_raj24"
+                target="_blank"
+                rel="noopener"
+                aria-label="Twitter"
+              >
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a
+                href="https://medium.com/@restlessankyyy"
+                target="_blank"
+                rel="noopener"
+                aria-label="Medium"
+              >
+                <i class="fab fa-medium"></i>
+              </a>
+            </div>
+          </div>
         </div>
         <div class="hero-scroll">
-            <div class="scroll-indicator">
-                <span></span>
-            </div>
+          <div class="scroll-indicator">
+            <span></span>
+          </div>
         </div>
-    </section>
+      </section>
 
-    <!-- About Section -->
-    <section id="about" class="about">
+      <!-- About Section -->
+      <section id="about" class="about">
         <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <div class="location-info">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Stockholm, Sweden</span>
-                    </div>
-                    <p class="lead">
-                        Cloud & AI Tech Executive ⚡⚡ ✧ Innovator ✧ Building Scalable Clouds with Accelerated AI Platforms ✧ 
-                        Security & Governance ✧ Speaker⚡
-                    </p>
-                    <p>
-                        Ask me about anything cloud .. ☁⚡ I help build the legacy apps of tomorrow, Today! 
-                        Driving innovation through secure, scalable cloud & AI powered solutions at H&M Group, 
-                        leveraging expertise in Microsoft Azure, Google Cloud Platform (GCP) and AWS.
-                    </p>
-                    <p>
-                        <strong>Key Specializations:</strong> Cloud Strategy & Governance • Multi-Cloud Infrastructure & Automation • 
-                        Next-Gen Cloud Solutions • MLOps Integration • Cross-Platform Integration • Secure DevOps • 
-                        GenAI Prototyping • FinOps at Scale
-                    </p>
-                    <div class="about-highlights">
-                        <div class="highlight-item">
-                            <i class="fab fa-aws"></i>
-                            <span>AWS Solutions Architecture</span>
-                        </div>
-                        <div class="highlight-item">
-                            <i class="fab fa-microsoft"></i>
-                            <span>Azure Enterprise Solutions</span>
-                        </div>
-                        <div class="highlight-item">
-                            <i class="fab fa-google"></i>
-                            <span>Google Cloud Platform</span>
-                        </div>
-                    </div>
+          <h2 class="section-title">About Me</h2>
+          <div class="about-content">
+            <div class="about-text">
+              <div class="location-info">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Stockholm, Sweden</span>
+              </div>
+              <p class="lead">
+                Cloud & AI Tech Executive ⚡⚡ ✧ Innovator ✧ Building Scalable
+                Clouds with Accelerated AI Platforms ✧ Security & Governance ✧
+                Speaker⚡
+              </p>
+              <p>
+                Ask me about anything cloud .. ☁⚡ I help build the legacy apps
+                of tomorrow, Today! Driving innovation through secure, scalable
+                cloud & AI powered solutions at H&M Group, leveraging expertise
+                in Microsoft Azure, Google Cloud Platform (GCP) and AWS.
+              </p>
+              <p>
+                <strong>Key Specializations:</strong> Cloud Strategy &
+                Governance • Multi-Cloud Infrastructure & Automation • Next-Gen
+                Cloud Solutions • MLOps Integration • Cross-Platform Integration
+                • Secure DevOps • GenAI Prototyping • FinOps at Scale
+              </p>
+              <div class="about-highlights">
+                <div class="highlight-item">
+                  <i class="fab fa-aws"></i>
+                  <span>AWS Solutions Architecture</span>
                 </div>
+                <div class="highlight-item">
+                  <i class="fab fa-microsoft"></i>
+                  <span>Azure Enterprise Solutions</span>
+                </div>
+                <div class="highlight-item">
+                  <i class="fab fa-google"></i>
+                  <span>Google Cloud Platform</span>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </section>
+      </section>
 
-    <!-- Stats Section -->
-    <section class="stats-section">
+      <!-- Stats Section -->
+      <section class="stats-section">
         <div class="container">
-            <div class="stats-grid">
-                <div class="stat-card" data-tilt data-tilt-max="10">
-                    <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
-                    <div class="stat-number" data-count="9">0</div>
-                    <div class="stat-label">Years Experience</div>
-                </div>
-                <div class="stat-card" data-tilt data-tilt-max="10">
-                    <div class="stat-icon"><i class="fas fa-cloud"></i></div>
-                    <div class="stat-number" data-count="3">0</div>
-                    <div class="stat-label">Cloud Platforms</div>
-                </div>
-                <div class="stat-card" data-tilt data-tilt-max="10">
-                    <div class="stat-icon"><i class="fas fa-project-diagram"></i></div>
-                    <div class="stat-number" data-count="50">0</div>
-                    <div class="stat-label">Projects Delivered</div>
-                </div>
-                <div class="stat-card" data-tilt data-tilt-max="10">
-                    <div class="stat-icon"><i class="fas fa-users"></i></div>
-                    <div class="stat-number" data-count="200">0</div>
-                    <div class="stat-label">Teams Supported</div>
-                </div>
+          <div class="stats-grid">
+            <div class="stat-card" data-tilt data-tilt-max="10">
+              <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+              <div class="stat-number" data-count="9">0</div>
+              <div class="stat-label">Years Experience</div>
             </div>
+            <div class="stat-card" data-tilt data-tilt-max="10">
+              <div class="stat-icon"><i class="fas fa-cloud"></i></div>
+              <div class="stat-number" data-count="3">0</div>
+              <div class="stat-label">Cloud Platforms</div>
+            </div>
+            <div class="stat-card" data-tilt data-tilt-max="10">
+              <div class="stat-icon">
+                <i class="fas fa-project-diagram"></i>
+              </div>
+              <div class="stat-number" data-count="50">0</div>
+              <div class="stat-label">Projects Delivered</div>
+            </div>
+            <div class="stat-card" data-tilt data-tilt-max="10">
+              <div class="stat-icon"><i class="fas fa-users"></i></div>
+              <div class="stat-number" data-count="200">0</div>
+              <div class="stat-label">Teams Supported</div>
+            </div>
+          </div>
         </div>
-    </section>
+      </section>
 
-    <!-- Experience Section -->
-    <section id="experience" class="experience">
+      <!-- Experience Section -->
+      <section id="experience" class="experience">
         <div class="container">
-            <h2 class="section-title">Professional Experience</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3 class="job-title">Lead Cloud Architect</h3>
-                        <h4 class="company">H&M Group</h4>
-                        <span class="job-date">April 2024 - Present</span>
-                        <p class="job-description">
-                            Led development and implementation of innovative Azure AI platforms & Google Cloud Vertex AI, revolutionizing 
-                            fashion retail operations. Architected enterprise-scale AI and cloud solutions, driving digital transformation 
-                            initiatives. Successfully led FinOps initiatives resulting in multi-million SEK cost optimization.
-                        </p>
-                        <div class="job-tech">
-                            <span class="tech-tag">Azure AI Foundry</span>
-                            <span class="tech-tag">GCP Vertex AI</span>
-                            <span class="tech-tag">FinOps</span>
-                            <span class="tech-tag">Enterprise Architecture</span>
-                        </div>
-                    </div>
+          <h2 class="section-title">Professional Experience</h2>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3 class="job-title">Lead Cloud Architect</h3>
+                <h4 class="company">H&M Group</h4>
+                <span class="job-date">April 2024 - Present</span>
+                <p class="job-description">
+                  Led development and implementation of innovative Azure AI
+                  platforms & Google Cloud Vertex AI, revolutionizing fashion
+                  retail operations. Architected enterprise-scale AI and cloud
+                  solutions, driving digital transformation initiatives.
+                  Successfully led FinOps initiatives resulting in multi-million
+                  SEK cost optimization.
+                </p>
+                <div class="job-tech">
+                  <span class="tech-tag">Azure AI Foundry</span>
+                  <span class="tech-tag">GCP Vertex AI</span>
+                  <span class="tech-tag">FinOps</span>
+                  <span class="tech-tag">Enterprise Architecture</span>
                 </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3 class="job-title">Lead Software Engineer - Azure Engineering</h3>
-                        <h4 class="company">H&M Group</h4>
-                        <span class="job-date">April 2023 - Present</span>
-                        <p class="job-description">
-                            Engineering H&M's cloud backbone on Microsoft Azure and Google Cloud at enterprise scale. 
-                            Developing Enterprise Cloud Governance and Strategy, building Internal Developer Platform 
-                            for Azure Engineering with Self Service automation. Evaluating OpenAI LLM use cases for 
-                            enhancing Developer Experience.
-                        </p>
-                        <div class="job-tech">
-                            <span class="tech-tag">Azure</span>
-                            <span class="tech-tag">Google Cloud</span>
-                            <span class="tech-tag">TypeScript</span>
-                            <span class="tech-tag">Azure Functions</span>
-                            <span class="tech-tag">OpenAI</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3 class="job-title">Senior Software Engineer</h3>
-                        <h4 class="company">H&M Group</h4>
-                        <span class="job-date">November 2020 - April 2023</span>
-                        <p class="job-description">
-                            Designed and architected Zero trust applications with functional programming principles. 
-                            Built scalable APIs & Microservices on GraphQL and REST paradigm. Enabled Multi-Cloud API 
-                            platform integration with Azure Self-hosted API Gateways on GKE. Conducted interviews with 50+ engineers.
-                        </p>
-                        <div class="job-tech">
-                            <span class="tech-tag">GraphQL</span>
-                            <span class="tech-tag">TypeScript</span>
-                            <span class="tech-tag">GitHub Actions</span>
-                            <span class="tech-tag">MLOps</span>
-                            <span class="tech-tag">Kubernetes</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3 class="job-title">DevOps Engineer Consultant</h3>
-                        <h4 class="company">Volvo Cars</h4>
-                        <span class="job-date">April 2019 - November 2020</span>
-                        <p class="job-description">
-                            Managed Azure DevOps, Microsoft Azure, and CI/CD pipelines with continuous monitoring. 
-                            Administered OpenShift & Enterprise Kubernetes Cluster monitoring using Elastic Search, 
-                            InfluxDB, Fluentd and Kibana. Architected enterprise log monitoring solutions for Grafana on AKS.
-                        </p>
-                        <div class="job-tech">
-                            <span class="tech-tag">Azure DevOps</span>
-                            <span class="tech-tag">OpenShift</span>
-                            <span class="tech-tag">Kubernetes</span>
-                            <span class="tech-tag">Elasticsearch</span>
-                            <span class="tech-tag">Grafana</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3 class="job-title">Cloud DevOps Engineer</h3>
-                        <h4 class="company">Cognizant</h4>
-                        <span class="job-date">May 2018 - November 2020</span>
-                        <p class="job-description">
-                            Orchestrated seamless integration and deployment using Jenkins, Azure DevOps, AWS CodePipeline, 
-                            Docker, ECS, Fargate. Created highly resilient infrastructure and managed private code repositories. 
-                            Engaged with customers and conducted validation activities with Go/No Go decisions.
-                        </p>
-                        <div class="job-tech">
-                            <span class="tech-tag">AWS</span>
-                            <span class="tech-tag">Azure DevOps</span>
-                            <span class="tech-tag">Docker</span>
-                            <span class="tech-tag">Jenkins</span>
-                            <span class="tech-tag">Kubernetes</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3 class="job-title">Cloud Developer</h3>
-                        <h4 class="company">Cognizant</h4>
-                        <span class="job-date">June 2017 - May 2018</span>
-                        <p class="job-description">
-                            Automated inventory governance for Cloud IaaS and developed Cloud Management dashboard using React JS. 
-                            Designed Automated Backup Management solution for AWS using Lambda with Python SDK. 
-                            Won 1st prize in Enterprise AWS Game Day Hackathon 2018.
-                        </p>
-                        <div class="job-tech">
-                            <span class="tech-tag">AWS Lambda</span>
-                            <span class="tech-tag">React JS</span>
-                            <span class="tech-tag">Python</span>
-                            <span class="tech-tag">AWS Lex</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3 class="job-title">Programmer Analyst Trainee</h3>
-                        <h4 class="company">Cognizant</h4>
-                        <span class="job-date">June 2016 - May 2017</span>
-                        <p class="job-description">
-                            Developed Chat-Bot using IBM Watson & IBM Bluemix for Feedback Management. 
-                            Built web applications for internal project management. Developed proof of concepts 
-                            for cloud management tools: Chef, Docker, Saltstack & RightScale.
-                        </p>
-                        <div class="job-tech">
-                            <span class="tech-tag">IBM Watson</span>
-                            <span class="tech-tag">Docker</span>
-                            <span class="tech-tag">Chef</span>
-                            <span class="tech-tag">SaltStack</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Education Background -->
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3 class="job-title">Graduate Student</h3>
-                        <h4 class="company">Galgotias University</h4>
-                        <span class="job-date">July 2012 - June 2016</span>
-                        <p class="job-description">
-                            Bachelor of Technology in Computer Science with Specialization in Cloud Computing & Virtualization. 
-                            Developed Android-IOT Heart Rate Monitor using IBM Bluemix, Big Data Analytics for Twitter, 
-                            and Car-Pool Web App using PHP and Google Maps APIs.
-                        </p>
-                        <div class="job-tech">
-                            <span class="tech-tag">Cloud Computing</span>
-                            <span class="tech-tag">Android</span>
-                            <span class="tech-tag">IBM Bluemix</span>
-                            <span class="tech-tag">Big Data</span>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Certifications & Achievements Section -->
-    <section id="certifications" class="experience">
-        <div class="container">
-            <h2 class="section-title">Certifications & Achievements</h2>
-            <div class="certifications-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
-                <div class="cert-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="color: #00BCF2; margin-bottom: 0.5rem;">Microsoft Certified: Azure Fundamentals</h3>
-                    <p style="margin-bottom: 1rem;">Foundational knowledge of cloud services and Microsoft Azure</p>
-                    <span class="tech-tag azure">Microsoft Azure</span>
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3 class="job-title">
+                  Lead Software Engineer - Azure Engineering
+                </h3>
+                <h4 class="company">H&M Group</h4>
+                <span class="job-date">April 2023 - Present</span>
+                <p class="job-description">
+                  Engineering H&M's cloud backbone on Microsoft Azure and Google
+                  Cloud at enterprise scale. Developing Enterprise Cloud
+                  Governance and Strategy, building Internal Developer Platform
+                  for Azure Engineering with Self Service automation. Evaluating
+                  OpenAI LLM use cases for enhancing Developer Experience.
+                </p>
+                <div class="job-tech">
+                  <span class="tech-tag">Azure</span>
+                  <span class="tech-tag">Google Cloud</span>
+                  <span class="tech-tag">TypeScript</span>
+                  <span class="tech-tag">Azure Functions</span>
+                  <span class="tech-tag">OpenAI</span>
                 </div>
-                
-                <div class="cert-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="color: #00BCF2; margin-bottom: 0.5rem;">MCP: Microsoft Certified Professional</h3>
-                    <p style="margin-bottom: 1rem;">Professional-level expertise in Microsoft technologies</p>
-                    <span class="tech-tag azure">Microsoft</span>
-                </div>
-                
-                <div class="cert-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="color: #FF6B35; margin-bottom: 0.5rem;">OpenHack: Security, Compliance & Identity</h3>
-                    <p style="margin-bottom: 1rem;">Advanced security and compliance practices in cloud environments</p>
-                    <span class="tech-tag">Security</span>
-                </div>
-                
-                <div class="cert-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="color: #FF6B35; margin-bottom: 0.5rem;">OpenHack: DevOps</h3>
-                    <p style="margin-bottom: 1rem;">Advanced DevOps practices and methodologies</p>
-                    <span class="tech-tag">DevOps</span>
-                </div>
-                
-                <div class="cert-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="color: #4285F4; margin-bottom: 0.5rem;">Google India Udacity Scholar</h3>
-                    <p style="margin-bottom: 1rem;">Advanced Google Cloud Platform training and certification</p>
-                    <span class="tech-tag gcp">Google Cloud</span>
-                </div>
-                
-                <div class="cert-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="color: #FFD700; margin-bottom: 0.5rem;">Potential Orbit Shifter</h3>
-                    <p style="margin-bottom: 1rem;">Recognition for innovative thinking and transformational leadership</p>
-                    <span class="tech-tag">Leadership</span>
-                </div>
+              </div>
             </div>
-            
-            <!-- Publications -->
-            <div style="margin-top: 3rem;">
-                <h3 style="color: #fff; margin-bottom: 1.5rem;">Publications & Thought Leadership</h3>
-                <div class="publications-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-                    <div class="publication-item" style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border-left: 3px solid #FF6B35;">
-                        <h4 style="color: #FF6B35; margin-bottom: 0.5rem;">What is Kubernetes?</h4>
-                        <p style="font-size: 0.9rem; opacity: 0.8;">Container orchestration and management</p>
-                    </div>
-                    <div class="publication-item" style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border-left: 3px solid #00BCF2;">
-                        <h4 style="color: #00BCF2; margin-bottom: 0.5rem;">Open AI experimentation with DALL-E</h4>
-                        <p style="font-size: 0.9rem; opacity: 0.8;">AI image generation and experimentation</p>
-                    </div>
-                    <div class="publication-item" style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border-left: 3px solid #4285F4;">
-                        <h4 style="color: #4285F4; margin-bottom: 0.5rem;">Building and Deploying Apps on Google Cloud Run</h4>
-                        <p style="font-size: 0.9rem; opacity: 0.8;">Serverless application deployment on GCP</p>
-                    </div>
-                    <div class="publication-item" style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border-left: 3px solid #9B59B6;">
-                        <h4 style="color: #9B59B6; margin-bottom: 0.5rem;">The Future of Quantum Computing</h4>
-                        <p style="font-size: 0.9rem; opacity: 0.8;">Emerging quantum technologies and applications</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2 class="section-title">Skills & Technologies</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>AWS Specialization</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <i class="fab fa-aws"></i>
-                            <span>AWS Solutions Architect</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-server"></i>
-                            <span>EC2 & Lambda</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-database"></i>
-                            <span>RDS & DynamoDB</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-network-wired"></i>
-                            <span>VPC & CloudFormation</span>
-                        </div>
-                    </div>
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3 class="job-title">Senior Software Engineer</h3>
+                <h4 class="company">H&M Group</h4>
+                <span class="job-date">November 2020 - April 2023</span>
+                <p class="job-description">
+                  Designed and architected Zero trust applications with
+                  functional programming principles. Built scalable APIs &
+                  Microservices on GraphQL and REST paradigm. Enabled
+                  Multi-Cloud API platform integration with Azure Self-hosted
+                  API Gateways on GKE. Conducted interviews with 50+ engineers.
+                </p>
+                <div class="job-tech">
+                  <span class="tech-tag">GraphQL</span>
+                  <span class="tech-tag">TypeScript</span>
+                  <span class="tech-tag">GitHub Actions</span>
+                  <span class="tech-tag">MLOps</span>
+                  <span class="tech-tag">Kubernetes</span>
                 </div>
-                
-                <div class="skill-category">
-                    <h3>Azure Expertise</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <i class="fab fa-microsoft"></i>
-                            <span>Azure Solutions Architect</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-cloud"></i>
-                            <span>Azure Functions & VMs</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-database"></i>
-                            <span>Azure SQL & Cosmos DB</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>Azure Entra ID & Security</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="skill-category">
-                    <h3>Google Cloud Platform</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <i class="fab fa-google"></i>
-                            <span>GCP Professional Architect</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-cogs"></i>
-                            <span>Compute Engine & GKE</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-rocket"></i>
-                            <span>Cloud Run</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-exchange-alt"></i>
-                            <span>Pub/Sub</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>BigQuery & Analytics</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-brain"></i>
-                            <span>AI/ML Services</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="skill-category">
-                    <h3>Multi-Cloud & DevOps</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <i class="fas fa-project-diagram"></i>
-                            <span>Multi-Cloud Architecture</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fab fa-docker"></i>
-                            <span>Containerization</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-cubes"></i>
-                            <span>Kubernetes</span>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-code-branch"></i>
-                            <span>Infrastructure as Code</span>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title">Enterprise Solutions & Architecture</h2>
-            <div class="projects-grid">
-                <!-- Add your projects from LinkedIn/GitHub here -->
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="img/H&M Azure AI Foundry.png" alt="H&M Azure AI Platform">
-                        <div class="project-overlay">
-                            <a href="https://www.linkedin.com/in/raj-ankit" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                            <a href="https://azure.microsoft.com/en-us/products/ai-foundry" class="project-github" target="_blank">
-                                <i class="fas fa-brain"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3>H&M Azure AI Foundry Platform</h3>
-                        <p>Led development and implementation of innovative Azure AI platforms & Google Cloud Vertex AI at H&M Group, revolutionizing fashion retail operations. Built advanced Custom Text classification model enhancing service health notifications for 200+ product teams.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag azure">Azure AI Foundry</span>
-                            <span class="tech-tag gcp">GCP Vertex AI</span>
-                            <span class="tech-tag">Machine Learning</span>
-                            <span class="tech-tag">Text Classification</span>
-                            <span class="tech-tag">Enterprise AI</span>
-                        </div>
-                    </div>
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3 class="job-title">DevOps Engineer Consultant</h3>
+                <h4 class="company">Volvo Cars</h4>
+                <span class="job-date">April 2019 - November 2020</span>
+                <p class="job-description">
+                  Managed Azure DevOps, Microsoft Azure, and CI/CD pipelines
+                  with continuous monitoring. Administered OpenShift &
+                  Enterprise Kubernetes Cluster monitoring using Elastic Search,
+                  InfluxDB, Fluentd and Kibana. Architected enterprise log
+                  monitoring solutions for Grafana on AKS.
+                </p>
+                <div class="job-tech">
+                  <span class="tech-tag">Azure DevOps</span>
+                  <span class="tech-tag">OpenShift</span>
+                  <span class="tech-tag">Kubernetes</span>
+                  <span class="tech-tag">Elasticsearch</span>
+                  <span class="tech-tag">Grafana</span>
                 </div>
-                
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="img/finops.png" alt="H&M FinOps Initiative">
-                        <div class="project-overlay">
-                            <a href="https://www.finops.org/" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                            <a href="https://azure.microsoft.com/en-us/solutions/finops/" class="project-github" target="_blank">
-                                <i class="fas fa-chart-line"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3>Enterprise FinOps at Scale - H&M Group</h3>
-                        <p>Successfully led FinOps initiatives resulting in multi-million SEK cost optimization through strategic program implementation. Responsible for Enterprise-wide adoption of FinOps at Scale, transforming cloud cost management across the organization.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">FinOps</span>
-                            <span class="tech-tag azure">Azure Cost Management</span>
-                            <span class="tech-tag gcp">GCP Billing</span>
-                            <span class="tech-tag">Cost Optimization</span>
-                            <span class="tech-tag">Enterprise Strategy</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="img/multicloud.png" alt="H&M Multi-Cloud Infrastructure">
-                        <div class="project-overlay">
-                            <a href="https://www.ankitraj.cloud" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                            <a href="https://github.com/restlessankyyy" class="project-github" target="_blank">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3>H&M Cloud Backbone - Multi-Cloud Engineering</h3>
-                        <p>Engineering H&M's cloud backbone on Microsoft Azure and Google Cloud at enterprise scale. Developing Enterprise Cloud Governance and Strategy, building Azure Custom and Built-in Policies at Management Group Level.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag azure">Azure</span>
-                            <span class="tech-tag gcp">Google Cloud</span>
-                            <span class="tech-tag">Cloud Governance</span>
-                            <span class="tech-tag">Azure Policies</span>
-                            <span class="tech-tag">Enterprise Scale</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="img/internaldevplatform.png" alt="Internal Developer Platform">
-                        <div class="project-overlay">
-                            <a href="https://azure.microsoft.com/en-us/solutions/dev-test/" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                            <a href="https://github.com/features/actions" class="project-github" target="_blank">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3>Internal Developer Platform - H&M Azure Engineering</h3>
-                        <p>Building Internal Developer Platform for Azure Engineering to enhance product teams' Azure usage with Self Service and backend automation for product delivery workflows. Includes native notification service using EventGrid and Azure Functions in TypeScript.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Developer Platform</span>
-                            <span class="tech-tag">TypeScript</span>
-                            <span class="tech-tag azure">Azure Functions</span>
-                            <span class="tech-tag azure">EventGrid</span>
-                            <span class="tech-tag">Self Service</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="img/zero-trust.png" alt="Zero Trust Microservices">
-                        <div class="project-overlay">
-                            <a href="https://www.microsoft.com/en-us/security/business/zero-trust" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                            <a href="https://kubernetes.io/" class="project-github" target="_blank">
-                                <i class="fas fa-cubes"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3>Zero Trust Microservices Architecture - H&M</h3>
-                        <p>Designed and architected Zero trust applications with functional programming principles. Built scalable APIs & Microservices on GraphQL and REST paradigm. Enabled Multi-Cloud API platform integration with Azure Self-hosted API Gateways on GKE.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Zero Trust</span>
-                            <span class="tech-tag">GraphQL</span>
-                            <span class="tech-tag">Microservices</span>
-                            <span class="tech-tag azure">Azure API Gateway</span>
-                            <span class="tech-tag gcp">GKE</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="img/enterprise-monitoring-solutions-volvo.png" alt="Volvo Enterprise Monitoring">
-                        <div class="project-overlay">
-                            <a href="https://www.elastic.co/" class="project-link" target="_blank">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                            <a href="https://grafana.com/" class="project-github" target="_blank">
-                                <i class="fas fa-chart-bar"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3>Enterprise Monitoring Solutions - Volvo Cars</h3>
-                        <p>Architected and developed enterprise log monitoring solutions for Elastic Search and Grafana on AKS. Managed OpenShift & Enterprise Kubernetes Cluster monitoring using Elastic Search, InfluxDB, Fluentd and Kibana for digital enablement.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Elasticsearch</span>
-                            <span class="tech-tag">Grafana</span>
-                            <span class="tech-tag azure">AKS</span>
-                            <span class="tech-tag">OpenShift</span>
-                            <span class="tech-tag">Monitoring</span>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">Let's Connect</h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <div>
-                            <h3>Email</h3>
-                            <a href="mailto:rajankit749@gmail.com">rajankit749@gmail.com</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fab fa-linkedin"></i>
-                        <div>
-                            <h3>LinkedIn</h3>
-                            <a href="https://linkedin.com/in/raj-ankit" target="_blank">linkedin.com/in/raj-ankit</a>
-                        </div>
-                    </div>
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3 class="job-title">Cloud DevOps Engineer</h3>
+                <h4 class="company">Cognizant</h4>
+                <span class="job-date">May 2018 - November 2020</span>
+                <p class="job-description">
+                  Orchestrated seamless integration and deployment using
+                  Jenkins, Azure DevOps, AWS CodePipeline, Docker, ECS, Fargate.
+                  Created highly resilient infrastructure and managed private
+                  code repositories. Engaged with customers and conducted
+                  validation activities with Go/No Go decisions.
+                </p>
+                <div class="job-tech">
+                  <span class="tech-tag">AWS</span>
+                  <span class="tech-tag">Azure DevOps</span>
+                  <span class="tech-tag">Docker</span>
+                  <span class="tech-tag">Jenkins</span>
+                  <span class="tech-tag">Kubernetes</span>
                 </div>
-                
-                <div class="contact-form">
-                    <form id="contact-form">
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="Your Email" required>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </form>
-                </div>
+              </div>
             </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3 class="job-title">Cloud Developer</h3>
+                <h4 class="company">Cognizant</h4>
+                <span class="job-date">June 2017 - May 2018</span>
+                <p class="job-description">
+                  Automated inventory governance for Cloud IaaS and developed
+                  Cloud Management dashboard using React JS. Designed Automated
+                  Backup Management solution for AWS using Lambda with Python
+                  SDK. Won 1st prize in Enterprise AWS Game Day Hackathon 2018.
+                </p>
+                <div class="job-tech">
+                  <span class="tech-tag">AWS Lambda</span>
+                  <span class="tech-tag">React JS</span>
+                  <span class="tech-tag">Python</span>
+                  <span class="tech-tag">AWS Lex</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3 class="job-title">Programmer Analyst Trainee</h3>
+                <h4 class="company">Cognizant</h4>
+                <span class="job-date">June 2016 - May 2017</span>
+                <p class="job-description">
+                  Developed Chat-Bot using IBM Watson & IBM Bluemix for Feedback
+                  Management. Built web applications for internal project
+                  management. Developed proof of concepts for cloud management
+                  tools: Chef, Docker, Saltstack & RightScale.
+                </p>
+                <div class="job-tech">
+                  <span class="tech-tag">IBM Watson</span>
+                  <span class="tech-tag">Docker</span>
+                  <span class="tech-tag">Chef</span>
+                  <span class="tech-tag">SaltStack</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Education Background -->
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <h3 class="job-title">Graduate Student</h3>
+                <h4 class="company">Galgotias University</h4>
+                <span class="job-date">July 2012 - June 2016</span>
+                <p class="job-description">
+                  Bachelor of Technology in Computer Science with Specialization
+                  in Cloud Computing & Virtualization. Developed Android-IOT
+                  Heart Rate Monitor using IBM Bluemix, Big Data Analytics for
+                  Twitter, and Car-Pool Web App using PHP and Google Maps APIs.
+                </p>
+                <div class="job-tech">
+                  <span class="tech-tag">Cloud Computing</span>
+                  <span class="tech-tag">Android</span>
+                  <span class="tech-tag">IBM Bluemix</span>
+                  <span class="tech-tag">Big Data</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-    </section>
+      </section>
+
+      <!-- Certifications & Achievements Section -->
+      <section id="certifications" class="experience">
+        <div class="container">
+          <h2 class="section-title">Certifications & Achievements</h2>
+          <div
+            class="certifications-grid"
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+              gap: 1.5rem;
+              margin-top: 2rem;
+            "
+          >
+            <div
+              class="cert-card"
+              style="
+                background: rgba(255, 255, 255, 0.05);
+                padding: 1.5rem;
+                border-radius: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+              "
+            >
+              <h3 style="color: #00bcf2; margin-bottom: 0.5rem">
+                Microsoft Certified: Azure Fundamentals
+              </h3>
+              <p style="margin-bottom: 1rem">
+                Foundational knowledge of cloud services and Microsoft Azure
+              </p>
+              <span class="tech-tag azure">Microsoft Azure</span>
+            </div>
+
+            <div
+              class="cert-card"
+              style="
+                background: rgba(255, 255, 255, 0.05);
+                padding: 1.5rem;
+                border-radius: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+              "
+            >
+              <h3 style="color: #00bcf2; margin-bottom: 0.5rem">
+                MCP: Microsoft Certified Professional
+              </h3>
+              <p style="margin-bottom: 1rem">
+                Professional-level expertise in Microsoft technologies
+              </p>
+              <span class="tech-tag azure">Microsoft</span>
+            </div>
+
+            <div
+              class="cert-card"
+              style="
+                background: rgba(255, 255, 255, 0.05);
+                padding: 1.5rem;
+                border-radius: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+              "
+            >
+              <h3 style="color: #ff6b35; margin-bottom: 0.5rem">
+                OpenHack: Security, Compliance & Identity
+              </h3>
+              <p style="margin-bottom: 1rem">
+                Advanced security and compliance practices in cloud environments
+              </p>
+              <span class="tech-tag">Security</span>
+            </div>
+
+            <div
+              class="cert-card"
+              style="
+                background: rgba(255, 255, 255, 0.05);
+                padding: 1.5rem;
+                border-radius: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+              "
+            >
+              <h3 style="color: #ff6b35; margin-bottom: 0.5rem">
+                OpenHack: DevOps
+              </h3>
+              <p style="margin-bottom: 1rem">
+                Advanced DevOps practices and methodologies
+              </p>
+              <span class="tech-tag">DevOps</span>
+            </div>
+
+            <div
+              class="cert-card"
+              style="
+                background: rgba(255, 255, 255, 0.05);
+                padding: 1.5rem;
+                border-radius: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+              "
+            >
+              <h3 style="color: #4285f4; margin-bottom: 0.5rem">
+                Google India Udacity Scholar
+              </h3>
+              <p style="margin-bottom: 1rem">
+                Advanced Google Cloud Platform training and certification
+              </p>
+              <span class="tech-tag gcp">Google Cloud</span>
+            </div>
+
+            <div
+              class="cert-card"
+              style="
+                background: rgba(255, 255, 255, 0.05);
+                padding: 1.5rem;
+                border-radius: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+              "
+            >
+              <h3 style="color: #ffd700; margin-bottom: 0.5rem">
+                Potential Orbit Shifter
+              </h3>
+              <p style="margin-bottom: 1rem">
+                Recognition for innovative thinking and transformational
+                leadership
+              </p>
+              <span class="tech-tag">Leadership</span>
+            </div>
+          </div>
+
+          <!-- Publications -->
+          <div style="margin-top: 3rem">
+            <h3 style="color: #fff; margin-bottom: 1.5rem">
+              Publications & Thought Leadership
+            </h3>
+            <div
+              class="publications-list"
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1rem;
+              "
+            >
+              <div
+                class="publication-item"
+                style="
+                  background: rgba(255, 255, 255, 0.03);
+                  padding: 1rem;
+                  border-radius: 8px;
+                  border-left: 3px solid #ff6b35;
+                "
+              >
+                <h4 style="color: #ff6b35; margin-bottom: 0.5rem">
+                  What is Kubernetes?
+                </h4>
+                <p style="font-size: 0.9rem; opacity: 0.8">
+                  Container orchestration and management
+                </p>
+              </div>
+              <div
+                class="publication-item"
+                style="
+                  background: rgba(255, 255, 255, 0.03);
+                  padding: 1rem;
+                  border-radius: 8px;
+                  border-left: 3px solid #00bcf2;
+                "
+              >
+                <h4 style="color: #00bcf2; margin-bottom: 0.5rem">
+                  Open AI experimentation with DALL-E
+                </h4>
+                <p style="font-size: 0.9rem; opacity: 0.8">
+                  AI image generation and experimentation
+                </p>
+              </div>
+              <div
+                class="publication-item"
+                style="
+                  background: rgba(255, 255, 255, 0.03);
+                  padding: 1rem;
+                  border-radius: 8px;
+                  border-left: 3px solid #4285f4;
+                "
+              >
+                <h4 style="color: #4285f4; margin-bottom: 0.5rem">
+                  Building and Deploying Apps on Google Cloud Run
+                </h4>
+                <p style="font-size: 0.9rem; opacity: 0.8">
+                  Serverless application deployment on GCP
+                </p>
+              </div>
+              <div
+                class="publication-item"
+                style="
+                  background: rgba(255, 255, 255, 0.03);
+                  padding: 1rem;
+                  border-radius: 8px;
+                  border-left: 3px solid #9b59b6;
+                "
+              >
+                <h4 style="color: #9b59b6; margin-bottom: 0.5rem">
+                  The Future of Quantum Computing
+                </h4>
+                <p style="font-size: 0.9rem; opacity: 0.8">
+                  Emerging quantum technologies and applications
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills Section -->
+      <section id="skills" class="skills">
+        <div class="container">
+          <h2 class="section-title">Skills & Technologies</h2>
+          <div class="skills-grid">
+            <div class="skill-category">
+              <h3>AWS Specialization</h3>
+              <div class="skill-items">
+                <div class="skill-item">
+                  <i class="fab fa-aws"></i>
+                  <span>AWS Solutions Architect</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-server"></i>
+                  <span>EC2 & Lambda</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-database"></i>
+                  <span>RDS & DynamoDB</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-network-wired"></i>
+                  <span>VPC & CloudFormation</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="skill-category">
+              <h3>Azure Expertise</h3>
+              <div class="skill-items">
+                <div class="skill-item">
+                  <i class="fab fa-microsoft"></i>
+                  <span>Azure Solutions Architect</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-cloud"></i>
+                  <span>Azure Functions & VMs</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-database"></i>
+                  <span>Azure SQL & Cosmos DB</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-shield-alt"></i>
+                  <span>Azure Entra ID & Security</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="skill-category">
+              <h3>Google Cloud Platform</h3>
+              <div class="skill-items">
+                <div class="skill-item">
+                  <i class="fab fa-google"></i>
+                  <span>GCP Professional Architect</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-cogs"></i>
+                  <span>Compute Engine & GKE</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-rocket"></i>
+                  <span>Cloud Run</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-exchange-alt"></i>
+                  <span>Pub/Sub</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-chart-bar"></i>
+                  <span>BigQuery & Analytics</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-brain"></i>
+                  <span>AI/ML Services</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="skill-category">
+              <h3>Multi-Cloud & DevOps</h3>
+              <div class="skill-items">
+                <div class="skill-item">
+                  <i class="fas fa-project-diagram"></i>
+                  <span>Multi-Cloud Architecture</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fab fa-docker"></i>
+                  <span>Containerization</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-cubes"></i>
+                  <span>Kubernetes</span>
+                </div>
+                <div class="skill-item">
+                  <i class="fas fa-code-branch"></i>
+                  <span>Infrastructure as Code</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <section id="projects" class="projects">
+        <div class="container">
+          <h2 class="section-title">Enterprise Solutions & Architecture</h2>
+          <div class="projects-grid">
+            <!-- Add your projects from LinkedIn/GitHub here -->
+            <div class="project-card">
+              <div class="project-image">
+                <img
+                  src="img/H&M Azure AI Foundry.png"
+                  alt="H&M Azure AI Platform"
+                />
+                <div class="project-overlay">
+                  <a
+                    href="https://www.linkedin.com/in/raj-ankit"
+                    class="project-link"
+                    target="_blank"
+                  >
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a
+                    href="https://azure.microsoft.com/en-us/products/ai-foundry"
+                    class="project-github"
+                    target="_blank"
+                  >
+                    <i class="fas fa-brain"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-content">
+                <h3>H&M Azure AI Foundry Platform</h3>
+                <p>
+                  Led development and implementation of innovative Azure AI
+                  platforms & Google Cloud Vertex AI at H&M Group,
+                  revolutionizing fashion retail operations. Built advanced
+                  Custom Text classification model enhancing service health
+                  notifications for 200+ product teams.
+                </p>
+                <div class="project-tech">
+                  <span class="tech-tag azure">Azure AI Foundry</span>
+                  <span class="tech-tag gcp">GCP Vertex AI</span>
+                  <span class="tech-tag">Machine Learning</span>
+                  <span class="tech-tag">Text Classification</span>
+                  <span class="tech-tag">Enterprise AI</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-image">
+                <img src="img/finops.png" alt="H&M FinOps Initiative" />
+                <div class="project-overlay">
+                  <a
+                    href="https://www.finops.org/"
+                    class="project-link"
+                    target="_blank"
+                  >
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a
+                    href="https://azure.microsoft.com/en-us/solutions/finops/"
+                    class="project-github"
+                    target="_blank"
+                  >
+                    <i class="fas fa-chart-line"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-content">
+                <h3>Enterprise FinOps at Scale - H&M Group</h3>
+                <p>
+                  Successfully led FinOps initiatives resulting in multi-million
+                  SEK cost optimization through strategic program
+                  implementation. Responsible for Enterprise-wide adoption of
+                  FinOps at Scale, transforming cloud cost management across the
+                  organization.
+                </p>
+                <div class="project-tech">
+                  <span class="tech-tag">FinOps</span>
+                  <span class="tech-tag azure">Azure Cost Management</span>
+                  <span class="tech-tag gcp">GCP Billing</span>
+                  <span class="tech-tag">Cost Optimization</span>
+                  <span class="tech-tag">Enterprise Strategy</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-image">
+                <img
+                  src="img/multicloud.png"
+                  alt="H&M Multi-Cloud Infrastructure"
+                />
+                <div class="project-overlay">
+                  <a
+                    href="https://www.ankitraj.cloud"
+                    class="project-link"
+                    target="_blank"
+                  >
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a
+                    href="https://github.com/restlessankyyy"
+                    class="project-github"
+                    target="_blank"
+                  >
+                    <i class="fab fa-github"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-content">
+                <h3>H&M Cloud Backbone - Multi-Cloud Engineering</h3>
+                <p>
+                  Engineering H&M's cloud backbone on Microsoft Azure and Google
+                  Cloud at enterprise scale. Developing Enterprise Cloud
+                  Governance and Strategy, building Azure Custom and Built-in
+                  Policies at Management Group Level.
+                </p>
+                <div class="project-tech">
+                  <span class="tech-tag azure">Azure</span>
+                  <span class="tech-tag gcp">Google Cloud</span>
+                  <span class="tech-tag">Cloud Governance</span>
+                  <span class="tech-tag">Azure Policies</span>
+                  <span class="tech-tag">Enterprise Scale</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-image">
+                <img
+                  src="img/internaldevplatform.png"
+                  alt="Internal Developer Platform"
+                />
+                <div class="project-overlay">
+                  <a
+                    href="https://azure.microsoft.com/en-us/solutions/dev-test/"
+                    class="project-link"
+                    target="_blank"
+                  >
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a
+                    href="https://github.com/features/actions"
+                    class="project-github"
+                    target="_blank"
+                  >
+                    <i class="fab fa-github"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-content">
+                <h3>Internal Developer Platform - H&M Azure Engineering</h3>
+                <p>
+                  Building Internal Developer Platform for Azure Engineering to
+                  enhance product teams' Azure usage with Self Service and
+                  backend automation for product delivery workflows. Includes
+                  native notification service using EventGrid and Azure
+                  Functions in TypeScript.
+                </p>
+                <div class="project-tech">
+                  <span class="tech-tag">Developer Platform</span>
+                  <span class="tech-tag">TypeScript</span>
+                  <span class="tech-tag azure">Azure Functions</span>
+                  <span class="tech-tag azure">EventGrid</span>
+                  <span class="tech-tag">Self Service</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-image">
+                <img src="img/zero-trust.png" alt="Zero Trust Microservices" />
+                <div class="project-overlay">
+                  <a
+                    href="https://www.microsoft.com/en-us/security/business/zero-trust"
+                    class="project-link"
+                    target="_blank"
+                  >
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a
+                    href="https://kubernetes.io/"
+                    class="project-github"
+                    target="_blank"
+                  >
+                    <i class="fas fa-cubes"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-content">
+                <h3>Zero Trust Microservices Architecture - H&M</h3>
+                <p>
+                  Designed and architected Zero trust applications with
+                  functional programming principles. Built scalable APIs &
+                  Microservices on GraphQL and REST paradigm. Enabled
+                  Multi-Cloud API platform integration with Azure Self-hosted
+                  API Gateways on GKE.
+                </p>
+                <div class="project-tech">
+                  <span class="tech-tag">Zero Trust</span>
+                  <span class="tech-tag">GraphQL</span>
+                  <span class="tech-tag">Microservices</span>
+                  <span class="tech-tag azure">Azure API Gateway</span>
+                  <span class="tech-tag gcp">GKE</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-image">
+                <img
+                  src="img/enterprise-monitoring-solutions-volvo.png"
+                  alt="Volvo Enterprise Monitoring"
+                />
+                <div class="project-overlay">
+                  <a
+                    href="https://www.elastic.co/"
+                    class="project-link"
+                    target="_blank"
+                  >
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+                  <a
+                    href="https://grafana.com/"
+                    class="project-github"
+                    target="_blank"
+                  >
+                    <i class="fas fa-chart-bar"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="project-content">
+                <h3>Enterprise Monitoring Solutions - Volvo Cars</h3>
+                <p>
+                  Architected and developed enterprise log monitoring solutions
+                  for Elastic Search and Grafana on AKS. Managed OpenShift &
+                  Enterprise Kubernetes Cluster monitoring using Elastic Search,
+                  InfluxDB, Fluentd and Kibana for digital enablement.
+                </p>
+                <div class="project-tech">
+                  <span class="tech-tag">Elasticsearch</span>
+                  <span class="tech-tag">Grafana</span>
+                  <span class="tech-tag azure">AKS</span>
+                  <span class="tech-tag">OpenShift</span>
+                  <span class="tech-tag">Monitoring</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="contact" class="contact">
+        <div class="container">
+          <h2 class="section-title">Let's Connect</h2>
+          <div class="contact-content">
+            <div class="contact-info">
+              <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <div>
+                  <h3>Email</h3>
+                  <a href="mailto:rajankit749@gmail.com"
+                    >rajankit749@gmail.com</a
+                  >
+                </div>
+              </div>
+              <div class="contact-item">
+                <i class="fab fa-linkedin"></i>
+                <div>
+                  <h3>LinkedIn</h3>
+                  <a href="https://linkedin.com/in/raj-ankit" target="_blank"
+                    >linkedin.com/in/raj-ankit</a
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-form">
+              <form id="contact-form">
+                <div class="form-group">
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Your Name"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Your Email"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows="5"
+                    placeholder="Your Message"
+                    required
+                  ></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  Send Message
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p>&copy; 2025 Ankit Raj. All rights reserved.</p>
-                <div class="footer-social">
-                    <a href="https://github.com/restlessankyyy" target="_blank" rel="noopener" aria-label="GitHub">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://linkedin.com/in/raj-ankit" target="_blank" rel="noopener" aria-label="LinkedIn">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="https://twitter.com/ankit_raj24" target="_blank" rel="noopener" aria-label="Twitter">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                </div>
-            </div>
+      <div class="container">
+        <div class="footer-content">
+          <p>&copy; 2025 Ankit Raj. All rights reserved.</p>
+          <div class="footer-social">
+            <a
+              href="https://github.com/restlessankyyy"
+              target="_blank"
+              rel="noopener"
+              aria-label="GitHub"
+            >
+              <i class="fab fa-github"></i>
+            </a>
+            <a
+              href="https://linkedin.com/in/raj-ankit"
+              target="_blank"
+              rel="noopener"
+              aria-label="LinkedIn"
+            >
+              <i class="fab fa-linkedin"></i>
+            </a>
+            <a
+              href="https://twitter.com/ankit_raj24"
+              target="_blank"
+              rel="noopener"
+              aria-label="Twitter"
+            >
+              <i class="fab fa-twitter"></i>
+            </a>
+          </div>
         </div>
+      </div>
     </footer>
 
     <!-- Scripts -->
     <script src="js/emailjs-config.js"></script>
     <script src="js/enhanced-portfolio.js"></script>
     <script src="js/modern-portfolio.js"></script>
-</body>
+  </body>
 </html>

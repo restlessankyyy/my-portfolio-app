@@ -33,8 +33,8 @@ output "cloudwatch_log_group" {
 output "deployment_info" {
   description = "Deployment information"
   value = {
-    region           = var.aws_region
-    environment      = var.environment
+    region          = var.aws_region
+    environment     = var.environment
     api_url         = aws_apigatewayv2_stage.portfolio_stage.invoke_url
     lambda_function = aws_lambda_function.portfolio.function_name
   }

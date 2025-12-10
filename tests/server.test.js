@@ -105,7 +105,7 @@ test('Health endpoint returns JSON', async () => {
 test('Homepage returns HTML', async () => {
   const res = await makeRequest('/');
   assert(res.status === 200, `Expected 200, got ${res.status}`);
-  assert(res.body.includes('<!DOCTYPE html>'), 'Should return HTML');
+  assert(res.body.toLowerCase().includes('<!doctype html>'), 'Should return HTML');
   assert(res.body.includes('Ankit Raj'), 'Should include name');
 });
 
@@ -149,7 +149,7 @@ test('Contact API validates email', async () => {
 test('Unknown routes return index.html (SPA)', async () => {
   const res = await makeRequest('/nonexistent-page');
   assert(res.status === 200, `Expected 200, got ${res.status}`);
-  assert(res.body.includes('<!DOCTYPE html>'), 'Should return HTML');
+  assert(res.body.toLowerCase().includes('<!doctype html>'), 'Should return HTML');
 });
 
 // Run tests
