@@ -219,6 +219,17 @@ jobs:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Build Lambda Package (for validation)
+        run: |
+          chmod +x scripts/build-lambda.sh
+          ./scripts/build-lambda.sh
+
       - name: 🔧 Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:

@@ -118,7 +118,8 @@ resource "aws_lambda_function" "portfolio" {
   timeout         = 30
   memory_size     = 512
 
-  source_code_hash = filebase64sha256("${path.module}/portfolio-lambda.zip")
+  # Use data source to handle missing file during validation
+  source_code_hash = fileexists("${path.module}/portfolio-lambda.zip") ? filebase64sha256("${path.module}/portfolio-lambda.zip") : null
 
   environment {
     variables = {
@@ -130,6 +131,10 @@ resource "aws_lambda_function" "portfolio" {
     aws_iam_role_policy_attachment.lambda_basic_execution,
     aws_cloudwatch_log_group.lambda_logs,
   ]
+
+  lifecycle {
+    ignore_changes = [source_code_hash]  # Lambda code is updated separately via CLI
+  }
 }
 
 # CloudWatch Log Group
