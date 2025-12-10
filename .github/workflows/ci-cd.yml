@@ -679,14 +679,77 @@ jobs:
           echo "- Commit: ${GITHUB_SHA::8}" >> $GITHUB_STEP_SUMMARY
           echo "- Branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
 
-      # Optional: Slack notification (uncomment and configure)
-      # - name: 📢 Slack Notification
-      #   uses: 8398a7/action-slack@v3
-      #   with:
-      #     status: ${{ job.status }}
-      #     fields: repo,message,commit,author,action,eventName,ref,workflow
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+      - name: 🔑 Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: 📧 Send Email Notification via SES
+        run: |
+          if [ "${{ needs.deploy.result }}" == "success" ] && [ "${{ needs.smoke-tests.result }}" == "success" ]; then
+            SUBJECT="✅ Deployment Successful - ankitraj.cloud"
+            STATUS_EMOJI="✅"
+            STATUS_TEXT="SUCCESS"
+          else
+            SUBJECT="❌ Deployment Failed - ankitraj.cloud"
+            STATUS_EMOJI="❌"
+            STATUS_TEXT="FAILED"
+          fi
+          
+          BODY="<!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0; }
+              .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 8px 8px; }
+              .status-success { color: #22c55e; }
+              .status-failed { color: #ef4444; }
+              .details { background: white; padding: 15px; border-radius: 8px; margin-top: 15px; }
+              .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+              .label { font-weight: bold; color: #666; }
+              .footer { text-align: center; margin-top: 20px; color: #888; font-size: 12px; }
+              a { color: #667eea; }
+            </style>
+          </head>
+          <body>
+            <div class='container'>
+              <div class='header'>
+                <h1>${STATUS_EMOJI} Deployment ${STATUS_TEXT}</h1>
+                <p>Portfolio CI/CD Pipeline</p>
+              </div>
+              <div class='content'>
+                <h2>Deployment Details</h2>
+                <div class='details'>
+                  <div class='detail-row'><span class='label'>Status</span><span>${STATUS_TEXT}</span></div>
+                  <div class='detail-row'><span class='label'>Environment</span><span>Production</span></div>
+                  <div class='detail-row'><span class='label'>Branch</span><span>${GITHUB_REF_NAME}</span></div>
+                  <div class='detail-row'><span class='label'>Commit</span><span>${GITHUB_SHA::8}</span></div>
+                  <div class='detail-row'><span class='label'>Actor</span><span>${GITHUB_ACTOR}</span></div>
+                  <div class='detail-row'><span class='label'>Deploy Result</span><span>${{ needs.deploy.result }}</span></div>
+                  <div class='detail-row'><span class='label'>Smoke Tests</span><span>${{ needs.smoke-tests.result }}</span></div>
+                </div>
+                <p style='margin-top: 20px;'>
+                  <a href='https://www.ankitraj.cloud'>🌐 View Site</a> | 
+                  <a href='https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}'>📋 View Workflow</a>
+                </p>
+              </div>
+              <div class='footer'>
+                <p>Automated notification from GitHub Actions</p>
+              </div>
+            </div>
+          </body>
+          </html>"
+          
+          aws ses send-email \
+            --from "ci-cd@ankitraj.cloud" \
+            --destination "ToAddresses=${{ secrets.NOTIFICATION_EMAIL }}" \
+            --message "Subject={Data='${SUBJECT}',Charset=utf-8},Body={Html={Data='${BODY}',Charset=utf-8}}"
+          
+          echo "📧 Email notification sent!"
 
   # ============================================================================
   # PR Preview Comment
