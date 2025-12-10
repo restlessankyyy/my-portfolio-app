@@ -41,9 +41,9 @@ resource "aws_s3_bucket" "terraform_state" {
   }
 
   tags = {
-    Name        = "${var.project_name}-terraform-state"
-    Purpose     = "Terraform Remote State"
-    ManagedBy   = "terraform"
+    Name      = "${var.project_name}-terraform-state"
+    Purpose   = "Terraform Remote State"
+    ManagedBy = "terraform"
   }
 }
 
@@ -88,9 +88,9 @@ resource "aws_dynamodb_table" "terraform_locks" {
   }
 
   tags = {
-    Name        = "${var.project_name}-terraform-locks"
-    Purpose     = "Terraform State Locking"
-    ManagedBy   = "terraform"
+    Name      = "${var.project_name}-terraform-locks"
+    Purpose   = "Terraform State Locking"
+    ManagedBy = "terraform"
   }
 }
 

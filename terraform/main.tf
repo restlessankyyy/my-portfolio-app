@@ -21,7 +21,7 @@ terraform {
 # Configure AWS Provider
 provider "aws" {
   region = var.aws_region
-  
+
   default_tags {
     tags = {
       Project     = "portfolio-serverless"
@@ -110,13 +110,13 @@ resource "aws_iam_role_policy" "lambda_ses_policy" {
 
 # Lambda Function
 resource "aws_lambda_function" "portfolio" {
-  filename         = "${path.module}/portfolio-lambda.zip"
-  function_name    = "${var.project_name}-${var.environment}-${random_string.suffix.result}"
-  role            = aws_iam_role.lambda_role.arn
-  handler         = "lambda.handler"
-  runtime         = "nodejs22.x"
-  timeout         = 30
-  memory_size     = 512
+  filename      = "${path.module}/portfolio-lambda.zip"
+  function_name = "${var.project_name}-${var.environment}-${random_string.suffix.result}"
+  role          = aws_iam_role.lambda_role.arn
+  handler       = "lambda.handler"
+  runtime       = "nodejs22.x"
+  timeout       = 30
+  memory_size   = 512
 
   # Use data source to handle missing file during validation
   source_code_hash = fileexists("${path.module}/portfolio-lambda.zip") ? filebase64sha256("${path.module}/portfolio-lambda.zip") : null
@@ -133,7 +133,7 @@ resource "aws_lambda_function" "portfolio" {
   ]
 
   lifecycle {
-    ignore_changes = [source_code_hash]  # Lambda code is updated separately via CLI
+    ignore_changes = [source_code_hash] # Lambda code is updated separately via CLI
   }
 }
 
@@ -155,7 +155,7 @@ resource "aws_apigatewayv2_api" "portfolio_api" {
     allow_methods     = ["*"]
     allow_origins     = ["*"]
     expose_headers    = ["date", "keep-alive"]
-    max_age          = 86400
+    max_age           = 86400
   }
 }
 

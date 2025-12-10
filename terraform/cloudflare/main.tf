@@ -111,8 +111,8 @@ resource "cloudflare_record" "root" {
   name    = "@"
   content = "www.ankitraj.cloud"
   type    = "CNAME"
-  ttl     = 1  # Auto
-  proxied = true  # Cloudflare will handle SSL and redirect
+  ttl     = 1    # Auto
+  proxied = true # Cloudflare will handle SSL and redirect
   comment = "Root domain - CNAME to www"
 }
 
@@ -122,8 +122,8 @@ resource "cloudflare_record" "acm_validation" {
   name    = var.acm_validation_name
   content = var.acm_validation_value
   type    = "CNAME"
-  ttl     = 1  # Auto
-  proxied = false  # DNS only - required for ACM validation
+  ttl     = 1     # Auto
+  proxied = false # DNS only - required for ACM validation
   comment = "AWS ACM Certificate Validation"
 }
 
@@ -131,10 +131,10 @@ resource "cloudflare_record" "acm_validation" {
 resource "cloudflare_record" "www" {
   zone_id = var.cloudflare_zone_id
   name    = "www"
-  content = var.custom_domain_target  # AWS API Gateway custom domain target
+  content = var.custom_domain_target # AWS API Gateway custom domain target
   type    = "CNAME"
-  ttl     = 1  # Auto
-  proxied = false  # DNS only - AWS ACM handles SSL
+  ttl     = 1     # Auto
+  proxied = false # DNS only - AWS ACM handles SSL
   comment = "WWW to AWS API Gateway Custom Domain"
 }
 
@@ -147,8 +147,8 @@ resource "cloudflare_record" "ses_dkim_1" {
   name    = "3hryyszifzsacww3lktwo7pg44pe63w7._domainkey"
   content = "3hryyszifzsacww3lktwo7pg44pe63w7.dkim.amazonses.com"
   type    = "CNAME"
-  ttl     = 1  # Auto
-  proxied = false  # DNS only - required for DKIM
+  ttl     = 1     # Auto
+  proxied = false # DNS only - required for DKIM
   comment = "AWS SES DKIM Record 1"
 }
 
@@ -157,8 +157,8 @@ resource "cloudflare_record" "ses_dkim_2" {
   name    = "ppohooaykyxf7amjltwaebd7u2d4ndvy._domainkey"
   content = "ppohooaykyxf7amjltwaebd7u2d4ndvy.dkim.amazonses.com"
   type    = "CNAME"
-  ttl     = 1  # Auto
-  proxied = false  # DNS only - required for DKIM
+  ttl     = 1     # Auto
+  proxied = false # DNS only - required for DKIM
   comment = "AWS SES DKIM Record 2"
 }
 
@@ -167,8 +167,8 @@ resource "cloudflare_record" "ses_dkim_3" {
   name    = "7nvquw6a44t6gdps2sqsnjpvwdq3kmu4._domainkey"
   content = "7nvquw6a44t6gdps2sqsnjpvwdq3kmu4.dkim.amazonses.com"
   type    = "CNAME"
-  ttl     = 1  # Auto
-  proxied = false  # DNS only - required for DKIM
+  ttl     = 1     # Auto
+  proxied = false # DNS only - required for DKIM
   comment = "AWS SES DKIM Record 3"
 }
 
@@ -178,7 +178,7 @@ resource "cloudflare_record" "spf" {
   name    = "@"
   content = "v=spf1 include:amazonses.com ~all"
   type    = "TXT"
-  ttl     = 1  # Auto
+  ttl     = 1 # Auto
   proxied = false
   comment = "SPF record for AWS SES email sending"
 }
@@ -189,7 +189,7 @@ resource "cloudflare_record" "dmarc" {
   name    = "_dmarc"
   content = "v=DMARC1; p=none; rua=mailto:rajankit749@gmail.com"
   type    = "TXT"
-  ttl     = 1  # Auto
+  ttl     = 1 # Auto
   proxied = false
   comment = "DMARC policy for email authentication"
 }
