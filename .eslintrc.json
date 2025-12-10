@@ -12,8 +12,7 @@
   "rules": {
     "no-unused-vars": "warn",
     "no-console": "off",
-    "semi": ["error", "always"],
-    "quotes": ["warn", "single", { "allowTemplateLiterals": true }]
+    "semi": ["error", "always"]
   },
   "globals": {
     "particlesJS": "readonly",

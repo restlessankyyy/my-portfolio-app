@@ -4,9 +4,9 @@
 class EmailJSHandler {
   constructor() {
     // EmailJS credentials configured
-    this.serviceId = 'service_lwb1ipq';
-    this.templateId = 'template_sx2bogd';
-    this.publicKey = 'P1pp_sysjRWvgNrlo';
+    this.serviceId = "service_lwb1ipq";
+    this.templateId = "template_sx2bogd";
+    this.publicKey = "P1pp_sysjRWvgNrlo";
 
     this.isConfigured = true;
   }
@@ -15,9 +15,9 @@ class EmailJSHandler {
     // Initialize EmailJS
     if (window.emailjs) {
       emailjs.init(this.publicKey);
-      console.log('EmailJS initialized successfully');
+      console.log("EmailJS initialized successfully");
     } else {
-      console.error('EmailJS not loaded');
+      console.error("EmailJS not loaded");
     }
   }
 
@@ -28,7 +28,7 @@ class EmailJSHandler {
         from_name: formData.name,
         from_email: formData.email,
         message: formData.message,
-        to_email: 'rajankit749@gmail.com', // Your email
+        to_email: "rajankit749@gmail.com", // Your email
         reply_to: formData.email,
       };
 
@@ -39,10 +39,10 @@ class EmailJSHandler {
         templateParams,
       );
 
-      console.log('Email sent successfully:', response);
+      console.log("Email sent successfully:", response);
       return { success: true, response };
     } catch (error) {
-      console.error('Email sending failed:', error);
+      console.error("Email sending failed:", error);
       return { success: false, error };
     }
   }
@@ -99,7 +99,7 @@ class EmailJSHandler {
 }
 
 // Export for use in other files
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = EmailJSHandler;
 } else {
   window.EmailJSHandler = EmailJSHandler;

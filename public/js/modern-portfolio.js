@@ -22,12 +22,12 @@ class ModernPortfolio {
 
   // 3D Tilt Effect for Cards
   setupTiltEffect() {
-    const tiltElements = document.querySelectorAll('[data-tilt]');
+    const tiltElements = document.querySelectorAll("[data-tilt]");
 
     tiltElements.forEach((element) => {
-      const maxTilt = parseInt(element.getAttribute('data-tilt-max')) || 10;
+      const maxTilt = parseInt(element.getAttribute("data-tilt-max")) || 10;
 
-      element.addEventListener('mousemove', (e) => {
+      element.addEventListener("mousemove", (e) => {
         const rect = element.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -41,9 +41,9 @@ class ModernPortfolio {
         element.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
       });
 
-      element.addEventListener('mouseleave', () => {
+      element.addEventListener("mouseleave", () => {
         element.style.transform =
-          'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+          "perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)";
       });
     });
   }
@@ -51,14 +51,14 @@ class ModernPortfolio {
   // Reveal animations on scroll
   setupRevealAnimations() {
     const revealElements = document.querySelectorAll(
-      '.section-title, .project-card, .skill-category, .cert-card',
+      ".section-title, .project-card, .skill-category, .cert-card",
     );
 
     const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
+            entry.target.classList.add("revealed");
           }
         });
       },
@@ -66,12 +66,12 @@ class ModernPortfolio {
     );
 
     revealElements.forEach((el) => {
-      el.classList.add('reveal-element');
+      el.classList.add("reveal-element");
       revealObserver.observe(el);
     });
 
     // Add reveal CSS
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.textContent = `
             .reveal-element {
                 opacity: 0;
@@ -88,105 +88,104 @@ class ModernPortfolio {
 
   // Navigation functionality
   setupNavigation() {
-    const navToggle = document.getElementById('nav-toggle');
-    const navMenu = document.getElementById('nav-menu');
-    const navbar = document.getElementById('navbar');
+    const navToggle = document.getElementById("nav-toggle");
+    const navMenu = document.getElementById("nav-menu");
+    const navbar = document.getElementById("navbar");
 
     // Mobile menu toggle
     if (navToggle && navMenu) {
-      navToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        navToggle.classList.toggle('active');
+      navToggle.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+        navToggle.classList.toggle("active");
       });
 
       // Close menu when clicking on a link
-      document.querySelectorAll('.nav-link').forEach((link) => {
-        link.addEventListener('click', () => {
-          navMenu.classList.remove('active');
-          navToggle.classList.remove('active');
+      document.querySelectorAll(".nav-link").forEach((link) => {
+        link.addEventListener("click", () => {
+          navMenu.classList.remove("active");
+          navToggle.classList.remove("active");
         });
       });
     }
 
     // Navbar scroll effect
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
       if (window.scrollY > 100) {
-        navbar.classList.add('scrolled');
+        navbar.classList.add("scrolled");
       } else {
-        navbar.classList.remove('scrolled');
+        navbar.classList.remove("scrolled");
       }
     });
 
     // Active navigation link
     this.updateActiveNavLink();
-    window.addEventListener('scroll', () => this.updateActiveNavLink());
+    window.addEventListener("scroll", () => this.updateActiveNavLink());
   }
 
   updateActiveNavLink() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll(".nav-link");
 
-    let current = '';
+    let current = "";
     sections.forEach((section) => {
       const sectionTop = section.offsetTop;
-      const sectionHeight = section.clientHeight;
       if (window.scrollY >= sectionTop - 200) {
-        current = section.getAttribute('id');
+        current = section.getAttribute("id");
       }
     });
 
     navLinks.forEach((link) => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
+      link.classList.remove("active");
+      if (link.getAttribute("href") === `#${current}`) {
+        link.classList.add("active");
       }
     });
   }
 
   // Theme toggle functionality
   setupThemeToggle() {
-    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggle = document.getElementById("theme-toggle");
     const body = document.body;
-    const icon = themeToggle.querySelector('i');
+    const icon = themeToggle.querySelector("i");
 
     // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
-      body.classList.toggle('light-mode', savedTheme === 'light');
-      this.updateThemeIcon(icon, savedTheme === 'light');
+      body.classList.toggle("light-mode", savedTheme === "light");
+      this.updateThemeIcon(icon, savedTheme === "light");
     } else {
       // Default to dark mode
       this.updateThemeIcon(icon, false);
     }
 
-    themeToggle.addEventListener('click', () => {
-      body.classList.toggle('light-mode');
-      const isLight = body.classList.contains('light-mode');
+    themeToggle.addEventListener("click", () => {
+      body.classList.toggle("light-mode");
+      const isLight = body.classList.contains("light-mode");
 
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      localStorage.setItem("theme", isLight ? "light" : "dark");
       this.updateThemeIcon(icon, isLight);
     });
   }
 
   updateThemeIcon(icon, isLight) {
-    icon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+    icon.className = isLight ? "fas fa-sun" : "fas fa-moon";
   }
 
   // Scroll effects
   setupScrollEffects() {
     // Subtle parallax effect for hero section (reduced to prevent overlap)
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
       const scrolled = window.pageYOffset;
-      const hero = document.querySelector('.hero');
+      const hero = document.querySelector(".hero");
       if (hero && scrolled < window.innerHeight) {
         hero.style.transform = `translateY(${scrolled * 0.2}px)`;
       }
     });
 
     // Scroll to top functionality
-    const scrollToTop = document.createElement('button');
+    const scrollToTop = document.createElement("button");
     scrollToTop.innerHTML = '<i class="fas fa-arrow-up"></i>';
-    scrollToTop.className = 'scroll-to-top';
+    scrollToTop.className = "scroll-to-top";
     scrollToTop.style.cssText = `
             position: fixed;
             bottom: 20px;
@@ -207,20 +206,20 @@ class ModernPortfolio {
 
     document.body.appendChild(scrollToTop);
 
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
       if (window.scrollY > 500) {
-        scrollToTop.style.opacity = '1';
-        scrollToTop.style.visibility = 'visible';
+        scrollToTop.style.opacity = "1";
+        scrollToTop.style.visibility = "visible";
       } else {
-        scrollToTop.style.opacity = '0';
-        scrollToTop.style.visibility = 'hidden';
+        scrollToTop.style.opacity = "0";
+        scrollToTop.style.visibility = "hidden";
       }
     });
 
-    scrollToTop.addEventListener('click', () => {
+    scrollToTop.addEventListener("click", () => {
       window.scrollTo({
         top: 0,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     });
   }
@@ -229,13 +228,13 @@ class ModernPortfolio {
   setupIntersectionObserver() {
     const observerOptions = {
       threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px',
+      rootMargin: "0px 0px -50px 0px",
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('animate-in');
+          entry.target.classList.add("animate-in");
         }
       });
     }, observerOptions);
@@ -250,14 +249,14 @@ class ModernPortfolio {
         `);
 
     animateElements.forEach((el) => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(30px)';
-      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      el.style.opacity = "0";
+      el.style.transform = "translateY(30px)";
+      el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
       observer.observe(el);
     });
 
     // Add CSS for animation
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.textContent = `
             .animate-in {
                 opacity: 1 !important;
@@ -269,10 +268,10 @@ class ModernPortfolio {
 
   // Contact form functionality - Modern serverless approach
   setupContactForm() {
-    const contactForm = document.getElementById('contact-form');
+    const contactForm = document.getElementById("contact-form");
 
     if (contactForm) {
-      contactForm.addEventListener('submit', async (e) => {
+      contactForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const formData = new FormData(contactForm);
@@ -280,14 +279,14 @@ class ModernPortfolio {
 
         // Validate form data
         if (!data.name || !data.email || !data.message) {
-          this.showNotification('Please fill in all fields.', 'error');
+          this.showNotification("Please fill in all fields.", "error");
           return;
         }
 
         // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(data.email)) {
-          this.showNotification('Please enter a valid email address.', 'error');
+          this.showNotification("Please enter a valid email address.", "error");
           return;
         }
 
@@ -300,10 +299,10 @@ class ModernPortfolio {
 
         try {
           // Send to our serverless API endpoint
-          const response = await fetch('/api/contact', {
-            method: 'POST',
+          const response = await fetch("/api/contact", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
           });
@@ -312,22 +311,22 @@ class ModernPortfolio {
 
           if (response.ok && result.success) {
             this.showNotification(
-              '✅ Message sent successfully! I\'ll get back to you soon.',
-              'success',
+              "✅ Message sent successfully! I'll get back to you soon.",
+              "success",
             );
             contactForm.reset();
 
             // Add a nice animation
-            contactForm.classList.add('form-success');
+            contactForm.classList.add("form-success");
             setTimeout(
-              () => contactForm.classList.remove('form-success'),
+              () => contactForm.classList.remove("form-success"),
               2000,
             );
           } else {
-            throw new Error(result.error || 'Failed to send message');
+            throw new Error(result.error || "Failed to send message");
           }
         } catch (error) {
-          console.error('Contact form error:', error);
+          console.error("Contact form error:", error);
 
           // Fallback to mailto
           const subject = encodeURIComponent(
@@ -337,7 +336,7 @@ class ModernPortfolio {
             `Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`,
           );
 
-          this.showNotification('Opening email client as backup...', 'info');
+          this.showNotification("Opening email client as backup...", "info");
           window.location.href = `mailto:rajankit749@gmail.com?subject=${subject}&body=${body}`;
         } finally {
           // Reset button
@@ -349,24 +348,24 @@ class ModernPortfolio {
   }
 
   showNotification(message, type) {
-    const notification = document.createElement('div');
+    const notification = document.createElement("div");
     notification.className = `notification notification-${type}`;
     notification.textContent = message;
 
     // Set background color based on type
     let backgroundColor;
     switch (type) {
-      case 'success':
-        backgroundColor = 'var(--success-color)';
+      case "success":
+        backgroundColor = "var(--success-color)";
         break;
-      case 'error':
-        backgroundColor = 'var(--error-color)';
+      case "error":
+        backgroundColor = "var(--error-color)";
         break;
-      case 'info':
-        backgroundColor = 'var(--primary-color)';
+      case "info":
+        backgroundColor = "var(--primary-color)";
         break;
       default:
-        backgroundColor = 'var(--primary-color)';
+        backgroundColor = "var(--primary-color)";
     }
 
     notification.style.cssText = `
@@ -390,12 +389,12 @@ class ModernPortfolio {
 
     // Animate in
     setTimeout(() => {
-      notification.style.transform = 'translateX(0)';
+      notification.style.transform = "translateX(0)";
     }, 100);
 
     // Remove after 5 seconds
     setTimeout(() => {
-      notification.style.transform = 'translateX(100%)';
+      notification.style.transform = "translateX(100%)";
       setTimeout(() => {
         if (notification.parentNode) {
           notification.parentNode.removeChild(notification);
@@ -406,8 +405,8 @@ class ModernPortfolio {
 
   // Particles background effect
   setupParticles() {
-    const canvas = document.createElement('canvas');
-    canvas.id = 'particles-canvas';
+    const canvas = document.createElement("canvas");
+    canvas.id = "particles-canvas";
     canvas.style.cssText = `
             position: fixed;
             top: 0;
@@ -420,7 +419,7 @@ class ModernPortfolio {
         `;
     document.body.appendChild(canvas);
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     let particles = [];
     let mouse = { x: null, y: null };
 
@@ -430,11 +429,11 @@ class ModernPortfolio {
       canvas.height = window.innerHeight;
     };
 
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
 
     // Mouse movement
-    window.addEventListener('mousemove', (e) => {
+    window.addEventListener("mousemove", (e) => {
       mouse.x = e.x;
       mouse.y = e.y;
     });
@@ -529,20 +528,20 @@ class ModernPortfolio {
     initParticles();
     animate();
 
-    window.addEventListener('resize', initParticles);
+    window.addEventListener("resize", initParticles);
   }
 
   // Typing effect for hero section
   setupTypingEffect() {
-    const element = document.getElementById('typed-text');
+    const element = document.getElementById("typed-text");
     if (!element) return;
 
     const texts = [
-      'Multi-Cloud Solution Architect',
-      'AWS • Azure • GCP Specialist',
-      'Enterprise Cloud Transformation Leader',
-      'AI & Cloud Innovation Expert',
-      'FinOps & DevOps Strategist',
+      "Multi-Cloud Solution Architect",
+      "AWS • Azure • GCP Specialist",
+      "Enterprise Cloud Transformation Leader",
+      "AI & Cloud Innovation Expert",
+      "FinOps & DevOps Strategist",
     ];
 
     let textIndex = 0;
@@ -582,18 +581,18 @@ class ModernPortfolio {
 
   // Counter animation for stats
   setupCounterAnimation() {
-    const counters = document.querySelectorAll('.stat-number[data-count]');
+    const counters = document.querySelectorAll(".stat-number[data-count]");
 
     const observerOptions = {
       threshold: 0.5,
-      rootMargin: '0px',
+      rootMargin: "0px",
     };
 
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const counter = entry.target;
-          const target = parseInt(counter.getAttribute('data-count'));
+          const target = parseInt(counter.getAttribute("data-count"));
           const duration = 2000; // 2 seconds
           const step = target / (duration / 16); // 60fps
           let current = 0;
@@ -619,18 +618,18 @@ class ModernPortfolio {
 
   // Timeline animation
   setupTimelineAnimation() {
-    const timelineItems = document.querySelectorAll('.timeline-item');
+    const timelineItems = document.querySelectorAll(".timeline-item");
 
     const observerOptions = {
       threshold: 0.2,
-      rootMargin: '0px',
+      rootMargin: "0px",
     };
 
     const timelineObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
           setTimeout(() => {
-            entry.target.classList.add('visible');
+            entry.target.classList.add("visible");
           }, index * 100);
         }
       });
@@ -642,28 +641,28 @@ class ModernPortfolio {
   // Smooth scrolling for navigation links
   setupSmoothScrolling() {
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener('click', function (e) {
+      anchor.addEventListener("click", function (e) {
         e.preventDefault();
 
-        const target = document.querySelector(this.getAttribute('href'));
+        const target = document.querySelector(this.getAttribute("href"));
         if (target) {
           const offsetTop = target.offsetTop - 70; // Account for fixed navbar
 
           window.scrollTo({
             top: offsetTop,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
         }
       });
     });
 
     // Scroll indicator in hero section
-    const scrollIndicator = document.querySelector('.scroll-indicator');
+    const scrollIndicator = document.querySelector(".scroll-indicator");
     if (scrollIndicator) {
-      scrollIndicator.addEventListener('click', () => {
-        const aboutSection = document.querySelector('#about');
+      scrollIndicator.addEventListener("click", () => {
+        const aboutSection = document.querySelector("#about");
         if (aboutSection) {
-          aboutSection.scrollIntoView({ behavior: 'smooth' });
+          aboutSection.scrollIntoView({ behavior: "smooth" });
         }
       });
     }
@@ -675,7 +674,7 @@ class ModernPortfolio {
       const response = await fetch(url);
       return await response.json();
     } catch (error) {
-      console.error('Failed to load external data:', error);
+      console.error("Failed to load external data:", error);
       return null;
     }
   }
@@ -699,14 +698,14 @@ class ModernPortfolio {
   }
 
   updateExperience(experiences) {
-    const timeline = document.querySelector('.timeline');
+    const timeline = document.querySelector(".timeline");
     if (!timeline) return;
 
-    timeline.innerHTML = '';
+    timeline.innerHTML = "";
 
     experiences.forEach((exp) => {
-      const timelineItem = document.createElement('div');
-      timelineItem.className = 'timeline-item';
+      const timelineItem = document.createElement("div");
+      timelineItem.className = "timeline-item";
       timelineItem.innerHTML = `
                 <div class="timeline-marker"></div>
                 <div class="timeline-content">
@@ -715,7 +714,7 @@ class ModernPortfolio {
                     <span class="job-date">${exp.date}</span>
                     <p class="job-description">${exp.description}</p>
                     <div class="job-tech">
-                        ${exp.technologies.map((tech) => `<span class="tech-tag">${tech}</span>`).join('')}
+                        ${exp.technologies.map((tech) => `<span class="tech-tag">${tech}</span>`).join("")}
                     </div>
                 </div>
             `;
@@ -724,14 +723,14 @@ class ModernPortfolio {
   }
 
   updateSkills(skillCategories) {
-    const skillsGrid = document.querySelector('.skills-grid');
+    const skillsGrid = document.querySelector(".skills-grid");
     if (!skillsGrid) return;
 
-    skillsGrid.innerHTML = '';
+    skillsGrid.innerHTML = "";
 
     skillCategories.forEach((category) => {
-      const categoryDiv = document.createElement('div');
-      categoryDiv.className = 'skill-category';
+      const categoryDiv = document.createElement("div");
+      categoryDiv.className = "skill-category";
       categoryDiv.innerHTML = `
                 <h3>${category.name}</h3>
                 <div class="skill-items">
@@ -744,7 +743,7 @@ class ModernPortfolio {
                         </div>
                     `,
                       )
-                      .join('')}
+                      .join("")}
                 </div>
             `;
       skillsGrid.appendChild(categoryDiv);
@@ -752,14 +751,14 @@ class ModernPortfolio {
   }
 
   updateProjects(projects) {
-    const projectsGrid = document.querySelector('.projects-grid');
+    const projectsGrid = document.querySelector(".projects-grid");
     if (!projectsGrid) return;
 
-    projectsGrid.innerHTML = '';
+    projectsGrid.innerHTML = "";
 
     projects.forEach((project) => {
-      const projectCard = document.createElement('div');
-      projectCard.className = 'project-card';
+      const projectCard = document.createElement("div");
+      projectCard.className = "project-card";
       projectCard.innerHTML = `
                 <div class="project-image">
                     <img src="${project.image}" alt="${project.title}">
@@ -776,7 +775,7 @@ class ModernPortfolio {
                     <h3>${project.title}</h3>
                     <p>${project.description}</p>
                     <div class="project-tech">
-                        ${project.technologies.map((tech) => `<span class="tech-tag">${tech}</span>`).join('')}
+                        ${project.technologies.map((tech) => `<span class="tech-tag">${tech}</span>`).join("")}
                     </div>
                 </div>
             `;
@@ -786,11 +785,11 @@ class ModernPortfolio {
 }
 
 // Initialize the portfolio when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   new ModernPortfolio();
 });
 
 // Export for potential module use
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = ModernPortfolio;
 }
