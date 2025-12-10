@@ -1,15 +1,66 @@
 {
-  "name": "my-pro",
-  "version": "1.0.0",
-  "description": "\"# my-pro\"",
-  "main": "index.js",
+  "name": "ankit-raj-portfolio",
+  "version": "2.0.0",
+  "description": "Modern portfolio website for Ankit Raj - Cloud Developer & DevOps Engineer",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "npm run minify:css && npm run minify:js",
+    "minify:css": "cleancss -o public/css/modern-style.min.css public/css/modern-style.css",
+    "minify:js": "uglifyjs public/js/modern-portfolio.js -o public/js/modern-portfolio.min.js",
+    "serve": "http-server public -p 8080",
+    "deploy": "./scripts/deploy.sh",
+    "deploy:destroy": "./scripts/destroy.sh",
+    "terraform:init": "cd terraform && terraform init",
+    "terraform:plan": "cd terraform && terraform plan",
+    "terraform:apply": "cd terraform && terraform apply",
+    "test": "node tests/server.test.js",
+    "test:ci": "npm test",
+    "lint": "eslint public/js/*.js --ignore-pattern '*.min.js'",
+    "lint:fix": "eslint public/js/*.js --fix --ignore-pattern '*.min.js'",
+    "format": "prettier --write public/js/*.js public/css/*.css",
+    "format:check": "prettier --check public/js/*.js public/css/*.css",
+    "validate": "npm run lint && npm run format:check && npm test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "portfolio",
+    "ankit-raj",
+    "cloud-developer",
+    "devops",
+    "javascript",
+    "python",
+    "aws",
+    "azure",
+    "modern-web"
+  ],
+  "author": "Ankit Raj <rajankit749@gmail.com>",
+  "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.948.0",
+    "@vendia/serverless-express": "^4.12.6",
     "express": "^4.19.2"
-  }
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.0",
+    "eslint": "^8.55.0",
+    "http-server": "^14.1.0",
+    "nodemon": "^3.0.0",
+    "prettier": "^3.1.0",
+    "serverless": "^4.19.1",
+    "serverless-http": "^4.0.0",
+    "uglify-js": "^3.17.0"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/restlessankyyy/my-portfolio-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/restlessankyyy/my-portfolio-app/issues"
+  },
+  "homepage": "https://ankitraj.cloud"
 }

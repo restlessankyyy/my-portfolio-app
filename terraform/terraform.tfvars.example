@@ -1,0 +1,14 @@
+# Portfolio Serverless Deployment Variables
+# Copy this file to terraform.tfvars and customize your values
+
+# AWS Configuration
+aws_region = "us-east-1"  # Change to your preferred region
+environment = "prod"
+
+# Project Configuration
+project_name = "portfolio-ankit"
+
+# Optional: Custom Domain Configuration
+# Uncomment and configure if you have a custom domain
+# domain_name = "ankit-raj.dev"
+# certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/your-cert-id"
