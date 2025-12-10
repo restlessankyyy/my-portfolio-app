@@ -2,55 +2,54 @@
 // Replace these with your actual EmailJS credentials
 
 class EmailJSHandler {
-    constructor() {
-        // EmailJS credentials configured
-        this.serviceId = 'service_lwb1ipq';
-        this.templateId = 'template_sx2bogd';
-        this.publicKey = 'P1pp_sysjRWvgNrlo';
-        
-        this.isConfigured = true;
+  constructor() {
+    // EmailJS credentials configured
+    this.serviceId = 'service_lwb1ipq';
+    this.templateId = 'template_sx2bogd';
+    this.publicKey = 'P1pp_sysjRWvgNrlo';
+
+    this.isConfigured = true;
+  }
+
+  init() {
+    // Initialize EmailJS
+    if (window.emailjs) {
+      emailjs.init(this.publicKey);
+      console.log('EmailJS initialized successfully');
+    } else {
+      console.error('EmailJS not loaded');
     }
+  }
 
-    init() {
-        // Initialize EmailJS
-        if (window.emailjs) {
-            emailjs.init(this.publicKey);
-            console.log('EmailJS initialized successfully');
-        } else {
-            console.error('EmailJS not loaded');
-        }
+  async sendEmail(formData) {
+    try {
+      // Prepare template parameters
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        to_email: 'rajankit749@gmail.com', // Your email
+        reply_to: formData.email,
+      };
+
+      // Send email via EmailJS
+      const response = await emailjs.send(
+        this.serviceId,
+        this.templateId,
+        templateParams,
+      );
+
+      console.log('Email sent successfully:', response);
+      return { success: true, response };
+    } catch (error) {
+      console.error('Email sending failed:', error);
+      return { success: false, error };
     }
+  }
 
-    async sendEmail(formData) {
-        try {
-            // Prepare template parameters
-            const templateParams = {
-                from_name: formData.name,
-                from_email: formData.email,
-                message: formData.message,
-                to_email: 'rajankit749@gmail.com', // Your email
-                reply_to: formData.email
-            };
-
-            // Send email via EmailJS
-            const response = await emailjs.send(
-                this.serviceId,
-                this.templateId,
-                templateParams
-            );
-
-            console.log('Email sent successfully:', response);
-            return { success: true, response };
-
-        } catch (error) {
-            console.error('Email sending failed:', error);
-            return { success: false, error };
-        }
-    }
-
-    // Setup instructions for EmailJS
-    static getSetupInstructions() {
-        return `
+  // Setup instructions for EmailJS
+  static getSetupInstructions() {
+    return `
         📧 EmailJS Setup Instructions:
         
         1. Go to https://www.emailjs.com/ and create a free account
@@ -96,14 +95,14 @@ class EmailJSHandler {
         Best regards,
         Portfolio Contact Form
         `;
-    }
+  }
 }
 
 // Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = EmailJSHandler;
+  module.exports = EmailJSHandler;
 } else {
-    window.EmailJSHandler = EmailJSHandler;
+  window.EmailJSHandler = EmailJSHandler;
 }
 
 // Log setup instructions to console
