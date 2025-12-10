@@ -114,7 +114,7 @@ resource "aws_lambda_function" "portfolio" {
   function_name    = "${var.project_name}-${var.environment}-${random_string.suffix.result}"
   role            = aws_iam_role.lambda_role.arn
   handler         = "lambda.handler"
-  runtime         = "nodejs18.x"
+  runtime         = "nodejs22.x"
   timeout         = 30
   memory_size     = 512
 
