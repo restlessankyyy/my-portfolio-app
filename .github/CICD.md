@@ -86,7 +86,23 @@ Configure these secrets in your repository settings (`Settings` → `Secrets and
 |--------|-------------|----------|
 | `AWS_ACCESS_KEY_ID` | AWS IAM access key | ✅ |
 | `AWS_SECRET_ACCESS_KEY` | AWS IAM secret key | ✅ |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare API token | ✅ |
+| `CLOUDFLARE_ZONE_ID` | Cloudflare Zone ID | ✅ |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Account ID | ✅ |
 | `SLACK_WEBHOOK` | Slack notification URL | ❌ |
+
+### Terraform Remote State
+
+State is managed remotely using **S3 + DynamoDB** (no additional secrets needed - uses AWS credentials):
+
+| Resource | Name | Purpose |
+|----------|------|---------|
+| S3 Bucket | `portfolio-ankit-terraform-state` | State storage |
+| DynamoDB Table | `portfolio-ankit-terraform-locks` | State locking |
+
+**State file locations:**
+- AWS: `s3://portfolio-ankit-terraform-state/portfolio/aws/terraform.tfstate`
+- Cloudflare: `s3://portfolio-ankit-terraform-state/portfolio/cloudflare/terraform.tfstate`
 
 ### AWS IAM Permissions
 
@@ -102,6 +118,7 @@ The AWS credentials need these permissions:
         "lambda:*",
         "apigateway:*",
         "s3:*",
+        "dynamodb:*",
         "cloudwatch:*",
         "logs:*",
         "iam:GetRole",
@@ -118,6 +135,13 @@ The AWS credentials need these permissions:
   ]
 }
 ```
+
+### Cloudflare API Token Permissions
+
+The Cloudflare API token needs:
+- `Zone:DNS:Edit`
+- `Zone:Zone Settings:Edit`
+- `Zone:Page Rules:Edit`
 
 ### Environment Configuration
 
@@ -253,8 +277,11 @@ Trigger → [Skip Tests?] → Build → [Lambda Only?] → Deploy → Health Che
 | `.github/workflows/security-scan.yml` | Security scanning |
 | `.github/workflows/dependency-update.yml` | Auto dependency updates |
 | `.github/workflows/manual-deploy.yml` | Manual deployment |
-| `terraform/main.tf` | Infrastructure as Code |
+| `terraform/main.tf` | AWS Infrastructure as Code |
+| `terraform/cloudflare/main.tf` | Cloudflare DNS Infrastructure |
+| `terraform/backend/main.tf` | Remote state backend setup |
 | `scripts/build-lambda.sh` | Lambda build script |
+| `tests/server.test.js` | Server unit tests |
 
 ## 🎯 Best Practices
 
@@ -263,6 +290,7 @@ Trigger → [Skip Tests?] → Build → [Lambda Only?] → Deploy → Health Che
 3. **Review dependency updates** - Test before merging
 4. **Use manual deployment carefully** - Document emergency deploys
 5. **Keep secrets secure** - Rotate credentials regularly
+6. **Don't modify state manually** - Always use Terraform commands
 
 ---
 

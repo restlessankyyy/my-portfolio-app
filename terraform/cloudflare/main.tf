@@ -6,7 +6,25 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 4.0"
     }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
   }
+
+  # Remote state configuration - S3 backend with DynamoDB locking
+  backend "s3" {
+    bucket         = "portfolio-ankit-terraform-state"
+    key            = "portfolio/cloudflare/terraform.tfstate"
+    region         = "eu-north-1"
+    encrypt        = true
+    dynamodb_table = "portfolio-ankit-terraform-locks"
+  }
+}
+
+# AWS Provider for backend (required for S3 state)
+provider "aws" {
+  region = "eu-north-1"
 }
 
 # Configure Cloudflare Provider

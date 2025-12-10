@@ -7,6 +7,15 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  # Remote state configuration - S3 backend with DynamoDB locking
+  backend "s3" {
+    bucket         = "portfolio-ankit-terraform-state"
+    key            = "portfolio/aws/terraform.tfstate"
+    region         = "eu-north-1"
+    encrypt        = true
+    dynamodb_table = "portfolio-ankit-terraform-locks"
+  }
 }
 
 # Configure AWS Provider

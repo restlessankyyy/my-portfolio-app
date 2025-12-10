@@ -259,6 +259,28 @@ jobs:
         env:
           TF_VAR_aws_region: ${{ env.AWS_REGION }}
 
+      - name: ☁️ Cloudflare Terraform Init
+        id: cf_init
+        run: terraform init -input=false
+        working-directory: terraform/cloudflare
+
+      - name: ☁️ Cloudflare Terraform Validate
+        id: cf_validate
+        run: terraform validate -no-color
+        working-directory: terraform/cloudflare
+
+      - name: ☁️ Cloudflare Terraform Plan
+        id: cf_plan
+        run: |
+          terraform plan -no-color -input=false 2>&1 | tee cf-plan.txt
+        working-directory: terraform/cloudflare
+        continue-on-error: true
+        env:
+          TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          TF_VAR_custom_domain_target: "d-hctzaliyt6.execute-api.eu-north-1.amazonaws.com"
+
       - name: 📤 Upload Terraform Plan
         uses: actions/upload-artifact@v4
         with:
@@ -266,6 +288,7 @@ jobs:
           path: |
             terraform/tfplan
             terraform/plan.txt
+            terraform/cloudflare/cf-plan.txt
           retention-days: 7
 
       - name: 💬 PR Comment - Terraform Plan
@@ -281,10 +304,16 @@ jobs:
             
             const output = `## 🏗️ Terraform Plan Results
             
+            ### AWS Infrastructure
             #### Format Check: \`${{ steps.fmt.outcome }}\`
             #### Initialization: \`${{ steps.init.outcome }}\`
             #### Validation: \`${{ steps.validate.outcome }}\`
             #### Plan: \`${{ steps.plan.outcome }}\`
+            
+            ### Cloudflare Infrastructure
+            #### Initialization: \`${{ steps.cf_init.outcome }}\`
+            #### Validation: \`${{ steps.cf_validate.outcome }}\`
+            #### Plan: \`${{ steps.cf_plan.outcome }}\`
             
             <details><summary>Show Plan</summary>
             
@@ -423,7 +452,7 @@ jobs:
           echo "previous_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           echo "📸 Backed up current version: $CURRENT_VERSION"
 
-      - name: 🏗️ Deploy Infrastructure
+      - name: 🏗️ Deploy AWS Infrastructure
         if: github.event.inputs.deploy_type != 'lambda-only'
         run: |
           cd terraform
@@ -431,6 +460,18 @@ jobs:
           terraform apply -auto-approve -input=false
         env:
           TF_VAR_aws_region: ${{ env.AWS_REGION }}
+
+      - name: ☁️ Deploy Cloudflare Infrastructure
+        if: github.event.inputs.deploy_type != 'lambda-only'
+        run: |
+          cd terraform/cloudflare
+          terraform init -input=false
+          terraform apply -auto-approve -input=false
+        env:
+          TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          TF_VAR_custom_domain_target: "d-hctzaliyt6.execute-api.eu-north-1.amazonaws.com"
 
       - name: 🚀 Deploy Lambda Function
         id: deploy
