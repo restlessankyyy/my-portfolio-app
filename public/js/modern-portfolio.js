@@ -14,6 +14,70 @@ class ModernPortfolio {
         this.setupParticles();
         this.setupTypingEffect();
         this.setupSmoothScrolling();
+        this.setupCounterAnimation();
+        this.setupTimelineAnimation();
+        this.setupTiltEffect();
+        this.setupRevealAnimations();
+    }
+
+    // 3D Tilt Effect for Cards
+    setupTiltEffect() {
+        const tiltElements = document.querySelectorAll('[data-tilt]');
+        
+        tiltElements.forEach(element => {
+            const maxTilt = parseInt(element.getAttribute('data-tilt-max')) || 10;
+            
+            element.addEventListener('mousemove', (e) => {
+                const rect = element.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / centerY * -maxTilt;
+                const rotateY = (x - centerX) / centerX * maxTilt;
+                
+                element.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                element.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+            });
+        });
+    }
+
+    // Reveal animations on scroll
+    setupRevealAnimations() {
+        const revealElements = document.querySelectorAll('.section-title, .project-card, .skill-category, .cert-card');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => {
+            el.classList.add('reveal-element');
+            revealObserver.observe(el);
+        });
+
+        // Add reveal CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            .reveal-element {
+                opacity: 0;
+                transform: translateY(30px);
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+            .reveal-element.revealed {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        `;
+        document.head.appendChild(style);
     }
 
     // Navigation functionality
@@ -197,7 +261,7 @@ class ModernPortfolio {
         document.head.appendChild(style);
     }
 
-    // Contact form functionality with EmailJS
+    // Contact form functionality - Modern serverless approach
     setupContactForm() {
         const contactForm = document.getElementById('contact-form');
         
@@ -214,42 +278,55 @@ class ModernPortfolio {
                     return;
                 }
 
+                // Email validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(data.email)) {
+                    this.showNotification('Please enter a valid email address.', 'error');
+                    return;
+                }
+
                 // Show loading state
                 const submitBtn = contactForm.querySelector('button[type="submit"]');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Sending...';
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                 submitBtn.disabled = true;
                 
                 try {
-                    // Check if EmailJS is configured
-                    if (window.EmailJSHandler) {
-                        const emailHandler = new EmailJSHandler();
-                        const result = await emailHandler.sendEmail(data);
-                        
-                        if (result.success) {
-                            this.showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
-                            contactForm.reset();
-                        } else {
-                            throw new Error('EmailJS sending failed');
-                        }
-                    } else {
-                        // Fallback to mailto if EmailJS not configured
-                        const subject = encodeURIComponent(`Portfolio Contact from ${data.name}`);
-                        const body = encodeURIComponent(
-                            `Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`
-                        );
-                        const mailtoUrl = `mailto:rajankit749@gmail.com?subject=${subject}&body=${body}`;
-                        
-                        window.open(mailtoUrl, '_blank');
-                        this.showNotification('Opening your email client...', 'info');
+                    // Send to our serverless API endpoint
+                    const response = await fetch('/api/contact', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+                    
+                    if (response.ok && result.success) {
+                        this.showNotification('✅ Message sent successfully! I\'ll get back to you soon.', 'success');
                         contactForm.reset();
+                        
+                        // Add a nice animation
+                        contactForm.classList.add('form-success');
+                        setTimeout(() => contactForm.classList.remove('form-success'), 2000);
+                    } else {
+                        throw new Error(result.error || 'Failed to send message');
                     }
                 } catch (error) {
                     console.error('Contact form error:', error);
-                    this.showNotification('Failed to send message. Please try emailing directly.', 'error');
+                    
+                    // Fallback to mailto
+                    const subject = encodeURIComponent(`Portfolio Contact from ${data.name}`);
+                    const body = encodeURIComponent(
+                        `Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`
+                    );
+                    
+                    this.showNotification('Opening email client as backup...', 'info');
+                    window.location.href = `mailto:rajankit749@gmail.com?subject=${subject}&body=${body}`;
                 } finally {
                     // Reset button
-                    submitBtn.textContent = originalText;
+                    submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                 }
             });
@@ -440,23 +517,23 @@ class ModernPortfolio {
 
     // Typing effect for hero section
     setupTypingEffect() {
-        const element = document.querySelector('.hero-subtitle');
+        const element = document.getElementById('typed-text');
         if (!element) return;
 
         const texts = [
             'Multi-Cloud Solution Architect',
             'AWS • Azure • GCP Specialist', 
             'Enterprise Cloud Transformation Leader',
-            'Cross-Platform Architecture Expert',
-            'Hybrid Cloud Strategy Consultant'
+            'AI & Cloud Innovation Expert',
+            'FinOps & DevOps Strategist'
         ];
 
         let textIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
-        const typeSpeed = 100;
-        const deleteSpeed = 50;
-        const pauseTime = 2000;
+        const typeSpeed = 80;
+        const deleteSpeed = 40;
+        const pauseTime = 2500;
 
         const type = () => {
             const currentText = texts[textIndex];
@@ -483,7 +560,66 @@ class ModernPortfolio {
         };
 
         // Start typing effect after a delay
-        setTimeout(type, 1000);
+        setTimeout(type, 500);
+    }
+
+    // Counter animation for stats
+    setupCounterAnimation() {
+        const counters = document.querySelectorAll('.stat-number[data-count]');
+        
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = parseInt(counter.getAttribute('data-count'));
+                    const duration = 2000; // 2 seconds
+                    const step = target / (duration / 16); // 60fps
+                    let current = 0;
+
+                    const updateCounter = () => {
+                        current += step;
+                        if (current < target) {
+                            counter.textContent = Math.floor(current);
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.textContent = target;
+                        }
+                    };
+
+                    updateCounter();
+                    counterObserver.unobserve(counter);
+                }
+            });
+        }, observerOptions);
+
+        counters.forEach(counter => counterObserver.observe(counter));
+    }
+
+    // Timeline animation
+    setupTimelineAnimation() {
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px'
+        };
+
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        timelineItems.forEach(item => timelineObserver.observe(item));
     }
 
     // Smooth scrolling for navigation links

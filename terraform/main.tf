@@ -79,6 +79,26 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+# IAM Policy for SES (Contact Form Email)
+resource "aws_iam_role_policy" "lambda_ses_policy" {
+  name = "${var.project_name}-lambda-ses-policy"
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ses:SendEmail",
+          "ses:SendRawEmail"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # Lambda Function
 resource "aws_lambda_function" "portfolio" {
   filename         = "${path.module}/portfolio-lambda.zip"
@@ -189,8 +209,9 @@ resource "aws_lambda_permission" "api_gw" {
   source_arn = "${aws_apigatewayv2_api.portfolio_api.execution_arn}/*/*"
 }
 
-# API Gateway Custom Domain
+# API Gateway Custom Domain (conditional)
 resource "aws_apigatewayv2_domain_name" "portfolio_domain" {
+  count       = var.enable_custom_domain ? 1 : 0
   domain_name = var.domain_name
 
   domain_name_configuration {
@@ -200,9 +221,10 @@ resource "aws_apigatewayv2_domain_name" "portfolio_domain" {
   }
 }
 
-# API Gateway Domain Mapping
+# API Gateway Domain Mapping (conditional)
 resource "aws_apigatewayv2_api_mapping" "portfolio_mapping" {
+  count       = var.enable_custom_domain ? 1 : 0
   api_id      = aws_apigatewayv2_api.portfolio_api.id
-  domain_name = aws_apigatewayv2_domain_name.portfolio_domain.id
+  domain_name = aws_apigatewayv2_domain_name.portfolio_domain[0].id
   stage       = aws_apigatewayv2_stage.portfolio_stage.id
 }

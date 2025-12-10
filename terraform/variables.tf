@@ -24,6 +24,12 @@ variable "domain_name" {
   default     = "ankitraj.cloud"
 }
 
+variable "enable_custom_domain" {
+  description = "Whether to enable custom domain (requires valid ACM certificate)"
+  type        = bool
+  default     = false
+}
+
 variable "certificate_arn" {
   description = "ACM certificate ARN for custom domain (eu-north-1 for CloudFront)"
   type        = string

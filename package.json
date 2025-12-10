@@ -15,9 +15,13 @@
     "terraform:init": "cd terraform && terraform init",
     "terraform:plan": "cd terraform && terraform plan",
     "terraform:apply": "cd terraform && terraform apply",
-    "test": "echo \"No tests specified yet\" && exit 0",
-    "lint": "eslint public/js/*.js",
-    "format": "prettier --write public/js/*.js public/css/*.css"
+    "test": "node tests/server.test.js",
+    "test:ci": "npm test",
+    "lint": "eslint public/js/*.js --ignore-pattern '*.min.js'",
+    "lint:fix": "eslint public/js/*.js --fix --ignore-pattern '*.min.js'",
+    "format": "prettier --write public/js/*.js public/css/*.css",
+    "format:check": "prettier --check public/js/*.js public/css/*.css",
+    "validate": "npm run lint && npm run format:check && npm test"
   },
   "keywords": [
     "portfolio",
@@ -33,6 +37,7 @@
   "author": "Ankit Raj <rajankit749@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.948.0",
     "@vendia/serverless-express": "^4.12.6",
     "express": "^4.19.2"
   },

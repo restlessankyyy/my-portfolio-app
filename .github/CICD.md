@@ -1,186 +1,269 @@
-# CI/CD Documentation
+# 🚀 Production CI/CD Pipeline Documentation
 
-This repository uses GitHub Actions for continuous integration and deployment (CI/CD) to AWS.
+## Overview
 
-## 🚀 Workflows
+This repository implements an **enterprise-grade CI/CD pipeline** using GitHub Actions for automated deployment to AWS Lambda + API Gateway.
 
-### 1. Main Deployment (`deploy.yml`)
-**Triggers**: Push to `main` or `my-profile-v3-2026` branches
-**Purpose**: Validates, builds, and deploys the portfolio to production
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         CI/CD Pipeline Architecture                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐              │
+│  │  Code    │───▶│  Test &  │───▶│  Build   │───▶│  Deploy  │              │
+│  │  Push    │    │  Scan    │    │  Package │    │  to AWS  │              │
+│  └──────────┘    └──────────┘    └──────────┘    └──────────┘              │
+│       │               │               │               │                     │
+│       │               │               │               │                     │
+│       ▼               ▼               ▼               ▼                     │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐              │
+│  │ Trigger  │    │ Quality  │    │ Lambda   │    │ Health   │              │
+│  │ Pipeline │    │ Security │    │ Artifact │    │ Checks   │              │
+│  └──────────┘    └──────────┘    └──────────┘    └──────────┘              │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
-**Jobs**:
-- **Validate**: Runs tests, linting, and Terraform validation
-- **Build**: Creates Lambda deployment package
-- **Deploy**: Deploys infrastructure and updates Lambda function
-- **Notify**: Sends deployment status notifications
+## 📋 Workflows
 
-### 2. PR Validation (`pr-validation.yml`)
-**Triggers**: Pull requests to `main`
-**Purpose**: Validates code quality and infrastructure changes
+### 1. Main CI/CD Pipeline (`ci-cd.yml`)
 
-**Jobs**:
-- **Quality**: ESLint, Prettier, security audits
-- **Terraform Check**: Validates Terraform configuration
-- **Build Test**: Tests Lambda package creation
-- **PR Comment**: Posts validation results as PR comment
+**Production-ready pipeline with 8 stages:**
 
-### 3. Manual Deployment (`manual-deploy.yml`)
-**Triggers**: Manual workflow dispatch
-**Purpose**: Emergency deployments with custom options
+| Stage | Job | Description |
+|-------|-----|-------------|
+| 1 | `code-quality` | ESLint, Prettier, npm audit |
+| 2 | `security-scan` | GitLeaks, Trivy vulnerability scanning |
+| 3 | `test` | Unit tests, integration tests |
+| 4 | `terraform-validate` | IaC validation, format check, plan |
+| 5 | `build` | Lambda package creation, artifact upload |
+| 6 | `deploy` | Infrastructure + Lambda deployment |
+| 7 | `smoke-tests` | Post-deployment validation |
+| 8 | `notify` | Deployment status notification |
 
-**Options**:
+**Triggers:**
+- Push to `main` or `my-profile-v3-2026`
+- Pull requests to `main`
+- Manual workflow dispatch
+
+### 2. Security Scan (`security-scan.yml`)
+
+**Scheduled weekly security scanning:**
+
+- 📦 NPM dependency audit
+- 🔐 Secret detection (GitLeaks)
+- 🛡️ Trivy vulnerability scanner
+- 🏗️ Checkov IaC security scan
+
+**Schedule:** Every Monday at 9:00 AM UTC
+
+### 3. Dependency Update (`dependency-update.yml`)
+
+**Automated dependency updates:**
+
+- Weekly check for outdated packages
+- Automatic PR creation
+- Configurable update type (patch/minor/major)
+
+**Schedule:** Every Sunday at 2:00 AM UTC
+
+### 4. Manual Deployment (`manual-deploy.yml`)
+
+**Emergency/manual deployment options:**
+
 - Environment selection (prod/staging)
-- Force deployment (skip validation)
-- Lambda-only updates (skip Terraform)
+- Force deployment (skip tests)
+- Lambda-only updates
+- Infrastructure-only updates
 
-## 🔧 Setup Requirements
+## 🔧 Setup
 
-### GitHub Secrets
-Configure these secrets in your repository settings:
+### Required GitHub Secrets
 
-```
-AWS_ACCESS_KEY_ID     - AWS access key for deployment
-AWS_SECRET_ACCESS_KEY - AWS secret key for deployment
-```
+Configure these secrets in your repository settings (`Settings` → `Secrets and variables` → `Actions`):
 
-### AWS Permissions
+| Secret | Description | Required |
+|--------|-------------|----------|
+| `AWS_ACCESS_KEY_ID` | AWS IAM access key | ✅ |
+| `AWS_SECRET_ACCESS_KEY` | AWS IAM secret key | ✅ |
+| `SLACK_WEBHOOK` | Slack notification URL | ❌ |
+
+### AWS IAM Permissions
+
 The AWS credentials need these permissions:
-- Lambda: Full access for function management
-- API Gateway: Full access for API management
-- ACM: Certificate management
-- CloudWatch: Logs access
-- IAM: Role and policy management
 
-## 🌍 Deployment Architecture
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "lambda:*",
+        "apigateway:*",
+        "s3:*",
+        "cloudwatch:*",
+        "logs:*",
+        "iam:GetRole",
+        "iam:CreateRole",
+        "iam:AttachRolePolicy",
+        "iam:PutRolePolicy",
+        "iam:PassRole",
+        "ses:SendEmail",
+        "ses:SendRawEmail",
+        "acm:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+### Environment Configuration
+
+Create a GitHub Environment named `production`:
+
+1. Go to `Settings` → `Environments`
+2. Create `production` environment
+3. Add protection rules (optional):
+   - Required reviewers
+   - Wait timer
+   - Deployment branches
+
+## 🏗️ Pipeline Features
+
+### 🔒 Security
+
+- **SAST Scanning**: Static analysis of source code
+- **Dependency Audit**: Automated vulnerability detection
+- **Secret Detection**: Prevents credential leaks
+- **IaC Scanning**: Terraform security best practices
+
+### 📦 Build Optimization
+
+- **Caching**: npm dependency caching
+- **Artifact Versioning**: SHA-based artifact naming
+- **Minimal Packages**: Production-only dependencies
+
+### 🚀 Deployment
+
+- **Blue/Green Ready**: Version tracking for rollback
+- **Health Checks**: Post-deployment validation
+- **Automatic Rollback**: On deployment failure
+
+### 📊 Observability
+
+- **GitHub Actions Summary**: Rich deployment reports
+- **Artifact Retention**: 30-day build artifacts
+- **PR Comments**: Validation results on PRs
+
+## 📈 Pipeline Metrics
+
+The pipeline tracks and reports:
+
+- Build package size
+- Build hash (for versioning)
+- Deployment ID
+- Response times
+- Test results
+
+## 🔄 Deployment Flow
+
+### Automatic (Push to main)
 
 ```
-GitHub → GitHub Actions → AWS (eu-north-1)
-   ↓
-   ├── Build Lambda package
-   ├── Run Terraform
-   ├── Update Lambda function
-   └── Test deployment
+Push → Validate → Build → Deploy → Smoke Test → Notify
 ```
 
-## 📋 Deployment Process
+### Pull Request
 
-1. **Code Push/PR**: Triggers validation
-2. **Validation**: 
-   - Code quality checks (ESLint, Prettier)
-   - Security audit (npm audit)
-   - Terraform validation
-   - Build test
-3. **Deployment** (main branch only):
-   - Build Lambda package with dependencies
-   - Apply Terraform infrastructure changes
-   - Update Lambda function code
-   - Test deployment health
+```
+PR Open → Validate → Build Test → PR Comment (no deploy)
+```
 
-## 🔄 Environment Configuration
+### Manual
 
-### Production
-- **Branch**: `main`, `my-profile-v3-2026`
-- **URL**: https://ankitraj.cloud
-- **Region**: eu-north-1 (EU North - Stockholm)
-
-### Development
-- **Local**: `npm start` (port 3000)
-- **Testing**: `npm test`, `npm run lint`
+```
+Trigger → [Skip Tests?] → Build → [Lambda Only?] → Deploy → Health Check
+```
 
 ## 🚨 Emergency Procedures
 
 ### Quick Lambda Update
-Use the Manual Deployment workflow with "Update Lambda only" option.
+
+1. Go to Actions → Manual Deployment
+2. Select `lambda-only` deployment type
+3. Run workflow
 
 ### Rollback
-1. Go to AWS Lambda console
-2. Use "Versions" tab to revert to previous version
-3. Or redeploy from a previous git commit
 
-### Infrastructure Issues
-1. Check Terraform state in AWS
-2. Use `terraform plan` locally to see changes
-3. Manual fix via AWS console if needed
+1. Go to AWS Lambda console
+2. Find the function: `portfolio-ankit-prod-7ette088`
+3. Navigate to Versions
+4. Deploy previous version
+
+### Skip Tests (Emergency)
+
+1. Go to Actions → Manual Deployment
+2. Check "Skip tests"
+3. Run workflow
+
+⚠️ **Warning**: Only use skip tests for critical hotfixes!
 
 ## 📊 Monitoring
 
-### Health Check
-- **Endpoint**: https://ankitraj.cloud/health
-- **Expected Response**: `{"status":"healthy","timestamp":"..."}`
+### GitHub Actions Dashboard
 
-### Logs
-- **Lambda Logs**: CloudWatch `/aws/lambda/portfolio-ankit-prod-*`
-- **API Gateway Logs**: CloudWatch `/aws/apigateway/portfolio-ankit-prod-*`
+- View all pipeline runs
+- Check job status
+- Download artifacts
+- Review logs
 
-## 🛠️ Development Workflow
+### AWS CloudWatch
 
-1. **Feature Development**:
-   ```bash
-   git checkout -b feature/new-feature
-   # Make changes
-   git commit -m "feat: add new feature"
-   git push origin feature/new-feature
-   ```
+- Lambda function metrics
+- API Gateway metrics
+- Error tracking
 
-2. **Create PR**: PR validation runs automatically
+## 🔧 Troubleshooting
 
-3. **Review & Merge**: Deployment runs automatically
+### Build Failures
 
-4. **Monitor**: Check https://ankitraj.cloud
+1. Check npm audit output
+2. Verify package.json dependencies
+3. Review build logs
 
-## 📝 Workflow Customization
+### Deployment Failures
 
-### Adding Environments
-1. Create new environment in GitHub repository settings
-2. Add environment-specific secrets
-3. Update workflow files with new environment options
+1. Check AWS credentials
+2. Verify Terraform state
+3. Review Lambda logs
 
-### Modifying Deployment Steps
-Edit `.github/workflows/deploy.yml`:
-- Add new validation steps in `validate` job
-- Modify build process in `build` job  
-- Customize deployment in `deploy` job
+### Health Check Failures
 
-## 🔍 Troubleshooting
+1. Check Lambda function status
+2. Verify API Gateway configuration
+3. Test endpoint manually
 
-### Common Issues
+## 📚 Related Files
 
-**Deployment Fails**:
-- Check AWS credentials and permissions
-- Verify Terraform state
-- Check CloudWatch logs
+| File | Description |
+|------|-------------|
+| `.github/workflows/ci-cd.yml` | Main CI/CD pipeline |
+| `.github/workflows/security-scan.yml` | Security scanning |
+| `.github/workflows/dependency-update.yml` | Auto dependency updates |
+| `.github/workflows/manual-deploy.yml` | Manual deployment |
+| `terraform/main.tf` | Infrastructure as Code |
+| `scripts/build-lambda.sh` | Lambda build script |
 
-**Tests Fail**:
-- Run tests locally: `npm test`
-- Check ESLint: `npm run lint`
-- Fix code quality issues
+## 🎯 Best Practices
 
-**Lambda Update Fails**:
-- Check package size (max 50MB)
-- Verify Lambda function exists
-- Check IAM permissions
+1. **Never push directly to main** - Use PRs for code review
+2. **Monitor security scans** - Address vulnerabilities promptly
+3. **Review dependency updates** - Test before merging
+4. **Use manual deployment carefully** - Document emergency deploys
+5. **Keep secrets secure** - Rotate credentials regularly
 
-**DNS/SSL Issues**:
-- Verify Cloudflare configuration
-- Check ACM certificate status
-- Test direct API Gateway endpoint
+---
 
-### Debug Commands
-
-```bash
-# Local testing
-npm start                    # Start local server
-npm test                     # Run tests
-npm run lint                 # Check code quality
-
-# AWS CLI debugging
-aws lambda list-functions --region eu-north-1
-aws apigatewayv2 get-apis --region eu-north-1
-aws acm list-certificates --region eu-north-1
-
-# Terraform debugging
-cd terraform
-terraform plan
-terraform validate
-terraform state list
-```
+*Last updated: December 2025*

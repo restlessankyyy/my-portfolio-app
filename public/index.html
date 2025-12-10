@@ -18,7 +18,7 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Ankit Raj - Multi-Cloud Solution Architect | Stockholm, Sweden">
     <meta property="og:description" content="Multi-Cloud Solution Architect specialized in AWS, Azure, and GCP. Leading enterprise cloud transformations at H&M Group in Stockholm, Sweden.">
-    <meta property="og:image" content="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/img/ankit.jpg">
+    <meta property="og:image" content="img/ankit.jpg">
     <meta property="og:url" content="https://ankitraj.cloud">
     <meta property="og:site_name" content="Ankit Raj Portfolio">
     <meta property="og:locale" content="en_US">
@@ -28,7 +28,7 @@
     <meta name="twitter:creator" content="@ankit_raj24">
     <meta name="twitter:title" content="Ankit Raj - Multi-Cloud Solution Architect | Stockholm">
     <meta name="twitter:description" content="Multi-Cloud Solution Architect specialized in AWS, Azure, and GCP. Enterprise cloud innovation leader at H&M Group.">
-    <meta name="twitter:image" content="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/img/ankit.jpg">
+    <meta name="twitter:image" content="img/ankit.jpg">
     
     <!-- Performance and Security -->
     <meta name="theme-color" content="#6366f1">
@@ -36,7 +36,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <meta property="og:image" content="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/img/ankit.jpg">
+    <meta property="og:image" content="img/ankit.jpg">
     <meta property="og:url" content="https://ankitraj.cloud">
     
     <!-- Twitter -->
@@ -44,12 +44,12 @@
     <meta name="twitter:creator" content="@ankit_raj24">
     <meta name="twitter:title" content="Ankit Raj - Cloud Developer & DevOps Engineer">
     <meta name="twitter:description" content="Experienced Cloud Developer and DevOps Engineer specializing in modern web technologies and cloud infrastructure">
-    <meta name="twitter:image" content="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/img/ankit.jpg">
+    <meta name="twitter:image" content="img/ankit.jpg">
     
     <title>Ankit Raj - Cloud Developer & DevOps Engineer</title>
     
     <!-- Favicon -->
-    <link rel="icon" href="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,7 +63,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/css/modern-style.css">
+    <link rel="stylesheet" href="css/modern-style.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -91,24 +91,41 @@
         </div>
     </nav>
 
+    <!-- Animated Background -->
+    <div id="particles-js" class="particles-bg"></div>
+    
+    <!-- Floating Cloud Icons -->
+    <div class="floating-clouds">
+        <i class="fab fa-aws floating-icon" style="--delay: 0s; --x: 10%; --y: 20%;"></i>
+        <i class="fab fa-microsoft floating-icon" style="--delay: 2s; --x: 85%; --y: 15%;"></i>
+        <i class="fab fa-google floating-icon" style="--delay: 4s; --x: 75%; --y: 70%;"></i>
+        <i class="fab fa-docker floating-icon" style="--delay: 1s; --x: 15%; --y: 75%;"></i>
+        <i class="fab fa-kubernetes floating-icon" style="--delay: 3s; --x: 90%; --y: 45%;"></i>
+        <i class="fas fa-cloud floating-icon" style="--delay: 5s; --x: 5%; --y: 50%;"></i>
+    </div>
+
     <!-- Hero Section -->
     <section id="home" class="hero" role="banner" aria-label="Introduction">
         <div class="hero-container">
             <div class="hero-content">
-                <div class="hero-image">
-                    <img src="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/img/ankit.jpg" alt="Ankit Raj - Multi-Cloud Solution Architect" class="profile-image">
+                <div class="hero-image" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.3">
+                    <img src="img/ankit.jpg" alt="Ankit Raj - Multi-Cloud Solution Architect" class="profile-image">
                     <div class="image-glow" aria-hidden="true"></div>
+                    <div class="image-ring"></div>
+                    <div class="image-ring ring-2"></div>
                 </div>
-                <h1 class="hero-title">
-                    Hi, I'm <span class="gradient-text">Ankit Raj</span>
+                <h1 class="hero-title animate-fade-up">
+                    Hi, I'm <span class="gradient-text animated-gradient">Ankit Raj</span>
                 </h1>
-                <p class="hero-subtitle" role="doc-subtitle">Multi-Cloud Solution Architect</p>
+                <p class="hero-subtitle" role="doc-subtitle">
+                    <span id="typed-text"></span><span class="cursor">|</span>
+                </p>
                 <div class="cloud-badges" style="margin: 1rem 0; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;" role="list" aria-label="Cloud platform specializations">
-                    <span class="cloud-badge aws" role="listitem">AWS Specialist</span>
-                    <span class="cloud-badge azure" role="listitem">Azure Expert</span>
-                    <span class="cloud-badge gcp" role="listitem">GCP Professional</span>
+                    <span class="cloud-badge aws pulse-badge" role="listitem"><i class="fab fa-aws"></i> AWS Specialist</span>
+                    <span class="cloud-badge azure pulse-badge" role="listitem"><i class="fab fa-microsoft"></i> Azure Expert</span>
+                    <span class="cloud-badge gcp pulse-badge" role="listitem"><i class="fab fa-google"></i> GCP Professional</span>
                 </div>
-                <p class="hero-description">
+                <p class="hero-description animate-fade-up" style="animation-delay: 0.3s;">
                     Specialized in AWS, Azure, and Google Cloud Platform with expertise in designing 
                     enterprise-grade multi-cloud solutions and leading complex digital transformations.
                 </p>
@@ -180,6 +197,34 @@
                             <span>Google Cloud Platform</span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card" data-tilt data-tilt-max="10">
+                    <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="stat-number" data-count="9">0</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-card" data-tilt data-tilt-max="10">
+                    <div class="stat-icon"><i class="fas fa-cloud"></i></div>
+                    <div class="stat-number" data-count="3">0</div>
+                    <div class="stat-label">Cloud Platforms</div>
+                </div>
+                <div class="stat-card" data-tilt data-tilt-max="10">
+                    <div class="stat-icon"><i class="fas fa-project-diagram"></i></div>
+                    <div class="stat-number" data-count="50">0</div>
+                    <div class="stat-label">Projects Delivered</div>
+                </div>
+                <div class="stat-card" data-tilt data-tilt-max="10">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-number" data-count="200">0</div>
+                    <div class="stat-label">Teams Supported</div>
                 </div>
             </div>
         </div>
@@ -538,7 +583,7 @@
                 <!-- Add your projects from LinkedIn/GitHub here -->
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/img/H&M Azure AI Foundry.png" alt="H&M Azure AI Platform">
+                        <img src="img/H&M Azure AI Foundry.png" alt="H&M Azure AI Platform">
                         <div class="project-overlay">
                             <a href="https://www.linkedin.com/in/raj-ankit" class="project-link" target="_blank">
                                 <i class="fas fa-external-link-alt"></i>
@@ -563,7 +608,7 @@
                 
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/img/finops.png" alt="H&M FinOps Initiative">
+                        <img src="img/finops.png" alt="H&M FinOps Initiative">
                         <div class="project-overlay">
                             <a href="https://www.finops.org/" class="project-link" target="_blank">
                                 <i class="fas fa-external-link-alt"></i>
@@ -588,7 +633,7 @@
                 
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/img/multicloud.png" alt="H&M Multi-Cloud Infrastructure">
+                        <img src="img/multicloud.png" alt="H&M Multi-Cloud Infrastructure">
                         <div class="project-overlay">
                             <a href="https://www.ankitraj.cloud" class="project-link" target="_blank">
                                 <i class="fas fa-external-link-alt"></i>
@@ -613,7 +658,7 @@
                 
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/img/internaldevplatform.png" alt="Internal Developer Platform">
+                        <img src="img/internaldevplatform.png" alt="Internal Developer Platform">
                         <div class="project-overlay">
                             <a href="https://azure.microsoft.com/en-us/solutions/dev-test/" class="project-link" target="_blank">
                                 <i class="fas fa-external-link-alt"></i>
@@ -638,7 +683,7 @@
                 
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/img/zero-trust.png" alt="Zero Trust Microservices">
+                        <img src="img/zero-trust.png" alt="Zero Trust Microservices">
                         <div class="project-overlay">
                             <a href="https://www.microsoft.com/en-us/security/business/zero-trust" class="project-link" target="_blank">
                                 <i class="fas fa-external-link-alt"></i>
@@ -663,7 +708,7 @@
                 
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/img/enterprise-monitoring-solutions-volvo.png" alt="Volvo Enterprise Monitoring">
+                        <img src="img/enterprise-monitoring-solutions-volvo.png" alt="Volvo Enterprise Monitoring">
                         <div class="project-overlay">
                             <a href="https://www.elastic.co/" class="project-link" target="_blank">
                                 <i class="fas fa-external-link-alt"></i>
@@ -751,8 +796,8 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/js/emailjs-config.js"></script>
-    <script src="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/js/enhanced-portfolio.js"></script>
-    <script src="https://portfolio-ankit-assets-txz824kw.s3.eu-north-1.amazonaws.com/js/modern-portfolio.js"></script>
+    <script src="js/emailjs-config.js"></script>
+    <script src="js/enhanced-portfolio.js"></script>
+    <script src="js/modern-portfolio.js"></script>
 </body>
 </html>

@@ -1,0 +1,20 @@
+# Cloudflare DNS Configuration for ankitraj.cloud
+# 
+# INSTRUCTIONS:
+# 1. Get your Cloudflare API Token from: https://dash.cloudflare.com/profile/api-tokens
+#    - Create a token with "Zone:DNS:Edit" permission for ankitraj.cloud
+# 2. Get your Zone ID from: Cloudflare Dashboard → ankitraj.cloud → Overview (right sidebar)
+# 3. Fill in the values below
+
+# Your Cloudflare API Token (keep this secret!)
+cloudflare_api_token = "YOUR_CLOUDFLARE_API_TOKEN"
+
+# Your Cloudflare Zone ID for ankitraj.cloud
+cloudflare_zone_id = "YOUR_ZONE_ID"
+
+# AWS API Gateway Domain (already configured)
+api_gateway_domain = "jmgjkrpp65.execute-api.eu-north-1.amazonaws.com"
+
+# ACM Certificate Validation (already configured)
+acm_validation_name  = "_fda1caf491ef2ac8c3dc323852e4243d"
+acm_validation_value = "_a21d0ea08f7f5d4ec86278a9b3b41242.jkddzztszm.acm-validations.aws."

@@ -1,0 +1,128 @@
+name: 🔄 Auto-Update Dependencies
+
+on:
+  schedule:
+    # Run weekly on Sunday at 2:00 AM UTC
+    - cron: '0 2 * * 0'
+  
+  workflow_dispatch:
+    inputs:
+      update_type:
+        description: 'Type of update'
+        required: true
+        default: 'minor'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  update-dependencies:
+    name: 📦 Update Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 📦 Check for Updates
+        id: updates
+        run: |
+          npm install -g npm-check-updates
+          
+          UPDATE_TYPE="${{ github.event.inputs.update_type || 'minor' }}"
+          
+          case $UPDATE_TYPE in
+            patch)
+              NCU_TARGET="patch"
+              ;;
+            minor)
+              NCU_TARGET="minor"
+              ;;
+            major)
+              NCU_TARGET="latest"
+              ;;
+          esac
+          
+          echo "Checking for $UPDATE_TYPE updates..."
+          ncu --target $NCU_TARGET --jsonUpgraded > updates.json
+          
+          UPDATES=$(cat updates.json)
+          if [ "$UPDATES" == "{}" ]; then
+            echo "has_updates=false" >> $GITHUB_OUTPUT
+            echo "No updates available"
+          else
+            echo "has_updates=true" >> $GITHUB_OUTPUT
+            echo "Updates available:"
+            cat updates.json | jq .
+          fi
+
+      - name: 🔄 Apply Updates
+        if: steps.updates.outputs.has_updates == 'true'
+        run: |
+          UPDATE_TYPE="${{ github.event.inputs.update_type || 'minor' }}"
+          
+          case $UPDATE_TYPE in
+            patch)
+              ncu -u --target patch
+              ;;
+            minor)
+              ncu -u --target minor
+              ;;
+            major)
+              ncu -u --target latest
+              ;;
+          esac
+          
+          npm install
+
+      - name: 🧪 Test After Update
+        if: steps.updates.outputs.has_updates == 'true'
+        run: |
+          npm run lint || echo "Linting issues found"
+          npm test
+
+      - name: 📝 Create Pull Request
+        if: steps.updates.outputs.has_updates == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(deps): update dependencies"
+          title: "🔄 Automated Dependency Update"
+          body: |
+            ## 📦 Automated Dependency Update
+            
+            This PR was automatically created to update dependencies.
+            
+            ### Updated Packages
+            ```json
+            $(cat updates.json)
+            ```
+            
+            ### Checklist
+            - [ ] Tests pass
+            - [ ] No breaking changes
+            - [ ] Security scan clean
+            
+            ---
+            *Created by GitHub Actions*
+          branch: deps/auto-update-${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            dependencies
+            automated
