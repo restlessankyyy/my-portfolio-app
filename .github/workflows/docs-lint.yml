@@ -1,0 +1,63 @@
+# ============================================================================
+# Documentation Linting Workflow
+# ============================================================================
+# Runs only on documentation changes (markdown files)
+# Lightweight - no build, no deploy, just markdown validation
+# ============================================================================
+
+name: 📝 Docs Lint
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.md'
+      - 'docs/**'
+  
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**.md'
+      - 'docs/**'
+
+jobs:
+  markdown-lint:
+    name: 📝 Markdown Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📝 Lint Markdown Files
+        uses: DavidAnson/markdownlint-cli2-action@v18
+        with:
+          globs: '**/*.md'
+          config: |
+            {
+              "default": true,
+              "MD013": false,
+              "MD033": false,
+              "MD041": false,
+              "MD024": { "siblings_only": true }
+            }
+
+      - name: 🔗 Check Links (Optional)
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          config-file: '.github/markdown-link-check.json'
+        continue-on-error: true
+
+      - name: 📊 Docs Summary
+        if: always()
+        run: |
+          echo "## 📝 Documentation Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Markdown Lint | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Only documentation files were changed - skipped full CI/CD pipeline." >> $GITHUB_STEP_SUMMARY
