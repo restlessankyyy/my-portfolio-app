@@ -1,0 +1,15 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^https://github.com/restlessankyyy/my-portfolio-app"
+    },
+    {
+      "pattern": "^http://localhost"
+    }
+  ],
+  "httpHeaders": [],
+  "timeout": "10s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "5s"
+}
