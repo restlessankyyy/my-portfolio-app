@@ -39,7 +39,7 @@
   "dependencies": {
     "@aws-sdk/client-ses": "^3.999.0",
     "@vendia/serverless-express": "^4.12.6",
-    "express": "^4.19.2"
+    "express": "^5.2.1"
   },
   "devDependencies": {
     "clean-css-cli": "^5.6.0",
