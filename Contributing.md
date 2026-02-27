@@ -50,7 +50,7 @@ Individual checks:
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
-```
+```text
 feat: add project filter animation
 fix: resolve typing effect ID mismatch
 docs: update README with new workflows
