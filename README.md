@@ -46,7 +46,7 @@ Premium cinematic portfolio website for **Ankit Raj** — Lead Solution Architec
 
 ## 📁 Project Structure
 
-```
+```text
 my-portfolio-app/
 ├── public/                     # Static assets
 │   ├── index.html              # Main HTML — cinematic portfolio
@@ -160,6 +160,7 @@ node scripts/generate-pdf.js
 ### Remote State
 
 Terraform state stored in S3 with DynamoDB locking:
+
 - **Bucket**: `portfolio-ankit-terraform-state`
 - **Lock Table**: `portfolio-ankit-terraform-locks`
 
@@ -185,7 +186,7 @@ Terraform state stored in S3 with DynamoDB locking:
 
 ### CI/CD Stages
 
-```
+```text
 Code Quality → Security Scan → Tests → Terraform Validate → Build → Deploy → Smoke Tests → Notify
 ```
 
@@ -202,7 +203,7 @@ Code Quality → Security Scan → Tests → Terraform Validate → Build → De
 
 ## 📊 Architecture
 
-```
+```text
                     ┌─────────────┐
                     │  Cloudflare │
                     │    DNS/SSL  │
@@ -283,10 +284,11 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 ## 👤 Author
 
 **Ankit Raj** — Lead Solution Architect & Multi-Cloud Engineer
+
 - 🌐 Website: [ankitraj.cloud](https://www.ankitraj.cloud)
 - 💻 GitHub: [@restlessankyyy](https://github.com/restlessankyyy)
 - 💼 LinkedIn: [Ankit Raj](https://www.linkedin.com/in/ankit-raj/)
-- 📧 Email: rajankit749@gmail.com
+- 📧 Email: <rajankit749@gmail.com>
 
 ---
 

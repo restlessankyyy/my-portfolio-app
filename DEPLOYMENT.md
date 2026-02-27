@@ -4,7 +4,7 @@ Modern, serverless portfolio website deployed to AWS Lambda via Terraform Infras
 
 ## 🏗️ Architecture
 
-```
+```text
 Cloudflare (DNS/SSL) → API Gateway (HTTP v2) → Lambda (Node.js 22) → SES / S3 / CloudWatch
 ```
 
@@ -27,17 +27,20 @@ Cloudflare (DNS/SSL) → API Gateway (HTTP v2) → Lambda (Node.js 22) → SES /
 ### Setup
 
 1. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 2. **Configure deployment:**
+
    ```bash
    cp terraform/terraform.tfvars.example terraform/terraform.tfvars
    # Edit terraform.tfvars with your settings
    ```
 
 3. **Deploy to AWS:**
+
    ```bash
    npm run deploy
    ```
@@ -74,28 +77,32 @@ project_name = "portfolio-ankit"
 ## 🏷️ Infrastructure Components
 
 ### Lambda Function
+
 - **Runtime**: Node.js 22.x
 - **Memory**: 512 MB
 - **Timeout**: 30 seconds
 - **Handler**: `lambda.handler`
 
 ### API Gateway
+
 - **Type**: HTTP API (v2)
 - **CORS**: Enabled
 - **Logging**: CloudWatch integration
 
 ### Remote State
+
 - **S3 Bucket**: `portfolio-ankit-terraform-state`
 - **DynamoDB Lock**: `portfolio-ankit-terraform-locks`
 - **Region**: eu-north-1
 
-
 ### Docker
+
 ```bash
 # Build and run locally
 docker build -t portfolio .
 docker run -p 3000:3000 portfolio
 ```
+
 - **Base image**: `node:22-alpine`
 
 ## 🌐 Local Development
@@ -129,7 +136,7 @@ npm start
 
 Deployment is automated via GitHub Actions on push to `main`:
 
-```
+```text
 Lint → Security Scan → Test → Terraform Validate → Build → Deploy → Smoke Test → Notify
 ```
 
@@ -154,4 +161,4 @@ npm run deploy:destroy
 ---
 
 **Author**: Ankit Raj — Lead Solution Architect & Multi-Cloud Engineer  
-**Contact**: rajankit749@gmail.com
+**Contact**: <rajankit749@gmail.com>
