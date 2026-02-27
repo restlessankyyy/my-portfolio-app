@@ -4,7 +4,7 @@
 
 This repository implements an **enterprise-grade CI/CD pipeline** using GitHub Actions for automated deployment to AWS Lambda + API Gateway.
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                         CI/CD Pipeline Architecture                         │
 ├─────────────────────────────────────────────────────────────────────────────┤
@@ -42,6 +42,7 @@ This repository implements an **enterprise-grade CI/CD pipeline** using GitHub A
 | 8 | `notify` | Deployment status notification |
 
 **Triggers:**
+
 - Push to `main` or `my-profile-v3-2026`
 - Pull requests to `main`
 - Manual workflow dispatch
@@ -101,6 +102,7 @@ State is managed remotely using **S3 + DynamoDB** (no additional secrets needed 
 | DynamoDB Table | `portfolio-ankit-terraform-locks` | State locking |
 
 **State file locations:**
+
 - AWS: `s3://portfolio-ankit-terraform-state/portfolio/aws/terraform.tfstate`
 - Cloudflare: `s3://portfolio-ankit-terraform-state/portfolio/cloudflare/terraform.tfstate`
 
@@ -139,6 +141,7 @@ The AWS credentials need these permissions:
 ### Cloudflare API Token Permissions
 
 The Cloudflare API token needs:
+
 - `Zone:DNS:Edit`
 - `Zone:Zone Settings:Edit`
 - `Zone:Page Rules:Edit`
@@ -195,19 +198,19 @@ The pipeline tracks and reports:
 
 ### Automatic (Push to main)
 
-```
+```text
 Push → Validate → Build → Deploy → Smoke Test → Notify
 ```
 
 ### Pull Request
 
-```
+```text
 PR Open → Validate → Build Test → PR Comment (no deploy)
 ```
 
 ### Manual
 
-```
+```text
 Trigger → [Skip Tests?] → Build → [Lambda Only?] → Deploy → Health Check
 ```
 
@@ -294,4 +297,4 @@ Trigger → [Skip Tests?] → Build → [Lambda Only?] → Deploy → Health Che
 
 ---
 
-*Last updated: December 2025*
+Last updated: February 2026

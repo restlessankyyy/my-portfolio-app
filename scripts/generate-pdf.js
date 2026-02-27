@@ -2,7 +2,11 @@ const puppeteer = require('puppeteer');
 const path = require('path');
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: 'new' });
+  const isCI = process.env.CI === 'true';
+  const browser = await puppeteer.launch({
+    headless: 'new',
+    args: isCI ? ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'] : [],
+  });
   const page = await browser.newPage();
   
   const htmlPath = path.resolve(__dirname, 'resume.html');
