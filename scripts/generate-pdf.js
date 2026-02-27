@@ -15,7 +15,7 @@ const path = require('path');
   await page.pdf({
     path: path.resolve(__dirname, '..', 'public', 'Profile.pdf'),
     format: 'A4',
-    margin: { top: '12mm', bottom: '12mm', left: '0mm', right: '0mm' },
+    margin: { top: '10mm', bottom: '10mm', left: '0mm', right: '0mm' },
     printBackground: true,
   });
 

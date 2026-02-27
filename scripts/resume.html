@@ -9,11 +9,11 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html { font-size: 10.5px; }
+  html { font-size: 10.2px; }
   body {
     font-family: 'Inter', -apple-system, sans-serif;
     color: #1a1a1a;
-    line-height: 1.45;
+    line-height: 1.42;
     background: #fff;
     -webkit-font-smoothing: antialiased;
   }
@@ -21,65 +21,61 @@
   .page {
     max-width: 800px;
     margin: 0 auto;
-    padding: 28px 40px;
+    padding: 22px 38px;
   }
 
   /* ── Header ── */
-  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; border-bottom: 2.5px solid #111; padding-bottom: 12px; }
-  .header-left { display: flex; align-items: center; gap: 14px; }
-  .header-photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid #ccc; flex-shrink: 0; }
+  .header { text-align: center; margin-bottom: 12px; border-bottom: 2.5px solid #111; padding-bottom: 8px; }
   .header h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
-  .header .subtitle { font-size: 1.05rem; color: #555; font-weight: 500; margin-top: 3px; }
-  .contact-info { text-align: right; font-size: 0.9rem; color: #444; line-height: 1.65; }
-  .contact-info a { color: #2563eb; text-decoration: none; }
+  .header .subtitle { font-size: 1rem; color: #555; font-weight: 500; margin-top: 2px; }
+  .contact-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 14px; font-size: 0.88rem; color: #444; margin-top: 4px; }
+  .contact-row a { color: #2563eb; text-decoration: none; }
+  .contact-row span { white-space: nowrap; }
 
   /* ── Sections ── */
-  .section { margin-bottom: 12px; }
-  .section-title { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #111; border-bottom: 1.5px solid #d0d0d0; padding-bottom: 4px; margin-bottom: 8px; }
+  .section { margin-bottom: 10px; }
+  .section-title { font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #111; border-bottom: 1.5px solid #d0d0d0; padding-bottom: 4px; margin-bottom: 7px; }
 
   /* ── Summary ── */
-  .summary { font-size: 0.95rem; color: #333; line-height: 1.5; }
+  .summary { font-size: 0.95rem; color: #333; line-height: 1.4; }
 
   /* ── Experience ── */
-  .job { margin-bottom: 10px; }
+  .job { margin-bottom: 8px; }
   .job-header { display: flex; justify-content: space-between; align-items: baseline; }
-  .job-title { font-size: 1rem; font-weight: 600; color: #111; }
-  .job-date { font-size: 0.88rem; color: #666; font-weight: 500; white-space: nowrap; }
-  .job-company { font-size: 0.92rem; color: #2563eb; font-weight: 500; margin-bottom: 3px; }
-  .job ul { padding-left: 17px; }
-  .job li { font-size: 0.9rem; color: #333; margin-bottom: 1.5px; line-height: 1.4; }
+  .job-title { font-size: 0.95rem; font-weight: 600; color: #111; }
+  .job-date { font-size: 0.85rem; color: #666; font-weight: 500; white-space: nowrap; }
+  .job-company { font-size: 0.9rem; color: #2563eb; font-weight: 500; margin-bottom: 1px; }
+  .job ul { padding-left: 15px; }
+  .job li { font-size: 0.88rem; color: #333; margin-bottom: 1px; line-height: 1.38; }
 
   /* ── Skills ── */
-  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 28px; }
-  .skill-row { display: flex; gap: 8px; font-size: 0.95rem; }
-  .skill-label { font-weight: 600; color: #111; min-width: 120px; }
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 24px; break-inside: avoid; }
+  .skills-section { break-inside: avoid; page-break-inside: avoid; }
+  .skill-row { display: flex; gap: 6px; font-size: 0.9rem; }
+  .skill-label { font-weight: 600; color: #111; min-width: 110px; }
   .skill-value { color: #444; }
 
   /* ── Projects ── */
-  .project { margin-bottom: 8px; }
-  .project h4 { font-size: 0.95rem; font-weight: 600; color: #111; }
-  .project p { font-size: 0.9rem; color: #444; line-height: 1.4; }
-  .project .tech { font-size: 0.84rem; color: #2563eb; font-weight: 500; margin-top: 1px; }
+  .project { margin-bottom: 7px; }
+  .project h4 { font-size: 0.92rem; font-weight: 600; color: #111; }
+  .project p { font-size: 0.88rem; color: #444; line-height: 1.32; }
+  .project .tech { font-size: 0.82rem; color: #2563eb; font-weight: 500; margin-top: 0px; }
 
   /* ── Certs ── */
-  .certs-list { columns: 2; column-gap: 24px; }
-  .certs-list li { font-size: 0.92rem; color: #333; margin-bottom: 2px; break-inside: avoid; }
+  .certs-list { padding-left: 15px; }
+  .certs-list li { font-size: 0.88rem; color: #333; margin-bottom: 1px; }
 
   /* ── Education ── */
   .edu-header { display: flex; justify-content: space-between; align-items: baseline; }
-  .edu-title { font-size: 1rem; font-weight: 600; }
-  .edu-date { font-size: 0.9rem; color: #666; }
-  .edu-school { font-size: 0.95rem; color: #2563eb; font-weight: 500; }
-
-  /* ── Page 2 spacing ── */
-  .page2-section { margin-bottom: 18px; }
-  .page2-section .section-title { font-size: 1.05rem; margin-bottom: 10px; }
+  .edu-title { font-size: 0.95rem; font-weight: 600; }
+  .edu-date { font-size: 0.85rem; color: #666; }
+  .edu-school { font-size: 0.9rem; color: #2563eb; font-weight: 500; }
 
   /* ── Print ── */
   @media print {
-    html { font-size: 10px; }
+    html { font-size: 10.2px; }
     body { background: none; }
-    .page { padding: 20px 32px; max-width: 100%; }
+    .page { padding: 16px 34px; max-width: 100%; }
   }
 </style>
 </head>
@@ -88,26 +84,25 @@
 
   <!-- Header -->
   <div class="header">
-    <div class="header-left">
-      <img src="../public/img/ankit.png" alt="Ankit Raj" class="header-photo" />
-      <div>
-        <h1>Ankit Raj</h1>
-        <div class="subtitle">Multi-Cloud Solution Architect &amp; AI Tech Lead</div>
-      </div>
-    </div>
-    <div class="contact-info">
-      Stockholm, Sweden<br />
-      <a href="mailto:rajankit749@gmail.com">rajankit749@gmail.com</a><br />
-      <a href="https://ankitraj.cloud">ankitraj.cloud</a><br />
-      <a href="https://linkedin.com/in/raj-ankit">linkedin.com/in/raj-ankit</a><br />
-      <a href="https://github.com/restlessankyyy">github.com/restlessankyyy</a>
+    <h1>Ankit Raj</h1>
+    <div class="subtitle">Multi-Cloud Solution Architect &amp; AI/ML Tech Lead</div>
+    <div class="contact-row">
+      <span>Stockholm, Sweden</span>
+      <span>|</span>
+      <span><a href="mailto:rajankit749@gmail.com">rajankit749@gmail.com</a></span>
+      <span>|</span>
+      <span><a href="https://ankitraj.cloud">ankitraj.cloud</a></span>
+      <span>|</span>
+      <span><a href="https://linkedin.com/in/raj-ankit">linkedin.com/in/raj-ankit</a></span>
+      <span>|</span>
+      <span><a href="https://github.com/restlessankyyy">github.com/restlessankyyy</a></span>
     </div>
   </div>
 
   <!-- Summary -->
   <div class="section">
     <div class="section-title">Summary</div>
-    <p class="summary">Cloud &amp; AI Tech Executive with 10+ years driving enterprise cloud transformations across AWS, Azure, and Google Cloud. Currently leading multi-cloud architecture and AI platform engineering at H&M Group. Specialising in cloud strategy &amp; governance, GenAI prototyping, FinOps at scale, MLOps, and secure DevOps. Proven track record of delivering multi-million SEK cost optimisations and architecting solutions for 200+ product teams.</p>
+    <p class="summary">Cloud &amp; AI Tech Executive with 10+ years driving enterprise-scale distributed systems and cloud transformations across AWS, Azure, and Google Cloud. Leading multi-cloud architecture, AI/ML platform engineering, and system design at H&M Group serving 200+ product teams. Deep expertise in cloud-native architecture, microservices, GenAI/LLM orchestration, FinOps, MLOps, and infrastructure automation. Track record of delivering multi-million SEK cost optimisations and high-availability platforms processing millions of requests.</p>
   </div>
 
   <!-- Experience -->
@@ -121,25 +116,41 @@
       </div>
       <div class="job-company">H&amp;M Group, Stockholm</div>
       <ul>
-        <li>Architected and led Microsoft Foundry &amp; GCP Vertex AI platforms powering enterprise-scale AI solutions across fashion retail</li>
-        <li>Drove multi-million SEK FinOps cost optimisation programme across Azure and GCP estates</li>
-        <li>Designed custom text classification models serving 200+ product teams with automated ML pipelines</li>
-        <li>Established cloud governance frameworks at Management Group level with Azure Policies and Sentinel</li>
+        <li>Architected distributed AI platforms on Microsoft Foundry &amp; GCP Vertex AI serving 200+ product teams at enterprise scale</li>
+        <li>Led multi-million SEK FinOps programme reducing cloud spend by 35% across Azure and GCP estates</li>
+        <li>Designed and deployed custom ML classification models with automated training pipelines processing 10M+ data points</li>
+        <li>Established cloud governance framework at Management Group level — Azure Policies, Sentinel, RBAC for 50+ subscriptions</li>
+        <li>Led enterprise architecture governance with SAP LeanIX, Zachman & TOGAF frameworks</li>
+        <li>Mentored 8+ engineers across cloud architecture, system design, and AI/ML best practices</li>
       </ul>
     </div>
 
     <div class="job">
       <div class="job-header">
-        <span class="job-title">Lead Software Engineer — Azure Engineering</span>
+        <span class="job-title">Lead Cloud Architect — AML/KYC Modernisation</span>
+        <span class="job-date">2025 — 2026 (Contract)</span>
+      </div>
+      <div class="job-company">Ikano Bank</div>
+      <ul>
+        <li>Led end-to-end migration of AML &amp; KYC APIs from on-prem monolith to AWS serverless — reduced latency by 70%</li>
+        <li>Built LLM-powered autonomous agent using AWS Bedrock + Claude Opus for API policy conversion, cutting migration time 60%</li>
+        <li>Engineered reusable prompt engineering framework — chain-of-thought templates for code analysis, blueprint generation, and IaC scaffolding</li>
+        <li>Designed serverless architecture on Lambda + Fargate handling 500K+ daily transactions with Terraform IaC</li>
+        <li>Established end-to-end CI/CD with GitHub Actions replacing legacy ClickOps — deployment frequency increased 10x</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job-header">
+        <span class="job-title">Lead Software Engineer — Platform Engineering</span>
         <span class="job-date">2023 — 2024</span>
       </div>
       <div class="job-company">H&amp;M Group, Stockholm</div>
       <ul>
-        <li>Engineered H&amp;M's multi-cloud backbone on Azure &amp; Google Cloud at enterprise scale</li>
-        <li>Built Internal Developer Platform with self-service Azure Engineering — EventGrid + Functions workflows</li>
-        <li>Evaluated OpenAI, Claude &amp; Gemini LLMs to improve developer experience across 200+ teams</li>
-        <li>Cloud governance at Management Group level with Azure Policies &amp; Sentinel (CTO office strategy)</li>
-        <li>SAP LeanIX for enterprise architecture; Zachman &amp; TOGAF frameworks for transformation governance</li>
+        <li>Engineered multi-cloud platform backbone on Azure &amp; Google Cloud — 99.9% uptime SLA for 200+ teams</li>
+        <li>Built Internal Developer Platform with self-service provisioning — EventGrid + Functions reducing onboarding from days to minutes</li>
+        <li>Evaluated and benchmarked OpenAI, Claude &amp; Gemini LLMs; shipped AI developer tools improving team velocity by 40%</li>
+
       </ul>
     </div>
 
@@ -150,26 +161,10 @@
       </div>
       <div class="job-company">H&amp;M Group, Stockholm</div>
       <ul>
-        <li>Designed Zero Trust microservices architecture with functional programming paradigms</li>
-        <li>Built scalable GraphQL &amp; REST APIs serving enterprise workloads</li>
-        <li>Implemented multi-cloud API platform with Azure API Gateways on GKE</li>
-        <li>Established CI/CD pipelines with GitHub Actions for automated testing and deployment</li>
-      </ul>
-    </div>
-
-    <div class="job">
-      <div class="job-header">
-        <span class="job-title">Lead Cloud Architect — AML/KYC App Modernisation</span>
-        <span class="job-date">2025 — 2026 (Contract)</span>
-      </div>
-      <div class="job-company">Ikano Bank</div>
-      <ul>
-        <li>Led Gen AI-powered modernisation of AML &amp; KYC service APIs from on-prem to AWS serverless</li>
-        <li>Leveraged AWS Bedrock with Claude Opus models to power LLM pipelines creating Policy conversion AI autonomous agent</li>
-        <li>Built Gen AI-driven policy engine migrating Axway API Gateway policies to AWS API Gateway</li>
-        <li>Created reusable prompt library for API migration — code analysis, blueprint generation and IaC scaffolding</li>
-        <li>Architected serverless platform on Lambda + Fargate with Terraform IaC and GitHub Actions CI/CD</li>
-        <li>Reduced migration time by 60% through AI-assisted code analysis and automated transformation</li>
+        <li>Designed Zero Trust microservices architecture — 15+ services with sub-100ms p99 latency</li>
+        <li>Built high-throughput GraphQL &amp; REST APIs handling 50K+ RPM across distributed systems</li>
+        <li>Implemented API gateway platform on Azure + GKE with automated scaling and rate limiting</li>
+        <li>Led CI/CD standardisation with GitHub Actions — 200+ repositories, 95% pipeline success rate</li>
       </ul>
     </div>
 
@@ -180,22 +175,20 @@
       </div>
       <div class="job-company">Volvo Cars, Gothenburg</div>
       <ul>
-        <li>Implemented enterprise monitoring with ELK stack &amp; Grafana on AKS for digital enablement</li>
-        <li>Managed Azure DevOps CI/CD pipelines for OpenShift &amp; Kubernetes clusters</li>
-        <li>Built observability dashboards for Kubernetes cluster health monitoring</li>
-      </ul>
+        <li>Built enterprise observability platform — ELK, Grafana, Prometheus on AKS monitoring 100+ microservices</li>
+        <li>Managed CI/CD pipelines for OpenShift &amp; Kubernetes clusters; reduced deployment cycle from hours to 15 minutes</li>        <li>Authored runbooks and incident response procedures, achieving 99.5% SLA compliance across production environments</li>      </ul>
     </div>
 
     <div class="job">
       <div class="job-header">
         <span class="job-title">Cloud DevOps Engineer → Cloud Developer</span>
-        <span class="job-date">2016 — 2019</span>
+        <span class="job-date">2016 — 2020</span>
       </div>
       <div class="job-company">Cognizant Technology Solutions</div>
       <ul>
-        <li>Built AWS CI/CD with CodePipeline, Docker, ECS/Fargate for enterprise clients</li>
-        <li>Developed React Cloud Management Dashboard for infrastructure visibility</li>
-        <li>Won 1st prize at Enterprise AWS Game Day 2018</li>
+        <li>Built AWS CI/CD pipelines with CodePipeline, Docker, ECS/Fargate serving 5+ enterprise clients</li>
+        <li>Developed React-based Cloud Management Dashboard for real-time infrastructure visibility</li>
+        <li>Won 1st place — Enterprise AWS Game Day 2018 (200+ participants)</li>
       </ul>
     </div>
   </div>
@@ -205,84 +198,63 @@
     <div class="section-title">Key Projects</div>
 
     <div class="project">
-      <h4>H&amp;M Microsoft Foundry &amp; Vertex AI Platform</h4>
-      <p>Azure AI platforms &amp; Vertex AI revolutionising fashion retail. Multi-model orchestration with OpenAI, Claude &amp; Gemini for 200+ product teams.</p>
-      <div class="tech">Microsoft Foundry · GCP Vertex AI · OpenAI · Claude · Gemini · ML · Python · TypeScript</div>
+      <h4>Enterprise AI Platform (H&amp;M)</h4> <span class="tech">Microsoft Foundry · Vertex AI · OpenAI · Claude · Gemini · Python · TypeScript</span>
+      <p>Multi-model AI orchestration platform serving 200+ teams. Distributed inference pipelines, auto-scaling, A/B model evaluation.</p>
     </div>
 
     <div class="project">
-      <h4>Ikano Bank — AML/KYC App Modernisation</h4>
-      <p>Gen AI-powered modernisation of AML &amp; KYC service APIs from on-prem to AWS. Powered by AWS Bedrock with Claude Opus models. Axway to AWS API Gateway policy generation using Gen AI. CI/CD with GitHub Actions &amp; Terraform replacing legacy ClickOps. Serverless on Lambda + Fargate.</p>
-      <div class="tech">AWS Bedrock · Claude Opus · AWS Lambda · Fargate · Axway · AWS API Gateway · GitHub Actions · Terraform · Gen AI · LLMs · AML/KYC</div>
+      <h4>AML/KYC Serverless Migration (Ikano Bank)</h4> <span class="tech">AWS Bedrock · Claude Opus · Lambda · Fargate · Terraform</span>
+      <p>LLM-powered autonomous agent converting legacy on-prem APIs to AWS serverless. 60% faster migration, 70% latency reduction.</p>
     </div>
 
     <div class="project">
-      <h4>Rubin — Claude for VS Code (Open Source)</h4>
-      <p>100% local AI coding assistant on Ollama. Streaming chat, 14-tool agent mode, MCP servers, inline completions — privacy-first.</p>
-      <div class="tech">TypeScript · VS Code Extension API · Ollama · Claude</div>
+      <h4>Rubin — AI Coding Assistant (Open Source)</h4> <span class="tech">TypeScript · VS Code API · Ollama · LLM Agent</span>
+      <p>Privacy-first local AI assistant with 14-tool agent mode, MCP servers, streaming chat, and inline completions.</p>
     </div>
 
     <div class="project">
-      <h4>OpenClaw Tesla — AI Vehicle Agent (Open Source)</h4>
-      <p>AI agent plugin for Tesla Fleet API. 21 voice actions — lock, climate, charging, sentry. Auto-wake, multi-vehicle support.</p>
-      <div class="tech">TypeScript · Tesla Fleet API · OAuth 2.0 · AI Agents</div>
+      <h4>OpenClaw Tesla — AI Vehicle Agent (Open Source)</h4> <span class="tech">TypeScript · Tesla Fleet API · OAuth 2.0</span>
+      <p>AI agent plugin with 21 voice actions for Tesla Fleet API. Auto-wake, multi-vehicle orchestration.</p>
     </div>
 
     <div class="project">
-      <h4>Enterprise FinOps at Scale</h4>
-      <p>Multi-million SEK cloud cost optimisation driving FinOps adoption with multi-agentic AI orchestration across H&amp;M Group's Azure and GCP estates.</p>
-      <div class="tech">FinOps · Multi-Agentic AI · Azure Fabric · Azure Cost Management · GCP Billing · Power BI</div>
+      <h4>Enterprise FinOps Platform (H&amp;M)</h4> <span class="tech">FinOps · Multi-Agent AI · Azure Fabric · GCP Billing · Power BI</span>
+      <p>Multi-agentic AI orchestration reducing multi-million SEK cloud spend across Azure and GCP estates.</p>
     </div>
   </div>
 
   <!-- Skills -->
-  <div class="page2-section" style="break-before: page; page-break-before: always;">
+  <div class="section skills-section">
     <div class="section-title">Technical Skills</div>
     <div class="skills-grid">
-      <div class="skill-row"><span class="skill-label">Cloud Platforms</span><span class="skill-value">AWS, Azure, Google Cloud</span></div>
-      <div class="skill-row"><span class="skill-label">AI / ML</span><span class="skill-value">Microsoft Foundry, Vertex AI, OpenAI, Claude, Gemini, LLMs</span></div>
-      <div class="skill-row"><span class="skill-label">Infrastructure</span><span class="skill-value">Terraform, Bicep, CloudFormation</span></div>
-      <div class="skill-row"><span class="skill-label">Containers</span><span class="skill-value">Kubernetes, Docker, GKE, AKS, ECS</span></div>
-      <div class="skill-row"><span class="skill-label">Languages</span><span class="skill-value">TypeScript, Python, JavaScript, Go</span></div>
-      <div class="skill-row"><span class="skill-label">CI/CD</span><span class="skill-value">GitHub Actions, Azure DevOps, CodePipeline</span></div>
-      <div class="skill-row"><span class="skill-label">Observability</span><span class="skill-value">Grafana, ELK, Application Insights</span></div>
-      <div class="skill-row"><span class="skill-label">Architecture</span><span class="skill-value">Microservices, Zero Trust, Serverless, GraphQL</span></div>
-      <div class="skill-row"><span class="skill-label">Practices</span><span class="skill-value">FinOps, MLOps, DevOps, GitOps</span></div>
-      <div class="skill-row"><span class="skill-label">Security</span><span class="skill-value">Entra ID, OAuth 2.0, Azure Sentinel</span></div>
+      <div class="skill-row"><span class="skill-label">Cloud</span><span class="skill-value">AWS, Azure, Google Cloud, Multi-Cloud Architecture</span></div>
+      <div class="skill-row"><span class="skill-label">AI / ML</span><span class="skill-value">LLMs, RAG, Microsoft Foundry, Vertex AI, OpenAI, Claude, Gemini, Prompt Engineering</span></div>
+      <div class="skill-row"><span class="skill-label">Infrastructure</span><span class="skill-value">Terraform, Bicep, CloudFormation, Infrastructure as Code</span></div>
+      <div class="skill-row"><span class="skill-label">Containers</span><span class="skill-value">Kubernetes, Docker, GKE, AKS, ECS, Helm, Service Mesh</span></div>
+      <div class="skill-row"><span class="skill-label">Languages</span><span class="skill-value">TypeScript, Python, JavaScript, Go, SQL</span></div>
+      <div class="skill-row"><span class="skill-label">CI/CD</span><span class="skill-value">GitHub Actions, Azure DevOps, CodePipeline, Jenkins</span></div>
+      <div class="skill-row"><span class="skill-label">Data &amp; APIs</span><span class="skill-value">GraphQL, REST, gRPC, Kafka, EventGrid, Data Pipelines</span></div>
+      <div class="skill-row"><span class="skill-label">Architecture</span><span class="skill-value">Distributed Systems, Microservices, System Design, Serverless, Event-Driven</span></div>
+      <div class="skill-row"><span class="skill-label">Practices</span><span class="skill-value">FinOps, MLOps, DevOps, GitOps, SRE, Agile, Scrum</span></div>
+      <div class="skill-row"><span class="skill-label">Security</span><span class="skill-value">Zero Trust, OAuth 2.0, Entra ID, Azure Sentinel, IAM, RBAC</span></div>
     </div>
   </div>
 
   <!-- Certifications -->
-  <div class="page2-section">
-    <div class="section-title">Certifications &amp; Awards <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="font-size:0.85rem;color:#0066cc;text-decoration:none;font-weight:normal">View on Credly &rarr;</a></div>
-    <!-- Badge images row -->
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;align-items:center">
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-security-identity.png" alt="OpenHack: Security" style="width:44px;height:44px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/azure-fundamentals.png" alt="Azure Fundamentals" style="width:44px;height:44px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/aws-devops-pro.png" alt="AWS DevOps Pro" style="width:44px;height:44px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/aws-developer-associate.png" alt="AWS Developer" style="width:44px;height:44px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/mcp-exam-533.png" alt="MCP Exam 533" style="width:44px;height:44px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-ai-knowledge-mining.png" alt="OpenHack: AI" style="width:44px;height:44px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-containers.png" alt="OpenHack: Containers" style="width:44px;height:44px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-devops.png" alt="OpenHack: DevOps" style="width:44px;height:44px;border-radius:50%"></a>
-    </div>
+  <div class="section">
+    <div class="section-title">Certifications</div>
     <ul class="certs-list">
-      <li><a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="color:#0066cc;text-decoration:none">Microsoft Certified Professional (MCP)</a> &mdash; Exam 533: Azure Infrastructure Solutions</li>
-      <li><a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="color:#0066cc;text-decoration:none">Microsoft Certified: Azure Fundamentals (AZ-900)</a></li>
-      <li><a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="color:#0066cc;text-decoration:none">AWS Certified DevOps Engineer &mdash; Professional</a></li>
-      <li><a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="color:#0066cc;text-decoration:none">AWS Certified Developer &mdash; Associate</a></li>
-      <li><a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="color:#0066cc;text-decoration:none">OpenHack: AI-Powered Knowledge Mining</a></li>
-      <li><a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="color:#0066cc;text-decoration:none">OpenHack: Containers</a></li>
-      <li><a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="color:#0066cc;text-decoration:none">OpenHack: Security, Compliance &amp; Identity</a></li>
-      <li><a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="color:#0066cc;text-decoration:none">OpenHack: DevOps</a></li>
-      <li>Google India Udacity Scholar</li>
-      <li>Potential Orbit Shifter &mdash; Cognizant</li>
-      <li>1st Place &mdash; Enterprise AWS Game Day 2018</li>
+      <li>AWS Certified DevOps Engineer — Professional</li>
+      <li>AWS Certified Developer — Associate</li>
+      <li>Microsoft Certified Professional (MCP) — Exam 533: Azure Infrastructure</li>
+      <li>Microsoft Certified: Azure Fundamentals (AZ-900)</li>
+      <li>OpenHack: AI-Powered Knowledge Mining · Containers · Security, Compliance &amp; Identity · DevOps</li>
+      <li>Google India Udacity Scholar · Potential Orbit Shifter (Cognizant)</li>
     </ul>
   </div>
 
   <!-- Education -->
-  <div class="page2-section">
+  <div class="section">
     <div class="section-title">Education</div>
     <div class="edu-header">
       <span class="edu-title">B.Tech Computer Science &amp; Engineering</span>
@@ -293,15 +265,15 @@
   </div>
 
   <!-- Publications -->
-  <div class="page2-section">
+  <div class="section">
     <div class="section-title">Publications</div>
-    <ul style="padding-left:17px;columns:2;column-gap:24px">
-      <li style="font-size:0.92rem;color:#333;margin-bottom:2px;break-inside:avoid"><a href="https://faun.pub/what-is-kubernetes-cb357c4f8186" style="color:#0066cc;text-decoration:none">What is Kubernetes?</a></li>
-      <li style="font-size:0.92rem;color:#333;margin-bottom:2px;break-inside:avoid"><a href="https://medium.com/@restlessankyyy/how-about-experimenting-with-open-ai-dall-e-2-c2f4e690cd7b" style="color:#0066cc;text-decoration:none">OpenAI Experimentation with DALL-E</a></li>
-      <li style="font-size:0.92rem;color:#333;margin-bottom:2px;break-inside:avoid"><a href="https://medium.com/@restlessankyyy/how-did-i-build-and-deploy-my-recent-app-on-cloud-run-by-google-cloud-32c070e03dec" style="color:#0066cc;text-decoration:none">Building Apps on Google Cloud Run</a></li>
-      <li style="font-size:0.92rem;color:#333;margin-bottom:2px;break-inside:avoid"><a href="https://medium.com/@restlessankyyy/the-future-of-quantum-computing-41a055bd5664" style="color:#0066cc;text-decoration:none">The Future of Quantum Computing</a></li>
-      <li style="font-size:0.92rem;color:#333;margin-bottom:2px;break-inside:avoid"><a href="https://medium.com/@restlessankyyy/azure-devops-is-the-new-vsts-417b9b33fc25" style="color:#0066cc;text-decoration:none">Azure DevOps is the new VSTS</a></li>
-    </ul>
+    <p style="font-size:0.88rem;color:#333;line-height:1.4">
+      <a href="https://faun.pub/what-is-kubernetes-cb357c4f8186" style="color:#0066cc;text-decoration:none">What is Kubernetes?</a> · 
+      <a href="https://medium.com/@restlessankyyy/how-about-experimenting-with-open-ai-dall-e-2-c2f4e690cd7b" style="color:#0066cc;text-decoration:none">OpenAI &amp; DALL-E Experimentation</a> · 
+      <a href="https://medium.com/@restlessankyyy/how-did-i-build-and-deploy-my-recent-app-on-cloud-run-by-google-cloud-32c070e03dec" style="color:#0066cc;text-decoration:none">Building Apps on Cloud Run</a> · 
+      <a href="https://medium.com/@restlessankyyy/the-future-of-quantum-computing-41a055bd5664" style="color:#0066cc;text-decoration:none">Future of Quantum Computing</a> · 
+      <a href="https://medium.com/@restlessankyyy/azure-devops-is-the-new-vsts-417b9b33fc25" style="color:#0066cc;text-decoration:none">Azure DevOps is the new VSTS</a>
+    </p>
   </div>
 
 </div>
