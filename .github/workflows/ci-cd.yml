@@ -309,7 +309,7 @@ jobs:
           retention-days: 7
 
       - name: 💬 PR Comment - Terraform Plan
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         if: github.event_name == 'pull_request'
         with:
           script: |
@@ -740,7 +740,7 @@ jobs:
     
     steps:
       - name: 📝 Create PR Summary Comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const codeQuality = '${{ needs.code-quality.result }}';
