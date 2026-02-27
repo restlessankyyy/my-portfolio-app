@@ -1,65 +1,102 @@
-# 🚀 Ankit Raj - Portfolio
+# 🚀 Ankit Raj — Portfolio
 
 [![CI/CD Pipeline](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/ci-cd.yml)
 [![Security Scan](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/security-scan.yml/badge.svg)](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/security-scan.yml)
+[![Security Audit](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/security-audit.yml/badge.svg)](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/security-audit.yml)
+[![CodeQL](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/codeql.yml/badge.svg)](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/codeql.yml)
 [![Node.js](https://img.shields.io/badge/Node.js-22-green)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Modern, serverless portfolio website for **Ankit Raj** - Multi-Cloud Solution Architect specializing in AWS, Azure, and GCP.
+Premium cinematic portfolio website for **Ankit Raj** — Lead Solution Architect & Multi-Cloud Engineer specializing in AWS, Azure, and GCP.
 
 🌐 **Live Site:** [https://www.ankitraj.cloud](https://www.ankitraj.cloud)
 
 ## ✨ Features
 
-- 🎨 **Modern UI** - Glassmorphism design with smooth animations
-- 🌙 **Dark/Light Mode** - Toggle between themes
-- 📱 **Fully Responsive** - Mobile-first design
-- ⚡ **Serverless** - AWS Lambda + API Gateway
-- 🔒 **Secure** - HTTPS, DKIM, SPF, DMARC configured
-- 📧 **Contact Form** - AWS SES integration
-- 🚀 **CI/CD** - Automated deployments via GitHub Actions
-- 🏗️ **Infrastructure as Code** - Terraform for AWS & Cloudflare
+- 🎬 **Cinematic Dark Theme** — Premium design inspired by zoox.com with grain overlay & parallax
+- 🖱️ **Custom Cursor** — Animated dot + ring cursor that reacts to interactive elements
+- ✍️ **Typing Effect** — Dynamic hero text cycling through roles & specialties
+- 🎨 **Glassmorphism Nav** — Frosted glass navigation with scroll progress indicator
+- 🌙 **Dark/Light Mode** — Persistent theme toggle with smooth transitions
+- 🏷️ **Project Filters** — Filter 9 showcase projects by Enterprise / Open Source / AI
+- 📜 **Experience Timeline** — Staggered animated career timeline
+- 🎓 **Certifications Marquee** — Auto-scrolling certification badges
+- 📄 **AI Resume** — Auto-generated PDF from HTML via Puppeteer + GitHub Actions
+- 📱 **Fully Responsive** — Breakpoints at 1024 / 768 / 480px
+- ⚡ **Serverless** — AWS Lambda + API Gateway deployment
+- 🔒 **Secure** — HTTPS, DKIM, SPF, DMARC, CodeQL, Dependabot
+- 📧 **Contact Form** — EmailJS + AWS SES fallback
+- 🚀 **CI/CD** — Automated deployments, security scans, resume generation
+- 🏗️ **Infrastructure as Code** — Terraform for AWS & Cloudflare
 
 ## 🛠️ Tech Stack
 
 | Category | Technologies |
 |----------|-------------|
-| **Frontend** | HTML5, CSS3, Vanilla JavaScript |
+| **Frontend** | HTML5, CSS3 (custom properties, glassmorphism), Vanilla JS (ES6+ classes) |
+| **Fonts** | Space Grotesk, JetBrains Mono |
+| **Icons** | Font Awesome 6.5.0 |
 | **Backend** | Node.js 22, Express.js |
-| **Cloud** | AWS Lambda, API Gateway, SES, ACM |
+| **PDF Gen** | Puppeteer (HTML → PDF) |
+| **Cloud** | AWS Lambda, API Gateway, SES, ACM, S3 |
 | **DNS/CDN** | Cloudflare (DNS, SSL, Page Rules) |
 | **IaC** | Terraform |
-| **CI/CD** | GitHub Actions |
-| **Security** | Gitleaks, Trivy, CodeQL |
+| **CI/CD** | GitHub Actions (6 workflows) |
+| **Security** | CodeQL, Dependabot, npm audit, Gitleaks, Trivy |
 
 ## 📁 Project Structure
 
 ```
 my-portfolio-app/
-├── public/                 # Static assets
-│   ├── css/               # Stylesheets
-│   ├── js/                # JavaScript files
-│   ├── img/               # Images
-│   └── index.html         # Main HTML
-├── terraform/             # Infrastructure as Code
-│   ├── main.tf            # AWS resources
-│   ├── cloudflare/        # Cloudflare DNS config
-│   └── backend/           # Remote state config
-├── .github/workflows/     # CI/CD pipelines
-├── scripts/               # Build & deploy scripts
-├── tests/                 # Unit tests
-├── server.js              # Express server
-└── lambda.js              # Lambda handler
+├── public/                     # Static assets
+│   ├── index.html              # Main HTML — cinematic portfolio
+│   ├── Profile.pdf             # Auto-generated resume
+│   ├── css/
+│   │   └── modern-style.css    # Full styling (dark/light themes, animations)
+│   ├── js/
+│   │   ├── modern-portfolio.js # Core: cursor, typing, filters, theme, nav
+│   │   ├── enhanced-portfolio.js # Perf: lazy load, a11y, parallax
+│   │   └── emailjs-config.js   # EmailJS integration
+│   └── img/
+│       └── ankit.png           # Profile photo
+├── scripts/
+│   ├── resume.html             # Professional HTML resume template
+│   ├── generate-pdf.js         # Puppeteer PDF generator (CI-aware)
+│   ├── build-lambda.sh         # Lambda package builder
+│   ├── deploy.sh               # Deployment script
+│   └── destroy.sh              # Teardown script
+├── terraform/                  # Infrastructure as Code
+│   ├── main.tf                 # AWS resources (Lambda, API GW, IAM, S3)
+│   ├── variables.tf            # Input variables
+│   ├── outputs.tf              # Output values
+│   ├── cloudflare/             # Cloudflare DNS config
+│   └── backend/                # S3 remote state config
+├── .github/
+│   ├── dependabot.yml          # Weekly npm + Actions dependency updates
+│   └── workflows/
+│       ├── ci-cd.yml           # Full CI/CD pipeline
+│       ├── codeql.yml          # CodeQL security scanning
+│       ├── security-scan.yml   # Gitleaks + Trivy scheduled scan
+│       ├── security-audit.yml  # npm audit + outdated check
+│       ├── resume-pdf.yml      # Auto-regenerate resume PDF
+│       └── dependency-update.yml # Dependency update checks
+├── tests/
+│   └── server.test.js          # Unit tests (8 test cases)
+├── server.js                   # Express server (port 3000)
+├── lambda.js                   # AWS Lambda handler
+├── Dockerfile                  # Docker image (node:22-alpine)
+├── package.json                # Dependencies + npm overrides
+└── _config.yml                 # GitHub Pages config
 ```
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 22+ (use `nvm use` with `.nvmrc`)
+- Node.js 22+ (`nvm install 22`)
 - npm 10+
-- AWS CLI configured
-- Terraform 1.5+
+- AWS CLI configured (for deployment)
+- Terraform 1.0+ (for infrastructure)
 
 ### Local Development
 
@@ -73,60 +110,84 @@ npm install
 
 # Start development server
 npm start
+# → http://localhost:3000
 
-# Open http://localhost:3000
+# Start with hot reload
+npm run dev
+```
+
+### Generate Resume PDF
+
+```bash
+# Generate Profile.pdf from resume.html
+node scripts/generate-pdf.js
+# → Output: public/Profile.pdf
 ```
 
 ### Available Scripts
 
 | Command | Description |
 |---------|-------------|
-| `npm start` | Start production server |
+| `npm start` | Start production server on port 3000 |
 | `npm run dev` | Start with hot reload (nodemon) |
-| `npm test` | Run unit tests |
-| `npm run lint` | Run ESLint |
-| `npm run format` | Format code with Prettier |
+| `npm test` | Run unit tests (8 test cases) |
+| `npm run lint` | Run ESLint on JS files |
+| `npm run lint:fix` | Auto-fix lint issues |
+| `npm run format` | Format with Prettier |
+| `npm run format:check` | Check formatting |
 | `npm run validate` | Run lint + format check + tests |
+| `npm run build` | Minify CSS + JS for production |
+| `npm run deploy` | Deploy to AWS via Terraform |
+| `npm run deploy:destroy` | Tear down AWS infrastructure |
 
 ## 🏗️ Infrastructure
 
 ### AWS Resources
 
-- **Lambda Function**: `portfolio-ankit-prod-*`
-- **API Gateway**: HTTP API v2
-- **ACM Certificate**: SSL for custom domain
-- **SES**: Email sending with DKIM verified
+- **Lambda Function** — `portfolio-ankit-prod-*` (Node.js 22.x, 512MB, 30s timeout)
+- **API Gateway** — HTTP API v2 with CORS
+- **ACM Certificate** — SSL for custom domain
+- **SES** — Email sending with DKIM verified
+- **S3** — Static assets + Terraform state
+- **CloudWatch** — Logs (14-day retention) + metrics
 
 ### Cloudflare
 
-- **DNS**: A, CNAME, TXT records
-- **SSL**: Full (strict) mode
-- **Page Rules**: Root domain redirect to www
+- **DNS** — A, CNAME, TXT records
+- **SSL** — Full (strict) mode
+- **Page Rules** — Root domain redirect to www
 
 ### Remote State
 
-Terraform state is stored in S3 with DynamoDB locking:
+Terraform state stored in S3 with DynamoDB locking:
 - **Bucket**: `portfolio-ankit-terraform-state`
 - **Lock Table**: `portfolio-ankit-terraform-locks`
 
 ## 🔄 CI/CD Pipeline
 
-The pipeline runs on every push to `main`:
+### Workflows
+
+| Workflow | Trigger | Purpose |
+|----------|---------|---------|
+| **ci-cd.yml** | Push to `main` | Full pipeline: lint → scan → test → build → deploy → smoke test |
+| **codeql.yml** | Push/PR to `main` + weekly | CodeQL security analysis for JavaScript |
+| **security-scan.yml** | Weekly + manual | Gitleaks (secrets) + Trivy (vulnerabilities) |
+| **security-audit.yml** | Push/PR (package changes) | npm audit + outdated packages report |
+| **resume-pdf.yml** | Push (resume.html/ankit.png changes) + manual | Auto-regenerate Profile.pdf |
+| **dependency-update.yml** | Scheduled | Check for dependency updates |
+
+### Dependabot
+
+- **npm** — Weekly Monday updates, grouped by dev/prod
+- **GitHub Actions** — Weekly Monday updates, grouped
+- **Labels** — `dependencies`, `ci`
+- **PR Limit** — 10 open PRs max
+
+### CI/CD Stages
 
 ```
 Code Quality → Security Scan → Tests → Terraform Validate → Build → Deploy → Smoke Tests → Notify
 ```
-
-### Stages
-
-1. **Code Quality** - ESLint, Prettier, npm audit
-2. **Security Scan** - Gitleaks (secrets), Trivy (vulnerabilities)
-3. **Tests** - Unit tests + health check
-4. **Terraform Validate** - Format check, init, validate, plan
-5. **Build** - Create Lambda deployment package
-6. **Deploy** - Apply Terraform, update Lambda
-7. **Smoke Tests** - Verify endpoints after deploy
-8. **Notify** - Email notification via SES
 
 ### Required Secrets
 
@@ -154,7 +215,7 @@ Code Quality → Security Scan → Tests → Terraform Validate → Build → De
                            │
                     ┌──────▼──────┐
                     │   Lambda    │
-                    │  (Node.js)  │
+                    │ (Node.js 22)│
                     └──────┬──────┘
                            │
               ┌────────────┼────────────┐
@@ -168,7 +229,6 @@ Code Quality → Security Scan → Tests → Terraform Validate → Build → De
 ## 🧪 Testing
 
 ```bash
-# Run all tests
 npm test
 
 # Expected output:
@@ -183,6 +243,18 @@ npm test
 # ✅ Unknown routes return index.html (SPA)
 # 📊 Results: 8 passed, 0 failed
 ```
+
+## 🛡️ Security
+
+- **CodeQL** — Static analysis for JavaScript vulnerabilities
+- **Dependabot** — Automated dependency updates
+- **npm audit** — CI check for known CVEs (0 vulnerabilities)
+- **Gitleaks** — Secret detection in commits
+- **Trivy** — Container vulnerability scanning
+- **npm overrides** — Pinned `fast-xml-parser >=5.3.8` to patch CVEs
+- **IAM** — Least privilege roles for Lambda
+- **API Gateway** — Throttling configured
+- **HTTPS** — Full strict SSL via Cloudflare
 
 ## 🚢 Manual Deployment
 
@@ -202,22 +274,19 @@ terraform apply
 
 ## 📝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+See [Contributing.md](Contributing.md) for guidelines.
 
 ## 📜 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ## 👤 Author
 
-**Ankit Raj**
-- Website: [ankitraj.cloud](https://www.ankitraj.cloud)
-- GitHub: [@restlessankyyy](https://github.com/restlessankyyy)
-- LinkedIn: [Ankit Raj](https://www.linkedin.com/in/ankit-raj/)
+**Ankit Raj** — Lead Solution Architect & Multi-Cloud Engineer
+- 🌐 Website: [ankitraj.cloud](https://www.ankitraj.cloud)
+- 💻 GitHub: [@restlessankyyy](https://github.com/restlessankyyy)
+- 💼 LinkedIn: [Ankit Raj](https://www.linkedin.com/in/ankit-raj/)
+- 📧 Email: rajankit749@gmail.com
 
 ---
 

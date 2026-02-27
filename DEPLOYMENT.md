@@ -1,26 +1,32 @@
 # Portfolio Serverless Deployment
 
-This repository contains a modern, serverless portfolio website deployed to AWS Lambda using Terraform Infrastructure as Code.
+Modern, serverless portfolio website deployed to AWS Lambda via Terraform Infrastructure as Code.
 
 ## 🏗️ Architecture
 
-- **AWS Lambda**: Serverless compute for the Express.js application
-- **API Gateway**: HTTP API for routing requests to Lambda
-- **S3**: Static asset storage (optional optimization)
-- **CloudWatch**: Logging and monitoring
-- **Terraform**: Infrastructure as Code deployment
+```
+Cloudflare (DNS/SSL) → API Gateway (HTTP v2) → Lambda (Node.js 22) → SES / S3 / CloudWatch
+```
+
+- **AWS Lambda** — Serverless Express.js (Node.js 22.x, 512MB, 30s timeout)
+- **API Gateway** — HTTP API v2 with CORS enabled
+- **S3** — Static asset storage + Terraform remote state
+- **SES** — Contact form email with DKIM verification
+- **CloudWatch** — Logs (14-day retention) + metrics
+- **Cloudflare** — DNS, full strict SSL, page rules
+- **Terraform** — All infrastructure defined as code
 
 ## 🚀 Quick Deployment
 
 ### Prerequisites
 
 1. **AWS CLI** configured with appropriate permissions
-2. **Terraform** installed (>= 1.0)
-3. **Node.js** (>= 18.x)
+2. **Terraform** >= 1.0
+3. **Node.js** >= 22.x
 
 ### Setup
 
-1. **Clone and install dependencies:**
+1. **Install dependencies:**
    ```bash
    npm install
    ```
@@ -38,12 +44,15 @@ This repository contains a modern, serverless portfolio website deployed to AWS 
 
 ## 📋 Available Scripts
 
-- `npm start` - Run locally for development
-- `npm run deploy` - Deploy to AWS Lambda
-- `npm run deploy:destroy` - Destroy AWS infrastructure
-- `npm run terraform:init` - Initialize Terraform
-- `npm run terraform:plan` - Plan infrastructure changes
-- `npm run terraform:apply` - Apply infrastructure changes
+| Command | Description |
+|---------|-------------|
+| `npm start` | Run locally on port 3000 |
+| `npm run dev` | Run with hot reload (nodemon) |
+| `npm run deploy` | Deploy to AWS Lambda |
+| `npm run deploy:destroy` | Destroy AWS infrastructure |
+| `npm run terraform:init` | Initialize Terraform |
+| `npm run terraform:plan` | Plan infrastructure changes |
+| `npm run terraform:apply` | Apply infrastructure changes |
 
 ## 🔧 Configuration
 
@@ -51,21 +60,21 @@ Edit `terraform/terraform.tfvars`:
 
 ```hcl
 # AWS Configuration
-aws_region = "us-east-1"
+aws_region  = "eu-north-1"
 environment = "prod"
 
 # Project Configuration
 project_name = "portfolio-ankit"
 
 # Optional: Custom Domain
-# domain_name = "your-domain.com"
+# domain_name     = "ankitraj.cloud"
 # certificate_arn = "arn:aws:acm:..."
 ```
 
 ## 🏷️ Infrastructure Components
 
 ### Lambda Function
-- **Runtime**: Node.js 18.x
+- **Runtime**: Node.js 22.x
 - **Memory**: 512 MB
 - **Timeout**: 30 seconds
 - **Handler**: `lambda.handler`
@@ -75,57 +84,74 @@ project_name = "portfolio-ankit"
 - **CORS**: Enabled
 - **Logging**: CloudWatch integration
 
-### Monitoring
-- **CloudWatch Logs**: 14-day retention
-- **Health Check**: `/health` endpoint
-- **Metrics**: Lambda and API Gateway metrics
+### Remote State
+- **S3 Bucket**: `portfolio-ankit-terraform-state`
+- **DynamoDB Lock**: `portfolio-ankit-terraform-locks`
+- **Region**: eu-north-1
+
+
+### Docker
+```bash
+# Build and run locally
+docker build -t portfolio .
+docker run -p 3000:3000 portfolio
+```
+- **Base image**: `node:22-alpine`
 
 ## 🌐 Local Development
 
 ```bash
 npm start
-# Portfolio available at http://localhost:3000
+# → http://localhost:3000
 ```
 
 ## 📊 Cost Estimation
 
 **Monthly costs (estimated for moderate traffic):**
-- Lambda: ~$0.20 (1M requests)
-- API Gateway: ~$1.00 (1M requests)
-- CloudWatch Logs: ~$0.50
-- **Total**: ~$1.70/month
 
-## 🚨 Security Features
+| Resource | Cost |
+|----------|------|
+| Lambda | ~$0.20 (1M requests) |
+| API Gateway | ~$1.00 (1M requests) |
+| CloudWatch Logs | ~$0.50 |
+| **Total** | **~$1.70/month** |
+
+## 🛡️ Security
 
 - IAM roles with least privilege
 - API Gateway throttling
 - CloudWatch monitoring
 - No hardcoded secrets
+- CodeQL + Dependabot + npm audit in CI
+- npm overrides for transitive CVE patches
+
+## 🔄 CI/CD Integration
+
+Deployment is automated via GitHub Actions on push to `main`:
+
+```
+Lint → Security Scan → Test → Terraform Validate → Build → Deploy → Smoke Test → Notify
+```
+
+See [README.md](README.md) for full workflow details.
 
 ## 🗑️ Cleanup
 
-To remove all AWS resources:
 ```bash
+# Remove all AWS resources
 npm run deploy:destroy
 ```
 
-## 📝 Features
-
-- ✅ Serverless Express.js app
-- ✅ EmailJS contact form integration
-- ✅ Modern 2026 portfolio design
-- ✅ Multi-cloud architect showcase
-- ✅ Infrastructure as Code with Terraform
-- ✅ Production-ready deployment
-- ✅ Cost-optimized architecture
-
 ## 🔗 URLs After Deployment
 
-- **Portfolio**: `https://[api-id].execute-api.[region].amazonaws.com`
-- **Health Check**: `https://[api-id].execute-api.[region].amazonaws.com/health`
-- **CloudWatch Logs**: AWS Console → CloudWatch → Log Groups
+| Endpoint | URL |
+|----------|-----|
+| **Portfolio** | `https://www.ankitraj.cloud` |
+| **Health Check** | `https://www.ankitraj.cloud/health` |
+| **API Gateway** | `https://[api-id].execute-api.[region].amazonaws.com` |
+| **CloudWatch Logs** | AWS Console → CloudWatch → Log Groups |
 
 ---
 
-**Author**: Ankit Raj - Multi-Cloud Solution Architect  
-**Portfolio**: Cloud architecture and serverless expertise showcase
+**Author**: Ankit Raj — Lead Solution Architect & Multi-Cloud Engineer  
+**Contact**: rajankit749@gmail.com
