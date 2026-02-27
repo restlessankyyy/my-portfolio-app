@@ -9,11 +9,11 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html { font-size: 11px; }
+  html { font-size: 10.5px; }
   body {
     font-family: 'Inter', -apple-system, sans-serif;
     color: #1a1a1a;
-    line-height: 1.5;
+    line-height: 1.45;
     background: #fff;
     -webkit-font-smoothing: antialiased;
   }
@@ -21,49 +21,49 @@
   .page {
     max-width: 800px;
     margin: 0 auto;
-    padding: 36px 44px;
+    padding: 28px 40px;
   }
 
   /* ── Header ── */
-  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; border-bottom: 2px solid #111; padding-bottom: 16px; }
-  .header-left { display: flex; align-items: center; gap: 16px; }
-  .header-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd; flex-shrink: 0; }
-  .header h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
-  .header .subtitle { font-size: 1.1rem; color: #555; font-weight: 500; margin-top: 4px; }
-  .contact-info { text-align: right; font-size: 0.95rem; color: #444; line-height: 1.7; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; border-bottom: 2.5px solid #111; padding-bottom: 12px; }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid #ccc; flex-shrink: 0; }
+  .header h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+  .header .subtitle { font-size: 1.05rem; color: #555; font-weight: 500; margin-top: 3px; }
+  .contact-info { text-align: right; font-size: 0.9rem; color: #444; line-height: 1.65; }
   .contact-info a { color: #2563eb; text-decoration: none; }
 
   /* ── Sections ── */
-  .section { margin-bottom: 18px; }
-  .section-title { font-size: 1.05rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #111; border-bottom: 1px solid #ddd; padding-bottom: 4px; margin-bottom: 10px; }
+  .section { margin-bottom: 12px; }
+  .section-title { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: #111; border-bottom: 1.5px solid #d0d0d0; padding-bottom: 4px; margin-bottom: 8px; }
 
   /* ── Summary ── */
-  .summary { font-size: 1rem; color: #333; line-height: 1.6; }
+  .summary { font-size: 0.95rem; color: #333; line-height: 1.5; }
 
   /* ── Experience ── */
-  .job { margin-bottom: 14px; }
+  .job { margin-bottom: 10px; }
   .job-header { display: flex; justify-content: space-between; align-items: baseline; }
-  .job-title { font-size: 1.05rem; font-weight: 600; }
-  .job-date { font-size: 0.9rem; color: #666; font-weight: 500; white-space: nowrap; }
-  .job-company { font-size: 0.95rem; color: #2563eb; font-weight: 500; margin-bottom: 4px; }
-  .job ul { padding-left: 18px; }
-  .job li { font-size: 0.95rem; color: #333; margin-bottom: 2px; }
+  .job-title { font-size: 1rem; font-weight: 600; color: #111; }
+  .job-date { font-size: 0.88rem; color: #666; font-weight: 500; white-space: nowrap; }
+  .job-company { font-size: 0.92rem; color: #2563eb; font-weight: 500; margin-bottom: 3px; }
+  .job ul { padding-left: 17px; }
+  .job li { font-size: 0.9rem; color: #333; margin-bottom: 1.5px; line-height: 1.4; }
 
   /* ── Skills ── */
-  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; }
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 28px; }
   .skill-row { display: flex; gap: 8px; font-size: 0.95rem; }
   .skill-label { font-weight: 600; color: #111; min-width: 120px; }
   .skill-value { color: #444; }
 
   /* ── Projects ── */
-  .project { margin-bottom: 10px; }
-  .project h4 { font-size: 1rem; font-weight: 600; }
-  .project p { font-size: 0.92rem; color: #444; }
-  .project .tech { font-size: 0.85rem; color: #2563eb; font-weight: 500; }
+  .project { margin-bottom: 8px; }
+  .project h4 { font-size: 0.95rem; font-weight: 600; color: #111; }
+  .project p { font-size: 0.9rem; color: #444; line-height: 1.4; }
+  .project .tech { font-size: 0.84rem; color: #2563eb; font-weight: 500; margin-top: 1px; }
 
   /* ── Certs ── */
   .certs-list { columns: 2; column-gap: 24px; }
-  .certs-list li { font-size: 0.95rem; color: #333; margin-bottom: 2px; break-inside: avoid; }
+  .certs-list li { font-size: 0.92rem; color: #333; margin-bottom: 2px; break-inside: avoid; }
 
   /* ── Education ── */
   .edu-header { display: flex; justify-content: space-between; align-items: baseline; }
@@ -71,11 +71,15 @@
   .edu-date { font-size: 0.9rem; color: #666; }
   .edu-school { font-size: 0.95rem; color: #2563eb; font-weight: 500; }
 
+  /* ── Page 2 spacing ── */
+  .page2-section { margin-bottom: 18px; }
+  .page2-section .section-title { font-size: 1.05rem; margin-bottom: 10px; }
+
   /* ── Print ── */
   @media print {
-    html { font-size: 10.5px; }
+    html { font-size: 10px; }
     body { background: none; }
-    .page { padding: 24px 32px; max-width: 100%; }
+    .page { padding: 20px 32px; max-width: 100%; }
   }
 </style>
 </head>
@@ -132,11 +136,10 @@
       <div class="job-company">H&amp;M Group, Stockholm</div>
       <ul>
         <li>Engineered H&amp;M's multi-cloud backbone on Azure &amp; Google Cloud at enterprise scale</li>
-        <li>Built Internal Developer Platform with self-service Azure Engineering — EventGrid + Azure Functions notification workflows in TypeScript</li>
-        <li>Evaluated and integrated OpenAI, Claude &amp; Gemini LLM use cases to improve developer experience across 200+ teams</li>
-        <li>Established cloud governance frameworks at Management Group level with Azure Policies and Microsoft Sentinel as part of CTO office enterprise-wide strategy</li>
-        <li>Leveraged SAP LeanIX for enterprise architecture management, technology landscape visibility and transformation planning</li>
-        <li>Applied Zachman and TOGAF enterprise architecture frameworks for structured decision-making and cloud transformation governance</li>
+        <li>Built Internal Developer Platform with self-service Azure Engineering — EventGrid + Functions workflows</li>
+        <li>Evaluated OpenAI, Claude &amp; Gemini LLMs to improve developer experience across 200+ teams</li>
+        <li>Cloud governance at Management Group level with Azure Policies &amp; Sentinel (CTO office strategy)</li>
+        <li>SAP LeanIX for enterprise architecture; Zachman &amp; TOGAF frameworks for transformation governance</li>
       </ul>
     </div>
 
@@ -161,13 +164,11 @@
       </div>
       <div class="job-company">Ikano Bank</div>
       <ul>
-        <li>Led Gen AI-powered modernisation of AML &amp; KYC service APIs from on-premises to AWS serverless architecture</li>
+        <li>Led Gen AI-powered modernisation of AML &amp; KYC service APIs from on-prem to AWS serverless</li>
         <li>Leveraged AWS Bedrock with Claude Opus models to power LLM pipelines creating Policy conversion AI autonomous agent</li>
-        <li>Designed LLM pipelines to auto-analyse legacy AML/KYC APIs, generate migration blueprints and IaC templates</li>
-        <li>Built Gen AI-driven policy generation engine to migrate Axway API Gateway policies to AWS API Gateway</li>
-        <li>Built reusable prompt library for API migration, standardising LLM interactions for code analysis, blueprint generation and IaC scaffolding</li>
-        <li>Architected serverless platform on Lambda + Fargate with Terraform infrastructure-as-code</li>
-        <li>Implemented CI/CD pipelines using GitHub Actions and Terraform, replacing legacy ClickOps deployments</li>
+        <li>Built Gen AI-driven policy engine migrating Axway API Gateway policies to AWS API Gateway</li>
+        <li>Created reusable prompt library for API migration — code analysis, blueprint generation and IaC scaffolding</li>
+        <li>Architected serverless platform on Lambda + Fargate with Terraform IaC and GitHub Actions CI/CD</li>
         <li>Reduced migration time by 60% through AI-assisted code analysis and automated transformation</li>
       </ul>
     </div>
@@ -235,7 +236,7 @@
   </div>
 
   <!-- Skills -->
-  <div class="section">
+  <div class="page2-section" style="break-before: page; page-break-before: always;">
     <div class="section-title">Technical Skills</div>
     <div class="skills-grid">
       <div class="skill-row"><span class="skill-label">Cloud Platforms</span><span class="skill-value">AWS, Azure, Google Cloud</span></div>
@@ -252,18 +253,18 @@
   </div>
 
   <!-- Certifications -->
-  <div class="section">
+  <div class="page2-section">
     <div class="section-title">Certifications &amp; Awards <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="font-size:0.85rem;color:#0066cc;text-decoration:none;font-weight:normal">View on Credly &rarr;</a></div>
     <!-- Badge images row -->
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-security-identity.png" alt="OpenHack: Security, Compliance &amp; Identity" style="width:52px;height:52px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/azure-fundamentals.png" alt="Azure Fundamentals" style="width:52px;height:52px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/aws-devops-pro.png" alt="AWS DevOps Engineer Professional" style="width:52px;height:52px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/aws-developer-associate.png" alt="AWS Developer Associate" style="width:52px;height:52px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/mcp-exam-533.png" alt="MCP Exam 533" style="width:52px;height:52px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-ai-knowledge-mining.png" alt="OpenHack: AI Knowledge Mining" style="width:52px;height:52px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-containers.png" alt="OpenHack: Containers" style="width:52px;height:52px;border-radius:50%"></a>
-      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-devops.png" alt="OpenHack: DevOps" style="width:52px;height:52px;border-radius:50%"></a>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;align-items:center">
+      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-security-identity.png" alt="OpenHack: Security" style="width:44px;height:44px;border-radius:50%"></a>
+      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/azure-fundamentals.png" alt="Azure Fundamentals" style="width:44px;height:44px;border-radius:50%"></a>
+      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/aws-devops-pro.png" alt="AWS DevOps Pro" style="width:44px;height:44px;border-radius:50%"></a>
+      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/aws-developer-associate.png" alt="AWS Developer" style="width:44px;height:44px;border-radius:50%"></a>
+      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/mcp-exam-533.png" alt="MCP Exam 533" style="width:44px;height:44px;border-radius:50%"></a>
+      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-ai-knowledge-mining.png" alt="OpenHack: AI" style="width:44px;height:44px;border-radius:50%"></a>
+      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-containers.png" alt="OpenHack: Containers" style="width:44px;height:44px;border-radius:50%"></a>
+      <a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="text-decoration:none"><img src="../public/img/badges/openhack-devops.png" alt="OpenHack: DevOps" style="width:44px;height:44px;border-radius:50%"></a>
     </div>
     <ul class="certs-list">
       <li><a href="https://www.credly.com/users/ankit-raj.c149f138/badges" style="color:#0066cc;text-decoration:none">Microsoft Certified Professional (MCP)</a> &mdash; Exam 533: Azure Infrastructure Solutions</li>
@@ -281,25 +282,25 @@
   </div>
 
   <!-- Education -->
-  <div class="section">
+  <div class="page2-section">
     <div class="section-title">Education</div>
     <div class="edu-header">
       <span class="edu-title">B.Tech Computer Science &amp; Engineering</span>
       <span class="edu-date">2012 — 2016</span>
     </div>
     <div class="edu-school">Galgotias University, Greater Noida, India</div>
-    <p style="font-size:0.92rem;color:#444;margin-top:2px">Specialisation in Cloud Computing &amp; Virtualisation. Projects: Android-IoT Heart Rate Monitor, Big Data Analytics for Twitter.</p>
+    <p style="font-size:0.92rem;color:#444;margin-top:3px">Specialisation in Cloud Computing &amp; Virtualisation.</p>
   </div>
 
   <!-- Publications -->
-  <div class="section">
+  <div class="page2-section">
     <div class="section-title">Publications</div>
-    <ul style="padding-left:18px">
-      <li style="font-size:0.95rem;color:#333;margin-bottom:2px"><a href="https://faun.pub/what-is-kubernetes-cb357c4f8186" style="color:#0066cc;text-decoration:none">What is Kubernetes?</a> — Medium</li>
-      <li style="font-size:0.95rem;color:#333;margin-bottom:2px"><a href="https://medium.com/@restlessankyyy/how-about-experimenting-with-open-ai-dall-e-2-c2f4e690cd7b" style="color:#0066cc;text-decoration:none">OpenAI Experimentation with DALL-E</a> — Medium</li>
-      <li style="font-size:0.95rem;color:#333;margin-bottom:2px"><a href="https://medium.com/@restlessankyyy/how-did-i-build-and-deploy-my-recent-app-on-cloud-run-by-google-cloud-32c070e03dec" style="color:#0066cc;text-decoration:none">Building Apps on Google Cloud Run</a> — Medium</li>
-      <li style="font-size:0.95rem;color:#333;margin-bottom:2px"><a href="https://medium.com/@restlessankyyy/the-future-of-quantum-computing-41a055bd5664" style="color:#0066cc;text-decoration:none">The Future of Quantum Computing</a> — Medium</li>
-      <li style="font-size:0.95rem;color:#333;margin-bottom:2px"><a href="https://medium.com/@restlessankyyy/azure-devops-is-the-new-vsts-417b9b33fc25" style="color:#0066cc;text-decoration:none">Azure DevOps is the new VSTS</a> — Medium</li>
+    <ul style="padding-left:17px;columns:2;column-gap:24px">
+      <li style="font-size:0.92rem;color:#333;margin-bottom:2px;break-inside:avoid"><a href="https://faun.pub/what-is-kubernetes-cb357c4f8186" style="color:#0066cc;text-decoration:none">What is Kubernetes?</a></li>
+      <li style="font-size:0.92rem;color:#333;margin-bottom:2px;break-inside:avoid"><a href="https://medium.com/@restlessankyyy/how-about-experimenting-with-open-ai-dall-e-2-c2f4e690cd7b" style="color:#0066cc;text-decoration:none">OpenAI Experimentation with DALL-E</a></li>
+      <li style="font-size:0.92rem;color:#333;margin-bottom:2px;break-inside:avoid"><a href="https://medium.com/@restlessankyyy/how-did-i-build-and-deploy-my-recent-app-on-cloud-run-by-google-cloud-32c070e03dec" style="color:#0066cc;text-decoration:none">Building Apps on Google Cloud Run</a></li>
+      <li style="font-size:0.92rem;color:#333;margin-bottom:2px;break-inside:avoid"><a href="https://medium.com/@restlessankyyy/the-future-of-quantum-computing-41a055bd5664" style="color:#0066cc;text-decoration:none">The Future of Quantum Computing</a></li>
+      <li style="font-size:0.92rem;color:#333;margin-bottom:2px;break-inside:avoid"><a href="https://medium.com/@restlessankyyy/azure-devops-is-the-new-vsts-417b9b33fc25" style="color:#0066cc;text-decoration:none">Azure DevOps is the new VSTS</a></li>
     </ul>
   </div>
 
