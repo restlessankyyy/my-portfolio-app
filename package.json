@@ -37,7 +37,7 @@
   "author": "Ankit Raj <rajankit749@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-ses": "^3.948.0",
+    "@aws-sdk/client-ses": "^3.999.0",
     "@vendia/serverless-express": "^4.12.6",
     "express": "^4.19.2"
   },
@@ -63,5 +63,8 @@
   "bugs": {
     "url": "https://github.com/restlessankyyy/my-portfolio-app/issues"
   },
-  "homepage": "https://ankitraj.cloud"
+  "homepage": "https://ankitraj.cloud",
+  "overrides": {
+    "fast-xml-parser": ">=5.3.8"
+  }
 }
