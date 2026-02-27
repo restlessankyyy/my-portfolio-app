@@ -13,12 +13,12 @@ const path = require('path');
   await page.goto(`file://${htmlPath}`, { waitUntil: 'networkidle0' });
   
   await page.pdf({
-    path: path.resolve(__dirname, '..', 'public', 'Profile-Nordic.pdf'),
+    path: path.resolve(__dirname, '..', 'public', 'assets', 'Profile-Nordic.pdf'),
     format: 'A4',
     margin: { top: '10mm', bottom: '10mm', left: '0mm', right: '0mm' },
     printBackground: true,
   });
 
-  console.log('✅ Profile-Nordic.pdf generated in public/');
+  console.log('✅ Profile-Nordic.pdf generated in public/assets/');
   await browser.close();
 })();

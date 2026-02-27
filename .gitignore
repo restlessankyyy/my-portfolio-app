@@ -12,7 +12,6 @@ lerna-debug.log*
 *.temp
 *-backup.*
 *-original.*
-Profile.pdf
 image-generator.html
 
 # Terraform
