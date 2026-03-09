@@ -47,7 +47,7 @@
     "http-server": "^14.1.0",
     "nodemon": "^3.0.0",
     "prettier": "^3.1.0",
-    "puppeteer": "^24.37.5",
+    "puppeteer": "^24.38.0",
     "serverless": "^4.19.1",
     "serverless-http": "^4.0.0",
     "uglify-js": "^3.17.0"
