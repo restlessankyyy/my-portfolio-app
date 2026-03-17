@@ -156,7 +156,7 @@ jobs:
           fetch-depth: 0  # Full history needed for gitleaks PR scanning
 
       - name: 🔐 Run GitLeaks (Secret Detection)
-        uses: gitleaks/gitleaks-action@v3
+        uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # NO continue-on-error - FAILS pipeline if secrets detected! ✅
