@@ -9,7 +9,7 @@ const path = require('path');
   });
   const page = await browser.newPage();
   
-  const htmlPath = path.resolve(__dirname, 'resume.html');
+  const htmlPath = path.resolve(__dirname, 'resume-aws-sa.html');
   await page.goto(`file://${htmlPath}`, { waitUntil: 'networkidle0' });
   
   await page.pdf({

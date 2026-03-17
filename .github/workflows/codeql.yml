@@ -15,6 +15,8 @@ permissions:
 jobs:
   analyze:
     runs-on: ubuntu-latest
+    env:
+      CODEQL_ACTION_FILE_COVERAGE_ON_PRS: 'false'
     strategy:
       fail-fast: false
       matrix:
@@ -22,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
