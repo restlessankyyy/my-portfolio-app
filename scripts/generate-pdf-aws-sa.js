@@ -13,12 +13,12 @@ const path = require('path');
   await page.goto(`file://${htmlPath}`, { waitUntil: 'networkidle0' });
   
   await page.pdf({
-    path: path.resolve(__dirname, '..', 'public', 'assets', 'Ankit-Raj-Solutions-Architect-AWS.pdf'),
+    path: path.resolve(__dirname, '..', 'public', 'assets', 'Profile.pdf'),
     format: 'A4',
     margin: { top: '8mm', bottom: '8mm', left: '0mm', right: '0mm' },
     printBackground: true,
   });
 
-  console.log('✅ Ankit-Raj-Solutions-Architect-AWS.pdf generated in public/assets/');
+  console.log('✅ Profile.pdf generated in public/assets/');
   await browser.close();
 })();
