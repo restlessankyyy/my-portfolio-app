@@ -5,7 +5,7 @@ Thanks for your interest in contributing! This guide will help you get started.
 ## Development Setup
 
 ```bash
-# Prerequisites: Node.js 22+, npm 10+
+# Prerequisites: Node.js 24+, npm 11+
 git clone https://github.com/restlessankyyy/my-portfolio-app.git
 cd my-portfolio-app
 npm install

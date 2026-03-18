@@ -103,7 +103,7 @@ docker build -t portfolio .
 docker run -p 3000:3000 portfolio
 ```
 
-- **Base image**: `node:22-alpine`
+- **Base image**: `node:24-alpine`
 
 ## 🌐 Local Development
 
