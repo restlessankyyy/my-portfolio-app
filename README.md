@@ -151,7 +151,7 @@ node scripts/generate-pdf-photo.js
 
 ### AWS Resources
 
-- **Lambda Function** — `portfolio-ankit-prod-*` (Node.js 24.x, 512MB, 30s timeout)
+- **Lambda Function** — `portfolio-ankit-prod-*` (Node.js 22.x, 512MB, 30s timeout)
 - **API Gateway** — HTTP API v2 with CORS
 - **ACM Certificate** — SSL for custom domain
 - **SES** — Email sending with DKIM verified
@@ -224,7 +224,7 @@ Code Quality → Security Scan → Tests → Terraform Validate → Build → De
                            │
                     ┌──────▼──────┐
                     │   Lambda    │
-                    │ (Node.js 24)│
+                    │ (Node.js 22)│
                     └──────┬──────┘
                            │
               ┌────────────┼────────────┐

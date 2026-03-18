@@ -5,10 +5,10 @@ Modern, serverless portfolio website deployed to AWS Lambda via Terraform Infras
 ## 🏗️ Architecture
 
 ```text
-Cloudflare (DNS/SSL) → API Gateway (HTTP v2) → Lambda (Node.js 24) → SES / S3 / CloudWatch
+Cloudflare (DNS/SSL) → API Gateway (HTTP v2) → Lambda (Node.js 22) → SES / S3 / CloudWatch
 ```
 
-- **AWS Lambda** — Serverless Express.js (Node.js 24.x, 512MB, 30s timeout)
+- **AWS Lambda** — Serverless Express.js (Node.js 22.x, 512MB, 30s timeout)
 - **API Gateway** — HTTP API v2 with CORS enabled
 - **S3** — Static asset storage + Terraform remote state
 - **SES** — Contact form email with DKIM verification
@@ -78,7 +78,7 @@ project_name = "portfolio-ankit"
 
 ### Lambda Function
 
-- **Runtime**: Node.js 24.x
+- **Runtime**: Node.js 22.x
 - **Memory**: 512 MB
 - **Timeout**: 30 seconds
 - **Handler**: `lambda.handler`

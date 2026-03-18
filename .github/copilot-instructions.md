@@ -82,7 +82,7 @@ lambda.js                → AWS Lambda handler (@vendia/serverless-express)
 
 | Task | Command |
 |------|---------|
-| Run locally | `npm start` → http://localhost:3000 |
+| Run locally | `npm start` → `http://localhost:3000` |
 | Dev with hot reload | `npm run dev` |
 | Run tests | `npm test` |
 | Lint + format + test | `npm run validate` |
