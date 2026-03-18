@@ -11,7 +11,7 @@ Live at [https://www.ankitraj.cloud](https://www.ankitraj.cloud).
 
 ## Repository Structure
 
-```
+```text
 public/                  → Static frontend (served by Express)
   index.html             → Main portfolio page (cinematic dark theme)
   assets/Profile.pdf     → Primary resume PDF (AWS SA variant)
