@@ -71,7 +71,7 @@ env:
   AWS_REGION: eu-north-1
   
   # Build Configuration
-  NODE_VERSION: '22'
+  NODE_VERSION: '24'
   TERRAFORM_VERSION: '1.5.0'
   
   # Application Configuration
@@ -100,12 +100,12 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Full history for better analysis
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -133,7 +133,7 @@ jobs:
         continue-on-error: true
 
       - name: 📊 Upload Code Quality Reports
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: code-quality-reports
@@ -151,7 +151,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Full history needed for gitleaks PR scanning
 
@@ -189,10 +189,10 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -218,16 +218,15 @@ jobs:
   terraform-validate:
     name: 🏗️ Terraform Validation
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
     outputs:
       plan_exitcode: ${{ steps.plan.outputs.exitcode }}
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -238,13 +237,13 @@ jobs:
           ./scripts/build-lambda.sh
 
       - name: 🔧 Setup Terraform
-        uses: hashicorp/setup-terraform@v4
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
 
       - name: 🔑 Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -300,7 +299,7 @@ jobs:
           TF_VAR_custom_domain_target: "d-hctzaliyt6.execute-api.eu-north-1.amazonaws.com"
 
       - name: 📤 Upload Terraform Plan
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: terraform-plan
           path: |
@@ -310,7 +309,7 @@ jobs:
           retention-days: 7
 
       - name: 💬 PR Comment - Terraform Plan
-        uses: actions/github-script@v8
+        uses: actions/github-script@v7
         if: github.event_name == 'pull_request'
         with:
           script: |
@@ -369,10 +368,10 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -398,7 +397,7 @@ jobs:
           echo "   Artifact: $ARTIFACT_NAME"
 
       - name: 📤 Upload Build Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.build.outputs.artifact_name }}
           path: terraform/portfolio-lambda.zip
@@ -425,7 +424,6 @@ jobs:
     if: |
       always() &&
       needs.build.result == 'success' &&
-      (needs.terraform-validate.result == 'success' || needs.terraform-validate.result == 'skipped') &&
       (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch')
     environment:
       name: ${{ github.event.inputs.environment || 'production' }}
@@ -437,23 +435,23 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: 🔧 Setup Terraform
-        uses: hashicorp/setup-terraform@v4
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
 
       - name: 🔑 Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: 📥 Download Build Artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v4
         with:
           name: ${{ needs.build.outputs.artifact_name }}
           path: terraform/
@@ -592,7 +590,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: 🔥 Run Smoke Tests
         run: |
@@ -691,7 +689,7 @@ jobs:
           echo "- Branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
 
       - name: 🔑 Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -742,7 +740,7 @@ jobs:
     
     steps:
       - name: 📝 Create PR Summary Comment
-        uses: actions/github-script@v8
+        uses: actions/github-script@v7
         with:
           script: |
             const codeQuality = '${{ needs.code-quality.result }}';

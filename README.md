@@ -1,10 +1,8 @@
 # 🚀 Ankit Raj — Portfolio
 
 [![CI/CD Pipeline](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/ci-cd.yml)
-[![Security Scan](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/security-scan.yml/badge.svg)](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/security-scan.yml)
-[![Security Audit](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/security-audit.yml/badge.svg)](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/security-audit.yml)
 [![CodeQL](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/codeql.yml/badge.svg)](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/codeql.yml)
-[![Node.js](https://img.shields.io/badge/Node.js-22-green)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-24-green)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Premium cinematic portfolio website for **Ankit Raj** — Lead Solution Architect & Multi-Cloud Engineer specializing in AWS, Azure, and GCP.
@@ -36,7 +34,7 @@ Premium cinematic portfolio website for **Ankit Raj** — Lead Solution Architec
 | **Frontend** | HTML5, CSS3 (custom properties, glassmorphism), Vanilla JS (ES6+ classes) |
 | **Fonts** | Space Grotesk, JetBrains Mono |
 | **Icons** | Font Awesome 6.5.0 |
-| **Backend** | Node.js 22, Express.js |
+| **Backend** | Node.js 24, Express.js |
 | **PDF Gen** | Puppeteer (HTML → PDF) |
 | **Cloud** | AWS Lambda, API Gateway, SES, ACM, S3 |
 | **DNS/CDN** | Cloudflare (DNS, SSL, Page Rules) |
@@ -50,7 +48,9 @@ Premium cinematic portfolio website for **Ankit Raj** — Lead Solution Architec
 my-portfolio-app/
 ├── public/                     # Static assets
 │   ├── index.html              # Main HTML — cinematic portfolio
-│   ├── Profile.pdf             # Auto-generated resume
+│   ├── assets/
+│   │   ├── Profile.pdf         # Primary resume (AWS SA variant)
+│   │   └── Profile-Nordic.pdf  # Nordic photo resume variant
 │   ├── css/
 │   │   └── modern-style.css    # Full styling (dark/light themes, animations)
 │   ├── js/
@@ -60,8 +60,11 @@ my-portfolio-app/
 │   └── img/
 │       └── ankit.png           # Profile photo
 ├── scripts/
-│   ├── resume.html             # Professional HTML resume template
-│   ├── generate-pdf.js         # Puppeteer PDF generator (CI-aware)
+│   ├── resume-aws-sa.html      # Primary resume HTML (AWS Solutions Architect)
+│   ├── resume-photo.html       # Nordic resume with photo
+│   ├── generate-pdf-aws-sa.js  # Puppeteer: resume-aws-sa.html → Profile.pdf
+│   ├── generate-pdf-photo.js   # Puppeteer: resume-photo.html → Profile-Nordic.pdf
+│   ├── generate-pdf.js         # Alias (also generates Profile.pdf)
 │   ├── build-lambda.sh         # Lambda package builder
 │   ├── deploy.sh               # Deployment script
 │   └── destroy.sh              # Teardown script
@@ -84,7 +87,7 @@ my-portfolio-app/
 │   └── server.test.js          # Unit tests (8 test cases)
 ├── server.js                   # Express server (port 3000)
 ├── lambda.js                   # AWS Lambda handler
-├── Dockerfile                  # Docker image (node:22-alpine)
+├── Dockerfile                  # Docker image (node:24-alpine)
 ├── package.json                # Dependencies + npm overrides
 └── _config.yml                 # GitHub Pages config
 ```
@@ -93,7 +96,7 @@ my-portfolio-app/
 
 ### Prerequisites
 
-- Node.js 22+ (`nvm install 22`)
+- Node.js 24+ (`nvm install 24`)
 - npm 10+
 - AWS CLI configured (for deployment)
 - Terraform 1.0+ (for infrastructure)
@@ -116,12 +119,16 @@ npm start
 npm run dev
 ```
 
-### Generate Resume PDF
+### Generate Resume PDFs
 
 ```bash
-# Generate Profile.pdf from resume.html
-node scripts/generate-pdf.js
-# → Output: public/Profile.pdf
+# Generate primary resume (AWS SA variant)
+node scripts/generate-pdf-aws-sa.js
+# → Output: public/assets/Profile.pdf
+
+# Generate Nordic photo resume
+node scripts/generate-pdf-photo.js
+# → Output: public/assets/Profile-Nordic.pdf
 ```
 
 ### Available Scripts
@@ -144,7 +151,7 @@ node scripts/generate-pdf.js
 
 ### AWS Resources
 
-- **Lambda Function** — `portfolio-ankit-prod-*` (Node.js 22.x, 512MB, 30s timeout)
+- **Lambda Function** — `portfolio-ankit-prod-*` (Node.js 24.x, 512MB, 30s timeout)
 - **API Gateway** — HTTP API v2 with CORS
 - **ACM Certificate** — SSL for custom domain
 - **SES** — Email sending with DKIM verified
@@ -174,7 +181,8 @@ Terraform state stored in S3 with DynamoDB locking:
 | **codeql.yml** | Push/PR to `main` + weekly | CodeQL security analysis for JavaScript |
 | **security-scan.yml** | Weekly + manual | Gitleaks (secrets) + Trivy (vulnerabilities) |
 | **security-audit.yml** | Push/PR (package changes) | npm audit + outdated packages report |
-| **resume-pdf.yml** | Push (resume.html/ankit.png changes) + manual | Auto-regenerate Profile.pdf |
+| **resume-pdf.yml** | Push (resume HTML changes) + manual | Auto-regenerate Profile.pdf |
+| **resume-nordic-pdf.yml** | Push (resume-photo.html changes) + manual | Auto-regenerate Profile-Nordic.pdf |
 | **dependency-update.yml** | Scheduled | Check for dependency updates |
 
 ### Dependabot
@@ -216,7 +224,7 @@ Code Quality → Security Scan → Tests → Terraform Validate → Build → De
                            │
                     ┌──────▼──────┐
                     │   Lambda    │
-                    │ (Node.js 22)│
+                    │ (Node.js 24)│
                     └──────┬──────┘
                            │
               ┌────────────┼────────────┐
