@@ -26,9 +26,19 @@ scripts/
   generate-pdf-aws-sa.js → Puppeteer: resume-aws-sa.html → public/assets/Profile.pdf
   generate-pdf-photo.js  → Puppeteer: resume-photo.html → public/assets/Profile-Nordic.pdf
   generate-pdf.js        → Alias script (also generates Profile.pdf from resume-aws-sa.html)
+  agent/                 → 🤖 Agentic Resume Pipeline
+    generate.js          → Orchestrator — CLI entry point (runs all 4 agents)
+    jd-analyzer.js       → Agent 1: parse JD → requirements, keywords, seniority
+    experience-mapper.js → Agent 2: map profile bullets to JD, build skills grid
+    resume-writer.js     → Agent 3: enhance bullets (ENHANCE mode, never invents data)
+    ats-scorer.js        → Agent 4: score resume vs JD (0-100), feedback loop
+    client.js            → Unified AI client (Azure OpenAI + Anthropic auto-routing)
+    candidate-profile.yaml → Single source of truth for candidate data
+    jds/                 → Job description text files (adding a .txt triggers pipeline)
 terraform/               → AWS infra (Lambda, API GW, S3, SES, IAM)
   cloudflare/            → Cloudflare DNS records
   backend/               → S3 remote state config
+docs/                    → Documentation (architecture, pipeline, CI/CD, deployment)
 tests/server.test.js     → 8 unit tests (health, static, contact, SPA)
 server.js                → Express server (port 3000)
 lambda.js                → AWS Lambda handler (@vendia/serverless-express)
@@ -77,6 +87,19 @@ lambda.js                → AWS Lambda handler (@vendia/serverless-express)
 - Branch from `main`, use conventional commit prefixes: `feat:`, `fix:`, `docs:`, `ci:`, `chore:`
 - Push triggers full CI/CD pipeline to Lambda
 - Resume HTML changes trigger `resume-pdf.yml` workflow
+- Changes to `scripts/agent/**` do NOT trigger the main CI/CD pipeline
+- Adding `.txt` to `scripts/agent/jds/` triggers both agentic resume workflows
+
+### Agentic Resume Pipeline
+
+- 4-agent architecture: JD Analyzer → Experience Mapper → Resume Writer → ATS Scorer
+- **ENHANCE mode**: Agent 3 enhances pre-resolved bullets only — never invents metrics, dates, or titles
+- **Profile-locked titles**: Job titles always come from `candidate-profile.yaml`, never AI-generated
+- **Skill category labels**: 9 canonical labels from `skill_categories` YAML block, never AI-chosen
+- **Dual provider**: `client.js` auto-routes to Azure OpenAI (`gpt-*`) or Anthropic (`claude-*`) by model prefix
+- **PDF generation**: Uses `page.goto('file://')` with a temp HTML file (not `page.setContent()`) to fix Google Fonts in PDF text layer
+- **ATS loop**: Iterates up to `--max-loops` times until `--threshold` is met (default: 2 loops, 80/100)
+- Run locally: `node scripts/agent/generate.js --jd scripts/agent/jds/microsoft-csa.txt --model gpt-5.4`
 
 ## Common Tasks
 
@@ -88,5 +111,8 @@ lambda.js                → AWS Lambda handler (@vendia/serverless-express)
 | Lint + format + test | `npm run validate` |
 | Generate primary resume PDF | `node scripts/generate-pdf-aws-sa.js` |
 | Generate Nordic resume PDF | `node scripts/generate-pdf-photo.js` |
+| Generate Microsoft CSA resume PDF | `node scripts/generate-pdf-microsoft-csa.js` |
+| Run agentic pipeline (Azure) | `node scripts/agent/generate.js --jd scripts/agent/jds/microsoft-csa.txt --model gpt-5.4` |
+| Run agentic pipeline (Claude) | `node scripts/agent/generate.js --jd scripts/agent/jds/microsoft-csa.txt` |
 | Deploy to AWS | `npm run deploy` |
 | Destroy infrastructure | `npm run deploy:destroy` |
