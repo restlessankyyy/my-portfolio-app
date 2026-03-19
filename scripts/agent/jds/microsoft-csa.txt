@@ -1,0 +1,29 @@
+Senior Cloud Solution Architect (CSA) — Microsoft Customer Success Unit
+
+The Customer Success Unit empowers customers to accelerate business value through differentiated experiences powered by Microsoft technology and our people. With over 17,000 employees worldwide, the Customer Success Unit partners with customers to help them achieve outcomes faster through cloud and AI innovation.
+
+We are seeking a Senior Cloud Solution Architect (CSA) with deep expertise across Azure AI, Applications, Infrastructure, and Data. In this senior, customer-facing role, you will lead strategic technical engagements, advise executive stakeholders, and partner with Customer Success Leaders to design and deliver cloud and AI strategies that drive measurable business impact.
+
+Responsibilities
+
+Build trusted relationships with IT executives and business leaders as a strategic advisor for Cloud and AI transformation.
+Lead architecture design sessions and guide delivery of secure, scalable, and resilient Azure solutions using frameworks such as CAF and WAF.
+Own end-to-end technical delivery for a portfolio of strategic enterprise customers, aligned to customer success plans.
+Drive technical excellence across Azure workloads, ensuring performance, security, and production-scale AI readiness.
+Accelerate Azure adoption by resolving technical blockers, delivering repeatable IP, and providing delivery oversight.
+Collaborate with internal teams and partners to shape and execute impactful delivery proposals.
+Contribute to Microsoft's technical communities through mentoring, knowledge sharing, and thought leadership.
+Maintain deep technical expertise and certifications across priority technologies such as Azure AI Foundry, GitHub, App Services, Databricks, and Fabric.
+Demonstrate a growth mindset and actively contribute to a culture of learning and excellence.
+
+Qualifications
+
+Required
+- Bachelor's degree in Computer Science, IT, Engineering, Business, or equivalent experience.
+- Strong experience in cloud and infrastructure technologies and customer-facing technical roles.
+- Proven experience delivering complex technical projects.
+
+Preferred
+- Extensive experience leading large-scale technical engagements.
+- Cloud certifications (e.g., Azure, AWS, GCP, security-related certifications).
+- Dutch speaking

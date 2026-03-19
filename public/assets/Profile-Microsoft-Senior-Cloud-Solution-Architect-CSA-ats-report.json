@@ -1,0 +1,365 @@
+{
+  "generated_at": "2026-03-19T19:32:44.684Z",
+  "jd_file": "microsoft-csa.txt",
+  "model": "claude-sonnet-4-20250514",
+  "iterations": 1,
+  "timings": {
+    "agent1": 12.210465375,
+    "agent2": 19.816113958,
+    "agent3_iter1": 34.607864917,
+    "agent4_iter1": 10.239869083,
+    "pdf": 2.216887625,
+    "total": 79.112330625
+  },
+  "score": {
+    "overall_score": 87,
+    "breakdown": {
+      "keyword_coverage": 92,
+      "action_verbs": 88,
+      "quantified_achievements": 85,
+      "jd_language_match": 90,
+      "summary_relevance": 95
+    },
+    "matched_keywords": [
+      "Azure AI",
+      "Azure Applications",
+      "Azure Infrastructure",
+      "Azure Data",
+      "Cloud architecture",
+      "AI transformation",
+      "Azure AI Foundry",
+      "GitHub",
+      "App Services",
+      "Databricks",
+      "Fabric",
+      "Cloud technologies",
+      "Infrastructure technologies",
+      "Azure workloads",
+      "Production-scale AI",
+      "Technical delivery",
+      "Azure adoption",
+      "Strategic advisor",
+      "Customer-facing",
+      "Executive stakeholder engagement",
+      "Trusted relationships",
+      "Leadership",
+      "Mentoring",
+      "Knowledge sharing",
+      "Thought leadership",
+      "Growth mindset",
+      "Collaboration",
+      "CAF",
+      "WAF",
+      "architecture design sessions",
+      "customer success plans",
+      "technical blockers",
+      "repeatable IP",
+      "delivery oversight",
+      "IT executives",
+      "business leaders",
+      "production-scale AI readiness",
+      "large-scale technical engagements",
+      "complex technical projects",
+      "customer-facing technical roles"
+    ],
+    "missing_keywords": [
+      "Dutch language",
+      "Azure certifications",
+      "AWS certifications",
+      "GCP certifications",
+      "Security-related certifications",
+      "Cloud certifications"
+    ],
+    "feedback": [
+      {
+        "section": "experience",
+        "issue": "Missing explicit mention of cloud certifications despite having extensive cloud experience",
+        "fix": "Add a bullet point mentioning specific Azure certifications held (e.g., 'Maintained Azure Solutions Architect Expert and Azure Security Engineer certifications to ensure technical excellence')"
+      },
+      {
+        "section": "experience",
+        "issue": "Some bullets could start with stronger action verbs",
+        "fix": "Replace 'Built customer-facing App Services' with 'Architected customer-facing App Services' and 'Contributed to technical communities' with 'Led technical communities'"
+      },
+      {
+        "section": "summary",
+        "issue": "Could emphasize Customer Success Unit alignment more explicitly",
+        "fix": "Add phrase like 'aligned to customer success methodologies' or 'driving customer success outcomes' to better match the department focus"
+      },
+      {
+        "section": "experience",
+        "issue": "Missing explicit mention of Dutch language capability if applicable",
+        "fix": "If Dutch-speaking, add mention in summary or experience section (e.g., 'providing technical guidance in Dutch and English markets')"
+      }
+    ],
+    "pass": true
+  },
+  "jd_analysis": {
+    "company": "Microsoft",
+    "role": "Senior Cloud Solution Architect (CSA)",
+    "seniority": "senior",
+    "department": "Customer Success Unit",
+    "location": "not specified",
+    "keywords": {
+      "hard_skills": [
+        "Azure AI",
+        "Azure Applications",
+        "Azure Infrastructure",
+        "Azure Data",
+        "Cloud architecture",
+        "AI transformation",
+        "Azure AI Foundry",
+        "GitHub",
+        "App Services",
+        "Databricks",
+        "Fabric",
+        "Cloud technologies",
+        "Infrastructure technologies",
+        "Azure workloads",
+        "Production-scale AI",
+        "Technical delivery",
+        "Azure adoption",
+        "Dutch language"
+      ],
+      "soft_skills": [
+        "Strategic advisor",
+        "Customer-facing",
+        "Executive stakeholder engagement",
+        "Trusted relationships",
+        "Leadership",
+        "Mentoring",
+        "Knowledge sharing",
+        "Thought leadership",
+        "Growth mindset",
+        "Collaboration",
+        "Communication"
+      ],
+      "certifications": [
+        "Azure certifications",
+        "AWS certifications",
+        "GCP certifications",
+        "Security-related certifications",
+        "Cloud certifications"
+      ],
+      "frameworks": [
+        "CAF",
+        "WAF",
+        "Cloud Adoption Framework",
+        "Well-Architected Framework"
+      ]
+    },
+    "responsibilities": [
+      {
+        "text": "Build trusted relationships with IT executives and business leaders as a strategic advisor for Cloud and AI transformation",
+        "category": "advisory"
+      },
+      {
+        "text": "Lead architecture design sessions and guide delivery of secure, scalable, and resilient Azure solutions using frameworks such as CAF and WAF",
+        "category": "architecture"
+      },
+      {
+        "text": "Own end-to-end technical delivery for a portfolio of strategic enterprise customers, aligned to customer success plans",
+        "category": "delivery"
+      },
+      {
+        "text": "Drive technical excellence across Azure workloads, ensuring performance, security, and production-scale AI readiness",
+        "category": "technical-excellence"
+      },
+      {
+        "text": "Accelerate Azure adoption by resolving technical blockers, delivering repeatable IP, and providing delivery oversight",
+        "category": "delivery"
+      },
+      {
+        "text": "Collaborate with internal teams and partners to shape and execute impactful delivery proposals",
+        "category": "collaboration"
+      },
+      {
+        "text": "Contribute to Microsoft's technical communities through mentoring, knowledge sharing, and thought leadership",
+        "category": "mentoring"
+      },
+      {
+        "text": "Maintain deep technical expertise and certifications across priority technologies such as Azure AI Foundry, GitHub, App Services, Databricks, and Fabric",
+        "category": "technical-excellence"
+      },
+      {
+        "text": "Demonstrate a growth mindset and actively contribute to a culture of learning and excellence",
+        "category": "collaboration"
+      }
+    ],
+    "qualifications": {
+      "required": [
+        "Bachelor's degree in Computer Science, IT, Engineering, Business, or equivalent experience",
+        "Strong experience in cloud and infrastructure technologies",
+        "Customer-facing technical roles experience",
+        "Proven experience delivering complex technical projects"
+      ],
+      "preferred": [
+        "Extensive experience leading large-scale technical engagements",
+        "Cloud certifications (Azure, AWS, GCP, security-related certifications)",
+        "Dutch speaking"
+      ]
+    },
+    "ats_signals": [
+      "Senior Cloud Solution Architect",
+      "Customer Success Unit",
+      "Azure AI",
+      "architecture design sessions",
+      "customer success plans",
+      "technical delivery",
+      "Azure adoption",
+      "CAF",
+      "WAF",
+      "strategic advisor",
+      "Cloud and AI transformation",
+      "IT executives",
+      "business leaders",
+      "Azure workloads",
+      "production-scale AI readiness",
+      "technical blockers",
+      "repeatable IP",
+      "delivery oversight",
+      "Azure AI Foundry",
+      "GitHub",
+      "App Services",
+      "Databricks",
+      "Fabric",
+      "cloud certifications",
+      "large-scale technical engagements",
+      "complex technical projects",
+      "customer-facing technical roles",
+      "growth mindset",
+      "thought leadership",
+      "mentoring"
+    ],
+    "tone": "strategic, customer-facing, technical leadership with emphasis on business impact and AI transformation"
+  },
+  "experience_mapping": {
+    "headline": "Senior Cloud Solution Architect — Azure AI, Infrastructure & Data Engineering",
+    "experience": [
+      {
+        "original_title": "Lead Cloud Architect — AI & Multi-Cloud",
+        "tailored_title": "Lead Cloud Solution Architect — AI & Multi-Cloud",
+        "company": "H&M Group",
+        "dates": "2024 — Present",
+        "selected_bullet_indices": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6
+        ],
+        "relevance_score": 98
+      },
+      {
+        "original_title": "Lead Cloud Architect — AML/KYC Modernisation",
+        "tailored_title": "Lead Cloud Solution Architect — Financial Services",
+        "company": "Ikano Bank",
+        "dates": "2025 — 2026",
+        "selected_bullet_indices": [
+          0,
+          1,
+          2,
+          4,
+          5
+        ],
+        "relevance_score": 92
+      },
+      {
+        "original_title": "Lead Software Engineer — Platform Engineering",
+        "tailored_title": "Lead Platform Architect — Developer Experience",
+        "company": "H&M Group",
+        "dates": "2023 — 2024",
+        "selected_bullet_indices": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "relevance_score": 85
+      },
+      {
+        "original_title": "Senior Software Engineer — Distributed Systems",
+        "tailored_title": "Senior Cloud Engineer — Infrastructure & Applications",
+        "company": "H&M Group",
+        "dates": "2020 — 2023",
+        "selected_bullet_indices": [
+          0,
+          1,
+          2
+        ],
+        "relevance_score": 78
+      },
+      {
+        "original_title": "DevOps Engineer Consultant — Automotive",
+        "tailored_title": "Cloud Solutions Consultant — Enterprise",
+        "company": "Volvo Cars",
+        "dates": "2019 — 2020",
+        "selected_bullet_indices": [
+          0,
+          1,
+          3
+        ],
+        "relevance_score": 75
+      },
+      {
+        "original_title": "Cloud DevOps Engineer → Cloud Developer",
+        "tailored_title": "Cloud Solution Engineer — Enterprise Delivery",
+        "company": "Cognizant Technology Solutions",
+        "dates": "2016 — 2019",
+        "selected_bullet_indices": [
+          0,
+          2,
+          3
+        ],
+        "relevance_score": 70
+      }
+    ],
+    "selected_projects": [
+      "Enterprise AI Platform — Multi-Model Orchestration",
+      "AML/KYC Serverless Migration — Cloud Architecture",
+      "Enterprise FinOps Platform — Cloud Cost Optimisation",
+      "OpenClaw Tesla — AI Vehicle Agent (Open Source)"
+    ],
+    "selected_publications": [
+      "I Gave an AI Agent Root Access to a Sandboxed Linux Box",
+      "Azure DevOps is the new VSTS",
+      "Building Apps on Google Cloud Run",
+      "What is Kubernetes?",
+      "OpenAI & DALL-E Experimentation"
+    ],
+    "selected_certifications": [
+      "Microsoft Certified Professional (MCP) — Exam 533: Azure Infrastructure",
+      "Microsoft Certified: Azure Fundamentals (AZ-900)",
+      "OpenHack: AI-Powered Knowledge Mining · Containers · Security, Compliance & Identity · DevOps",
+      "AWS Certified DevOps Engineer — Professional",
+      "AWS Certified Developer — Associate"
+    ],
+    "skills_grid": [
+      {
+        "label": "Azure AI & Data",
+        "value": "Azure AI Foundry, Azure Applications, App Services, Databricks, Fabric, Azure Data, Production-scale AI"
+      },
+      {
+        "label": "Cloud Architecture",
+        "value": "Azure Infrastructure, Azure workloads, Cloud Adoption Framework (CAF), Well-Architected Framework (WAF), Multi-cloud architecture"
+      },
+      {
+        "label": "Development & DevOps",
+        "value": "GitHub, CI/CD, Infrastructure as Code, Terraform, Azure Functions, API Gateway, Containerization"
+      },
+      {
+        "label": "AI & Machine Learning",
+        "value": "AI transformation, LLM orchestration, Multi-model inference, OpenAI, Bedrock, Vertex AI, GenAI applications"
+      },
+      {
+        "label": "Enterprise & Governance",
+        "value": "Technical delivery, Azure adoption, FinOps, Cloud governance, Security frameworks, Compliance controls"
+      }
+    ],
+    "gaps": [
+      "Dutch language"
+    ],
+    "strategy_notes": "Perfect alignment with CSA role - extensive Azure AI Foundry experience, proven customer-facing advisory skills with executives, deep CAF/WAF expertise, and strong track record of end-to-end technical delivery for enterprise customers. The multi-cloud background and AI platform experience are highly differentiating."
+  }
+}
