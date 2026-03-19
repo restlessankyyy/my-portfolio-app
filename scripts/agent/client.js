@@ -36,7 +36,7 @@ function detectProvider(model) {
 
 function getAzureClient() {
   if (_azure) return _azure;
-  const endpoint = process.env.AZURE_OPENAI_ENDPOINT;
+  let endpoint = process.env.AZURE_OPENAI_ENDPOINT;
   const apiKey = process.env.AZURE_OPENAI_API_KEY;
   if (!endpoint || !apiKey) {
     console.error(
@@ -44,6 +44,12 @@ function getAzureClient() {
     );
     process.exit(1);
   }
+  // Normalise endpoint — prepend https:// if no scheme present
+  if (!/^https?:\/\//i.test(endpoint)) {
+    endpoint = `https://${endpoint}`;
+  }
+  // Strip trailing slash to avoid double-slash in URL construction
+  endpoint = endpoint.replace(/\/+$/, '');
   _azure = new AzureOpenAI({
     endpoint,
     apiKey,
