@@ -13,6 +13,7 @@ Run the agentic resume pipeline to produce a tailored, ATS-optimized resume PDF 
 1. **Save the JD** — Create a `.txt` file in `scripts/agent/jds/` with the job description text (use a slugified name, e.g. `amazon-sa.txt`).
 
 2. **Run the pipeline** — Execute the orchestrator:
+
    ```bash
    node scripts/agent/generate.js --jd scripts/agent/jds/<filename>.txt --model gpt-5.4 --max-loops 2 --threshold 80
    ```

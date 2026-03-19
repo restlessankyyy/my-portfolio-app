@@ -52,6 +52,7 @@
 | Region | `eu-north-1` |
 
 State file locations:
+
 - AWS: `s3://portfolio-ankit-terraform-state/portfolio/aws/terraform.tfstate`
 - Cloudflare: `s3://portfolio-ankit-terraform-state/portfolio/cloudflare/terraform.tfstate`
 

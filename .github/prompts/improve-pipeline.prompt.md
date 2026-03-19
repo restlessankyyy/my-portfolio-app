@@ -10,7 +10,7 @@ Make changes to the 4-agent resume pipeline in `scripts/agent/`.
 
 ## Architecture
 
-```
+```text
 JD Analyzer → Experience Mapper → Resume Writer → ATS Scorer
 (jd-analyzer.js)  (experience-mapper.js)  (resume-writer.js)  (ats-scorer.js)
 ```

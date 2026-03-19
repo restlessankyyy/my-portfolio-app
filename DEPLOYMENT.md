@@ -2,7 +2,6 @@
 
 > This file has moved to [docs/deployment.md](docs/deployment.md).
 
-
 ## 🏗️ Architecture
 
 ```text

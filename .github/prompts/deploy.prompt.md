@@ -17,21 +17,25 @@ npm run deploy
 ## Step-by-Step
 
 1. **Validate locally**:
+
    ```bash
    npm run validate  # lint + format + tests
    ```
 
 2. **Check Terraform**:
+
    ```bash
    cd terraform && terraform init && terraform plan
    ```
 
 3. **Deploy**:
+
    ```bash
    npm run deploy
    ```
 
 4. **Smoke test**:
+
    ```bash
    curl -s https://www.ankitraj.cloud/health | jq .
    ```

@@ -2,7 +2,6 @@
 
 > This file has moved to [docs/contributing.md](docs/contributing.md).
 
-
 ## Development Setup
 
 ```bash

@@ -22,6 +22,7 @@ Modify a resume HTML template and regenerate the corresponding PDF.
    - Font: Inter via Google Fonts `@import url()`
 
 3. **Regenerate the PDF**:
+
    ```bash
    node scripts/generate-pdf-aws-sa.js       # → Profile.pdf
    node scripts/generate-pdf-photo.js         # → Profile-Nordic.pdf
