@@ -9,60 +9,69 @@
  * - Outputs structured data ready for the Handlebars template
  */
 
-const { getClient } = require('./client');
+const { chat } = require('./client');
 
-const SYSTEM_PROMPT = `You are an expert resume writer specializing in ATS-optimized, senior technical resumes.
+const SYSTEM_PROMPT = `You are a senior resume editor specialising in executive-level, ATS-optimised technical resumes.
 
-Given a candidate profile, JD analysis, and experience mapping, produce the final resume content.
+You are NOT generating a resume from scratch. You are given pre-selected, pre-resolved content as ground truth — your job is to ENHANCE it for a specific JD.
 
 Return ONLY valid JSON with this schema:
 {
-  "summary": "string — 3-4 line professional summary tailored to the JD. Mirror JD terminology. Include metrics.",
+  "summary": "string — 4-sentence professional summary tailored to the JD",
   "experience": [
     {
-      "title": "string — the tailored job title",
-      "company": "string — company name (use &amp; for ampersands in HTML)",
-      "dates": "string",
-      "bullets": ["string array — rewritten bullet points using JD language"]
-    }
-  ],
-  "projects": [
-    {
-      "title": "string — project title",
-      "description": "string — 2 line description using JD-relevant technology names"
-    }
-  ],
-  "publications": [
-    {
-      "title": "string",
-      "url": "string",
-      "description": "string"
+      "bullets": ["string array — one enhanced bullet per resolved_bullet, SAME ORDER AND COUNT as resolved_bullets"]
     }
   ]
 }
 
-WRITING RULES:
-1. Start EVERY bullet with a strong action verb: Led, Designed, Architected, Delivered, Built, Drove, Established, Accelerated, Owned, Resolved
-2. Mirror JD phrases EXACTLY where truthful (e.g., if JD says "architecture design sessions", use that exact phrase)
-3. Quantify everything possible — numbers, percentages, scale
-4. Keep bullets concise: 1-2 lines max
-5. The summary must feel like it was written FOR this specific role
-6. Use HTML entities for special chars: &amp; for &, &rarr; for →
-7. Do NOT fabricate experience — only reframe existing bullets using JD language
-8. Prioritize JD's ATS signals in bullet placement (most important keywords in first bullets of each role)`;
+══ BULLET ENHANCEMENT RULES (MANDATORY) ══
+Each role in the mapping has a resolved_bullets array — these are the EXACT words from the candidate's real profile.
+Produce exactly one output bullet per resolved_bullet, in the same order, same count.
+
+You MUST PRESERVE in every output bullet:
+• Every specific service/product name: Lambda, Fargate, AWS Bedrock, Azure AI Foundry, Azure OpenAI, GCP Vertex AI, GKE, AKS, GitHub Actions, Event Grid, GraphQL, REST APIs, DynamoDB, Step Functions, Prometheus, Grafana, ELK, SAP LeanIX, TOGAF, Zachman, OpenShift, CodePipeline, ECS, React, etc.
+• Every metric and number: 35%, 70%, 50K+ RPM, 200+ teams, 500K+ daily transactions, 99.9% uptime, 10x, 60%, 200+ repos, 95%, 100+ microservices, 8+ engineers, 15+ services, 5+ enterprise clients, etc.
+• Every proper noun: H&M Group, Ikano Bank, Volvo Cars, Cognizant, NVIDIA, Tesla, AWS, Azure, Google Cloud, etc.
+
+You MAY:
+• Strengthen the opening action verb (Architected, Engineered, Designed, Led, Drove, Delivered, Established, Accelerated, Owned)
+• Insert 1-2 JD-specific phrases naturally, where they genuinely fit — for example: "architecture design sessions", "customer success", "technical communities", "delivery oversight", "trusted advisor", "portfolio of enterprise customers"
+• Tighten or rephrase connective tissue (prepositions, transitions) for better JD alignment
+
+You MUST NEVER:
+• Remove, abstract, or summarise any named service, platform, or technology
+• Replace "GraphQL & REST APIs on Azure + GKE" ➜ "API services"
+• Replace "AWS Bedrock, Azure AI Foundry, and GCP Vertex AI" ➜ "AI platforms"
+• Replace "Bedrock + Claude" ➜ "LLM framework"
+• Replace "Lambda, Fargate, API Gateway, DynamoDB, and Step Functions" ➜ "serverless stack"
+• Drop any quantified metric or achievement
+• Produce fewer bullets than resolved_bullets for a given role
+• Add experience, tools, or credentials the candidate does not have
+
+══ PROFESSIONAL SUMMARY (4 sentences) ══
+Sentence 1: "Solutions Architect / Cloud Architect with X+ years [what they do] for [customer type]." — mirror the exact JD role title in this sentence.
+Sentence 2: "Deep expertise in [2-3 JD-critical capabilities] — backed by hands-on delivery in [2 named technologies from the profile relevant to this JD]."
+Sentence 3: "Proven track record: [pick the strongest singular achievement from the profile with its exact metric, e.g. '35% cloud cost reduction', '70% latency improvement', '99.9% uptime for 200+ teams']."
+Sentence 4: "[Closing sentence that directly addresses the JD's core need using a JD phrase and one more metric from the profile]."
+
+Sound like a confident senior practitioner. No hollow adjectives (innovative, passionate, dynamic). Mirror JD terminology precisely.
+
+CASING RULES — STRICT, NO EXCEPTIONS:
+• Every sentence and bullet starts with a capital letter
+• Technology/product names use their brand capitalization: Azure, Microsoft, GitHub, Kubernetes, Docker, Terraform, AWS, GCP, Python, Node.js, TypeScript, JavaScript, CI/CD, DevOps, MLOps, FinOps, AI, ML, LLM, API, RBAC, WAF, CAF, SLA
+• Job titles use Title Case
+• Acronyms always fully uppercase: API, CI/CD, RBAC, WAF, CAF, SLA, ROI, TCO, AKS, ECS, GKE, IaC, VPN`;
 
 async function writeResume(jdAnalysis, experienceMapping, candidateProfile, options = {}) {
-  const client = getClient();
   const model = options.model || 'claude-sonnet-4-20250514';
 
-  const response = await client.messages.create({
+  const text = await chat({
     model,
-    max_tokens: 8192,
     system: SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: `## JD Analysis\n\`\`\`json\n${JSON.stringify(jdAnalysis, null, 2)}\n\`\`\`\n\n## Experience Mapping\n\`\`\`json\n${JSON.stringify(experienceMapping, null, 2)}\n\`\`\`\n\n## Candidate Profile\n\`\`\`json\n${JSON.stringify(candidateProfile, null, 2)}\n\`\`\`\n\nWrite the final resume content. Use the mapping to select bullets, then REWRITE them using JD terminology. Return the JSON.` }],
+    userContent: `## JD Analysis\n\`\`\`json\n${JSON.stringify(jdAnalysis, null, 2)}\n\`\`\`\n\n## Experience Mapping (with pre-resolved bullet text)\n\`\`\`json\n${JSON.stringify(experienceMapping, null, 2)}\n\`\`\`\n\nFor each role, the resolved_bullets array contains the EXACT selected bullet text from the candidate's real profile. Enhance each bullet by preserving all specific service names, metrics, and proper nouns — weave in JD terminology around them. Produce one output bullet per resolved_bullet in the same order. Return only the JSON with summary and experience[].bullets.`,
+    maxTokens: 8192,
   });
-
-  const text = response.content[0].text;
   const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, text];
   return JSON.parse(jsonMatch[1].trim());
 }

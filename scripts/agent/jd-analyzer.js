@@ -9,7 +9,7 @@
  * - Company & role metadata
  */
 
-const { getClient } = require('./client');
+const { chat } = require('./client');
 
 const SYSTEM_PROMPT = `You are an expert ATS (Applicant Tracking System) analyst. 
 Given a job description, extract structured data that will be used to tailor a resume.
@@ -45,17 +45,14 @@ Be thorough. Extract EVERY keyword, technology, and phrase that an ATS system wo
 Include both explicit mentions and strongly implied skills.`;
 
 async function analyzeJD(jdText, options = {}) {
-  const client = getClient();
   const model = options.model || 'claude-sonnet-4-20250514';
 
-  const response = await client.messages.create({
+  const text = await chat({
     model,
-    max_tokens: 4096,
     system: SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: `Analyze this job description and extract structured ATS data:\n\n${jdText}` }],
+    userContent: `Analyze this job description and extract structured ATS data:\n\n${jdText}`,
+    maxTokens: 4096,
   });
-
-  const text = response.content[0].text;
 
   // Extract JSON from response (handle markdown code blocks)
   const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, text];

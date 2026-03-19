@@ -9,7 +9,7 @@
  * - Returns pass/fail with actionable fix instructions
  */
 
-const { getClient } = require('./client');
+const { chat } = require('./client');
 
 const SYSTEM_PROMPT = `You are an ATS (Applicant Tracking System) scoring engine.
 
@@ -49,17 +49,14 @@ SCORING RULES:
 Be strict. An 85 should mean the resume would genuinely score well in an ATS.`;
 
 async function scoreResume(resumeContent, jdAnalysis, options = {}) {
-  const client = getClient();
   const model = options.model || 'claude-sonnet-4-20250514';
 
-  const response = await client.messages.create({
+  const text = await chat({
     model,
-    max_tokens: 4096,
     system: SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: `## JD Analysis\n\`\`\`json\n${JSON.stringify(jdAnalysis, null, 2)}\n\`\`\`\n\n## Resume Content\n\`\`\`json\n${JSON.stringify(resumeContent, null, 2)}\n\`\`\`\n\nScore this resume against the JD. Be strict and specific.` }],
+    userContent: `## JD Analysis\n\`\`\`json\n${JSON.stringify(jdAnalysis, null, 2)}\n\`\`\`\n\n## Resume Content\n\`\`\`json\n${JSON.stringify(resumeContent, null, 2)}\n\`\`\`\n\nScore this resume against the JD. Be strict and specific.`,
+    maxTokens: 4096,
   });
-
-  const text = response.content[0].text;
   const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/) || [null, text];
   return JSON.parse(jsonMatch[1].trim());
 }

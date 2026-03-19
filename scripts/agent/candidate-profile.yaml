@@ -11,6 +11,19 @@ website: https://ankitraj.cloud
 linkedin: https://linkedin.com/in/raj-ankit
 github: https://github.com/restlessankyyy
 
+# ── Skill Categories (canonical — labels NEVER change across JDs) ──
+# The AI mapper fills the values per JD but MUST use these labels exactly as written.
+skill_categories:
+  - Solutions Architecture
+  - Cloud Services & Platforms
+  - AI & Machine Learning
+  - Multi-Cloud & Infrastructure
+  - Security & Networking
+  - Data & Analytics
+  - DevOps & CI/CD
+  - Languages & Frameworks
+  - Leadership & Advisory
+
 # ── Education ──
 education:
   - degree: Bachelor of Technology — Computer Science & Engineering
