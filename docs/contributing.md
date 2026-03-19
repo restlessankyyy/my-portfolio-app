@@ -1,12 +1,8 @@
 # Contributing
 
-> This file has moved to [docs/contributing.md](docs/contributing.md).
-
-
-## Development Setup
+## Setup
 
 ```bash
-# Prerequisites: Node.js 24+, npm 11+
 git clone https://github.com/restlessankyyy/my-portfolio-app.git
 cd my-portfolio-app
 npm install
@@ -19,26 +15,21 @@ We use [GitHub Flow](https://guides.github.com/introduction/flow/index.html):
 
 1. Fork the repo and create your branch from `main`
 2. Make your changes
-3. Ensure lint + format + tests pass: `npm run validate`
-4. If you've changed APIs, update the documentation
-5. Open a Pull Request
+3. Run `npm run validate` (lint + format + tests)
+4. Open a Pull Request
 
 ## Code Quality
-
-Before committing, run the full validation:
 
 ```bash
 npm run validate   # lint + format check + tests
 ```
-
-Individual checks:
 
 | Command | Purpose |
 |---------|---------|
 | `npm run lint` | ESLint (JS files) |
 | `npm run lint:fix` | Auto-fix lint issues |
 | `npm run format` | Format with Prettier |
-| `npm test` | Run unit tests (8 cases) |
+| `npm test` | Run unit tests |
 
 ## Branch Naming
 
@@ -63,17 +54,11 @@ ci: add CodeQL security scanning
 - Never commit secrets or API keys
 - Gitleaks runs in CI to catch leaked secrets
 - CodeQL + npm audit check for vulnerabilities
-- Dependabot keeps dependencies updated
 
 ## Reporting Bugs
 
-Use [GitHub Issues](https://github.com/restlessankyyy/my-portfolio-app/issues/new) with:
-
-- Steps to reproduce
-- Expected vs actual behavior
-- Browser/Node version
-- Screenshots if applicable
+Use [GitHub Issues](https://github.com/restlessankyyy/my-portfolio-app/issues/new) with steps to reproduce, expected vs actual behavior, and browser/Node version.
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+By contributing, you agree your contributions will be licensed under the [MIT License](../LICENSE).

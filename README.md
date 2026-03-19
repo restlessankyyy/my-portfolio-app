@@ -20,6 +20,7 @@ Premium cinematic portfolio website for **Ankit Raj** — Lead Solution Architec
 - 📜 **Experience Timeline** — Staggered animated career timeline
 - 🎓 **Certifications Marquee** — Auto-scrolling certification badges
 - 📄 **AI Resume** — Auto-generated PDF from HTML via Puppeteer + GitHub Actions
+- 🤖 **Agentic Resume Pipeline** — 4-agent AI system (Azure OpenAI / Claude) generates ATS-optimized resumes from job descriptions
 - 📱 **Fully Responsive** — Breakpoints at 1024 / 768 / 480px
 - ⚡ **Serverless** — AWS Lambda + API Gateway deployment
 - 🔒 **Secure** — HTTPS, DKIM, SPF, DMARC, CodeQL, Dependabot
@@ -67,13 +68,28 @@ my-portfolio-app/
 │   ├── generate-pdf.js         # Alias (also generates Profile.pdf)
 │   ├── build-lambda.sh         # Lambda package builder
 │   ├── deploy.sh               # Deployment script
-│   └── destroy.sh              # Teardown script
+│   ├── destroy.sh              # Teardown script
+│   └── agent/                  # 🤖 Agentic Resume Pipeline
+│       ├── generate.js         # Orchestrator — CLI entry point
+│       ├── jd-analyzer.js      # Agent 1: parse JD → requirements
+│       ├── experience-mapper.js# Agent 2: map profile → JD bullets
+│       ├── resume-writer.js    # Agent 3: enhance bullets (ENHANCE mode)
+│       ├── ats-scorer.js       # Agent 4: score resume vs JD
+│       ├── client.js           # Unified AI client (Azure OpenAI + Anthropic)
+│       ├── candidate-profile.yaml # Single source of truth for candidate data
+│       └── jds/                # Job description text files (trigger pipeline)
 ├── terraform/                  # Infrastructure as Code
 │   ├── main.tf                 # AWS resources (Lambda, API GW, IAM, S3)
 │   ├── variables.tf            # Input variables
 │   ├── outputs.tf              # Output values
 │   ├── cloudflare/             # Cloudflare DNS config
 │   └── backend/                # S3 remote state config
+├── docs/                       # 📚 Documentation
+│   ├── architecture.md         # System architecture (AWS + Cloudflare)
+│   ├── agentic-pipeline.md     # 4-agent AI resume pipeline
+│   ├── cicd.md                 # CI/CD workflows reference
+│   ├── deployment.md           # Deployment guide
+│   └── contributing.md         # Contributing guidelines
 ├── .github/
 │   ├── dependabot.yml          # Weekly npm + Actions dependency updates
 │   └── workflows/
@@ -82,6 +98,8 @@ my-portfolio-app/
 │       ├── security-scan.yml   # Gitleaks + Trivy scheduled scan
 │       ├── security-audit.yml  # npm audit + outdated check
 │       ├── resume-pdf.yml      # Auto-regenerate resume PDF
+│       ├── agentic-resume.yml  # 4-agent pipeline via Claude
+│       ├── agentic-resume-foundry.yml # 4-agent pipeline via Azure OpenAI
 │       └── dependency-update.yml # Dependency update checks
 ├── tests/
 │   └── server.test.js          # Unit tests (8 test cases)
@@ -92,7 +110,17 @@ my-portfolio-app/
 └── _config.yml                 # GitHub Pages config
 ```
 
-## 🚀 Quick Start
+## � Documentation
+
+| Doc | Description |
+|-----|-------------|
+| [docs/architecture.md](docs/architecture.md) | System architecture — AWS, Cloudflare, remote state |
+| [docs/agentic-pipeline.md](docs/agentic-pipeline.md) | 4-agent AI resume pipeline — architecture, usage, CI/CD |
+| [docs/cicd.md](docs/cicd.md) | All GitHub Actions workflows reference |
+| [docs/deployment.md](docs/deployment.md) | Deployment guide, Terraform config, secrets |
+| [docs/contributing.md](docs/contributing.md) | Contributing guidelines |
+
+## �🚀 Quick Start
 
 ### Prerequisites
 
@@ -173,7 +201,7 @@ Terraform state stored in S3 with DynamoDB locking:
 
 ## 🔄 CI/CD Pipeline
 
-### Workflows
+See [docs/cicd.md](docs/cicd.md) for the full workflow reference.
 
 | Workflow | Trigger | Purpose |
 |----------|---------|---------|
@@ -183,6 +211,8 @@ Terraform state stored in S3 with DynamoDB locking:
 | **security-audit.yml** | Push/PR (package changes) | npm audit + outdated packages report |
 | **resume-pdf.yml** | Push (resume HTML changes) + manual | Auto-regenerate Profile.pdf |
 | **resume-nordic-pdf.yml** | Push (resume-photo.html changes) + manual | Auto-regenerate Profile-Nordic.pdf |
+| **agentic-resume.yml** | Push (`jds/*.txt`) + manual | 4-agent resume pipeline via Claude (Anthropic) |
+| **agentic-resume-foundry.yml** | Push (`jds/*.txt`) + manual | 4-agent resume pipeline via Azure OpenAI (Foundry) |
 | **dependency-update.yml** | Scheduled | Check for dependency updates |
 
 ### Dependabot
@@ -200,40 +230,26 @@ Code Quality → Security Scan → Tests → Terraform Validate → Build → De
 
 ### Required Secrets
 
-| Secret | Description |
-|--------|-------------|
-| `AWS_ACCESS_KEY_ID` | AWS IAM access key |
-| `AWS_SECRET_ACCESS_KEY` | AWS IAM secret key |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare API token |
-| `CLOUDFLARE_ZONE_ID` | Cloudflare zone ID |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |
-| `NOTIFICATION_EMAIL` | Email for deploy notifications |
+See [docs/deployment.md](docs/deployment.md) for full secrets and IAM permissions.
+
+## 🤖 Agentic Resume Pipeline
+
+4-agent AI system (JD Analyzer → Experience Mapper → Resume Writer → ATS Scorer) generating ATS-optimized resume PDFs. Supports **Azure OpenAI (gpt-5.4)** and **Anthropic Claude**.
+
+```bash
+# Run locally
+node scripts/agent/generate.js --jd scripts/agent/jds/microsoft-csa.txt --model gpt-5.4
+```
+
+→ See [docs/agentic-pipeline.md](docs/agentic-pipeline.md) for full architecture, design decisions, and CI/CD integration.
 
 ## 📊 Architecture
 
 ```text
-                    ┌─────────────┐
-                    │  Cloudflare │
-                    │    DNS/SSL  │
-                    └──────┬──────┘
-                           │
-                    ┌──────▼──────┐
-                    │ API Gateway │
-                    │  (HTTP API) │
-                    └──────┬──────┘
-                           │
-                    ┌──────▼──────┐
-                    │   Lambda    │
-                    │ (Node.js 22)│
-                    └──────┬──────┘
-                           │
-              ┌────────────┼────────────┐
-              │            │            │
-       ┌──────▼──────┐ ┌───▼───┐ ┌─────▼─────┐
-       │    SES      │ │  S3   │ │CloudWatch │
-       │  (Email)    │ │(State)│ │  (Logs)   │
-       └─────────────┘ └───────┘ └───────────┘
+Cloudflare (DNS/SSL) → API Gateway (HTTP v2) → Lambda (Node.js 24) → SES / S3 / CloudWatch
 ```
+
+→ See [docs/architecture.md](docs/architecture.md) for full diagrams and resource details.
 
 ## 🧪 Testing
 
@@ -265,25 +281,13 @@ npm test
 - **API Gateway** — Throttling configured
 - **HTTPS** — Full strict SSL via Cloudflare
 
-## 🚢 Manual Deployment
+## 🚢 Deployment
 
-```bash
-# Build Lambda package
-./scripts/build-lambda.sh
-
-# Deploy with Terraform
-cd terraform
-terraform init
-terraform plan
-terraform apply
-
-# Or use the deploy script
-./scripts/deploy.sh
-```
+→ See [docs/deployment.md](docs/deployment.md) for full deployment guide, Terraform config, and infrastructure details.
 
 ## 📝 Contributing
 
-See [Contributing.md](Contributing.md) for guidelines.
+See [docs/contributing.md](docs/contributing.md) for guidelines.
 
 ## 📜 License
 

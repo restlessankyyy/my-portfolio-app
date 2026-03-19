@@ -1,6 +1,7 @@
-# Portfolio Serverless Deployment
+# Deployment
 
-Modern, serverless portfolio website deployed to AWS Lambda via Terraform Infrastructure as Code.
+> This file has moved to [docs/deployment.md](docs/deployment.md).
+
 
 ## 🏗️ Architecture
 
