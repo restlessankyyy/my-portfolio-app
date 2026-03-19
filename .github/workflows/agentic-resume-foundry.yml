@@ -1,0 +1,212 @@
+# ============================================================================
+# Agentic Resume Pipeline — Microsoft Foundry (Azure OpenAI)
+# ============================================================================
+# Generates an ATS-optimized resume PDF from a job description using a
+# 4-agent AI pipeline powered by Azure OpenAI via Microsoft AI Foundry.
+#
+# Triggers:
+#   1. Manual dispatch — paste JD text or pick an existing JD file
+#   2. Push — when a new .txt file is added to scripts/agent/jds/
+#
+# Required secrets:
+#   AZURE_OPENAI_ENDPOINT    — e.g. https://<resource>.openai.azure.com/
+#   AZURE_OPENAI_API_KEY     — Azure API key
+#   AZURE_OPENAI_API_VERSION — (optional) defaults to 2025-01-01-preview
+#
+# The model input must match the **deployment name** in your Foundry project.
+#
+# Outputs:
+#   - Resume PDF uploaded as workflow artifact
+#   - ATS score report (JSON) uploaded as workflow artifact
+#   - Debug HTML uploaded as workflow artifact
+# ============================================================================
+
+name: 📄 Resume Generator — Foundry (Azure OpenAI)
+
+on:
+  push:
+    branches: [main, 'feat/agentic-resume-pipeline']
+    paths:
+      - 'scripts/agent/jds/*.txt'
+
+  workflow_dispatch:
+    inputs:
+      jd_text:
+        description: 'Paste the full job description here (leave empty to use jd_file instead)'
+        required: false
+        type: string
+      jd_file:
+        description: 'Path to existing JD file in repo (e.g. scripts/agent/jds/microsoft-csa.txt)'
+        required: false
+        default: 'scripts/agent/jds/microsoft-csa.txt'
+        type: string
+      model:
+        description: 'Azure Foundry deployment name'
+        required: false
+        default: 'gpt-5.4'
+        type: choice
+        options:
+          - gpt-5.4
+      max_loops:
+        description: 'Max ATS feedback loops'
+        required: false
+        default: '2'
+        type: choice
+        options:
+          - '1'
+          - '2'
+          - '3'
+      threshold:
+        description: 'ATS score threshold (0-100)'
+        required: false
+        default: '80'
+        type: string
+
+concurrency:
+  group: agentic-resume-foundry-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '24'
+
+jobs:
+  generate-resume:
+    name: 🤖 Generate ATS Resume (Foundry)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔧 Install Chromium for Puppeteer
+        run: npx puppeteer browsers install chrome
+
+      # If JD text was pasted via workflow_dispatch, write it to a temp file
+      - name: 📝 Prepare JD input
+        id: jd
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ inputs.jd_text }}" ]]; then
+            # User pasted JD text — write to file
+            cat <<'JD_EOF' > /tmp/jd-input.txt
+          ${{ inputs.jd_text }}
+          JD_EOF
+            echo "path=/tmp/jd-input.txt" >> "$GITHUB_OUTPUT"
+            echo "source=pasted" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            # User selected existing file
+            echo "path=${{ inputs.jd_file }}" >> "$GITHUB_OUTPUT"
+            echo "source=file" >> "$GITHUB_OUTPUT"
+          else
+            # Push trigger — find the newest .txt in jds/
+            NEWEST=$(git diff --name-only HEAD~1 HEAD -- 'scripts/agent/jds/*.txt' | head -1)
+            if [[ -z "$NEWEST" ]]; then
+              NEWEST=$(ls -t scripts/agent/jds/*.txt | head -1)
+            fi
+            echo "path=$NEWEST" >> "$GITHUB_OUTPUT"
+            echo "source=push" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 🤖 Run Agentic Pipeline (Azure Foundry)
+        env:
+          AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          AZURE_OPENAI_API_VERSION: ${{ secrets.AZURE_OPENAI_API_VERSION || '2024-12-01-preview' }}
+          CI: 'true'
+        run: |
+          MODEL="${{ inputs.model || 'gpt-5.4' }}"
+          MAX_LOOPS="${{ inputs.max_loops || '2' }}"
+          THRESHOLD="${{ inputs.threshold || '80' }}"
+          JD_PATH="${{ steps.jd.outputs.path }}"
+
+          echo "🔍 JD source: ${{ steps.jd.outputs.source }}"
+          echo "📄 JD path: $JD_PATH"
+          echo "🧠 Model: $MODEL (Azure Foundry)"
+          echo "🔄 Max loops: $MAX_LOOPS"
+          echo "🎯 Threshold: $THRESHOLD"
+          echo ""
+
+          node scripts/agent/generate.js \
+            --jd "$JD_PATH" \
+            --model "$MODEL" \
+            --max-loops "$MAX_LOOPS" \
+            --threshold "$THRESHOLD" \
+            --verbose
+
+      - name: 📊 Parse results
+        id: results
+        if: always()
+        run: |
+          PDF=$(ls -t public/assets/Profile-*.pdf 2>/dev/null | head -1)
+          REPORT=$(ls -t public/assets/*-ats-report.json 2>/dev/null | head -1)
+
+          if [[ -n "$REPORT" ]]; then
+            SCORE=$(node -e "const r=require('./$REPORT'); console.log(r.score.overall_score)")
+            MATCHED=$(node -e "const r=require('./$REPORT'); console.log(r.score.matched_keywords.length)")
+            MISSING=$(node -e "const r=require('./$REPORT'); console.log(r.score.missing_keywords.length)")
+            TOTAL_TIME=$(node -e "const r=require('./$REPORT'); const t=r.timings.total; const m=Math.floor(t/60); const s=(t%60).toFixed(1); console.log(m+'m '+s+'s')")
+
+            echo "score=$SCORE" >> "$GITHUB_OUTPUT"
+            echo "matched=$MATCHED" >> "$GITHUB_OUTPUT"
+            echo "missing=$MISSING" >> "$GITHUB_OUTPUT"
+            echo "total_time=$TOTAL_TIME" >> "$GITHUB_OUTPUT"
+            echo "pdf=$PDF" >> "$GITHUB_OUTPUT"
+            echo "report=$REPORT" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 📤 Upload Resume PDF
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resume-pdf-foundry
+          path: public/assets/Profile-*.pdf
+          retention-days: 30
+
+      - name: 📤 Upload ATS Report
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ats-report-foundry
+          path: public/assets/*-ats-report.json
+          retention-days: 30
+
+      - name: 📤 Upload Debug HTML
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-html-foundry
+          path: public/assets/resume-debug.html
+          retention-days: 7
+
+      - name: 📋 Job Summary
+        if: always()
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ## 📄 Agentic Resume Pipeline Results (Foundry)
+
+          | Metric | Value |
+          |--------|-------|
+          | **ATS Score** | ${{ steps.results.outputs.score || 'N/A' }}/100 |
+          | **Keywords Matched** | ${{ steps.results.outputs.matched || 'N/A' }} |
+          | **Keywords Missing** | ${{ steps.results.outputs.missing || 'N/A' }} |
+          | **Total Time** | ${{ steps.results.outputs.total_time || 'N/A' }} |
+          | **Model** | ${{ inputs.model || 'gpt-5.4' }} |
+          | **Provider** | Microsoft Foundry (Azure OpenAI) |
+          | **JD Source** | ${{ steps.jd.outputs.source }} |
+
+          ### Artifacts
+          - 📄 **Resume PDF** — download from the Artifacts section above
+          - 📊 **ATS Report** — full scoring breakdown (JSON)
+          - 🎨 **Debug HTML** — rendered HTML before PDF conversion
+
+          > Pipeline powered by Azure OpenAI via Microsoft AI Foundry
+          EOF
