@@ -32,7 +32,7 @@ jobs:
         run: node scripts/generate-pdf-photo.js
 
       - name: Upload PDF artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Profile-Nordic
           path: public/assets/Profile-Nordic.pdf

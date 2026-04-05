@@ -160,7 +160,7 @@ jobs:
 
       - name: 📤 Upload Resume PDF
         if: success()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: resume-pdf
           path: public/assets/Profile-*.pdf
@@ -168,7 +168,7 @@ jobs:
 
       - name: 📤 Upload ATS Report
         if: success()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ats-report
           path: public/assets/*-ats-report.json
@@ -176,7 +176,7 @@ jobs:
 
       - name: 📤 Upload Debug HTML
         if: success()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: debug-html
           path: public/assets/resume-debug.html

@@ -133,7 +133,7 @@ jobs:
         continue-on-error: true
 
       - name: 📊 Upload Code Quality Reports
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: code-quality-reports
@@ -299,7 +299,7 @@ jobs:
           TF_VAR_custom_domain_target: "d-hctzaliyt6.execute-api.eu-north-1.amazonaws.com"
 
       - name: 📤 Upload Terraform Plan
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: terraform-plan
           path: |
@@ -397,7 +397,7 @@ jobs:
           echo "   Artifact: $ARTIFACT_NAME"
 
       - name: 📤 Upload Build Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.build.outputs.artifact_name }}
           path: terraform/portfolio-lambda.zip
