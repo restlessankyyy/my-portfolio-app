@@ -299,7 +299,7 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 - 🌐 Website: [ankitraj.cloud](https://www.ankitraj.cloud)
 - 💻 GitHub: [@restlessankyyy](https://github.com/restlessankyyy)
-- 💼 LinkedIn: [Ankit Raj](https://www.linkedin.com/in/ankit-raj/)
+- 💼 LinkedIn: [Ankit Raj](https://www.linkedin.com/in/raj-ankit/)
 - 📧 Email: <rajankit749@gmail.com>
 
 ---
