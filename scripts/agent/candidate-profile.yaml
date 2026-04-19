@@ -55,7 +55,7 @@ certifications:
 # ── Experience ──
 experience:
   - title: Lead Cloud Architect — AI & Multi-Cloud
-    company: H&M Group
+    company: Global Fashion Retail
     location: Stockholm
     dates: "2024 — Present"
     tags: [cloud-architecture, azure, aws, gcp, ai, executive-advisory, governance, finops, mentoring, caf, waf]
@@ -108,7 +108,7 @@ experience:
         metrics: { deployment_frequency_increase: "10x" }
 
   - title: Lead Software Engineer — Platform Engineering
-    company: H&M Group
+    company: Global Fashion Retail
     location: Stockholm
     dates: "2023 — 2024"
     tags: [platform-engineering, azure, gcp, ai, developer-platform]
@@ -127,7 +127,7 @@ experience:
         metrics: {}
 
   - title: Senior Software Engineer — Distributed Systems
-    company: H&M Group
+    company: Global Fashion Retail
     location: Stockholm
     dates: "2020 — 2023"
     tags: [distributed-systems, azure, gcp, microservices, ci-cd]
@@ -186,7 +186,7 @@ experience:
 # ── Key Projects ──
 projects:
   - title: Enterprise AI Platform — Multi-Model Orchestration
-    company: H&M Group
+    company: Global Fashion Retail
     description: "Designed distributed AI orchestration platform serving 200+ teams. Multi-model inference pipelines with auto-scaling, A/B evaluation, and real-time serving. AWS Bedrock, Azure AI Foundry, Vertex AI, OpenAI, Python, TypeScript."
     tags: [azure-ai-foundry, production-scale-ai, architecture-design, enterprise-customers]
 
@@ -196,7 +196,7 @@ projects:
     tags: [cloud-migration, ai, repeatable-ip, end-to-end-delivery]
 
   - title: Enterprise FinOps Platform — Cloud Cost Optimisation
-    company: H&M Group
+    company: Global Fashion Retail
     description: "Multi-agentic AI system reducing multi-million SEK cloud spend. Automated anomaly detection, right-sizing recommendations, and governance dashboards across AWS, Azure, and GCP."
     tags: [finops, governance, measurable-business-impact, multi-cloud]
 

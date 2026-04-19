@@ -242,3 +242,23 @@ resource "aws_apigatewayv2_api_mapping" "portfolio_mapping" {
   domain_name = aws_apigatewayv2_domain_name.portfolio_domain[0].id
   stage       = aws_apigatewayv2_stage.portfolio_stage.id
 }
+
+# ==================== Profile Subdomain ====================
+
+# API Gateway Custom Domain for profile.ankitraj.cloud
+resource "aws_apigatewayv2_domain_name" "profile_domain" {
+  domain_name = "profile.${var.domain_name}"
+
+  domain_name_configuration {
+    certificate_arn = var.wildcard_certificate_arn
+    endpoint_type   = "REGIONAL"
+    security_policy = "TLS_1_2"
+  }
+}
+
+# API Gateway Domain Mapping for profile subdomain
+resource "aws_apigatewayv2_api_mapping" "profile_mapping" {
+  api_id      = aws_apigatewayv2_api.portfolio_api.id
+  domain_name = aws_apigatewayv2_domain_name.profile_domain.id
+  stage       = aws_apigatewayv2_stage.portfolio_stage.id
+}

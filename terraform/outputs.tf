@@ -66,3 +66,14 @@ output "custom_domain_hosted_zone_id" {
   description = "Hosted zone ID for custom domain (for Route 53 alias records)"
   value       = var.enable_custom_domain ? aws_apigatewayv2_domain_name.portfolio_domain[0].domain_name_configuration[0].hosted_zone_id : null
 }
+
+# Profile Subdomain Outputs
+output "profile_domain_target" {
+  description = "Target domain name for profile.ankitraj.cloud DNS CNAME record"
+  value       = aws_apigatewayv2_domain_name.profile_domain.domain_name_configuration[0].target_domain_name
+}
+
+output "profile_domain_hosted_zone_id" {
+  description = "Hosted zone ID for profile subdomain"
+  value       = aws_apigatewayv2_domain_name.profile_domain.domain_name_configuration[0].hosted_zone_id
+}

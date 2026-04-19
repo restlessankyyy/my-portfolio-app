@@ -41,3 +41,9 @@ variable "cloudfront_certificate_arn" {
   type        = string
   default     = "arn:aws:acm:us-east-1:351323459199:certificate/e6af6c14-0083-43af-91f1-259e534b6cb2"
 }
+
+variable "wildcard_certificate_arn" {
+  description = "ACM wildcard certificate ARN for *.ankitraj.cloud (eu-north-1)"
+  type        = string
+  default     = "arn:aws:acm:eu-north-1:157539276388:certificate/be572efd-37be-4806-b8a7-53a7f45f9970"
+}

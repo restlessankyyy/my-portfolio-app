@@ -297,6 +297,7 @@ jobs:
           TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
           TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           TF_VAR_custom_domain_target: "d-hctzaliyt6.execute-api.eu-north-1.amazonaws.com"
+          TF_VAR_profile_domain_target: ""
 
       - name: 📤 Upload Terraform Plan
         uses: actions/upload-artifact@v4
@@ -474,6 +475,10 @@ jobs:
           cd terraform
           terraform init -input=false
           terraform apply -auto-approve -input=false
+          
+          # Capture profile domain target for Cloudflare
+          PROFILE_TARGET=$(terraform output -raw profile_domain_target 2>/dev/null || echo "")
+          echo "PROFILE_DOMAIN_TARGET=$PROFILE_TARGET" >> $GITHUB_ENV
         env:
           TF_VAR_aws_region: ${{ env.AWS_REGION }}
 
@@ -488,6 +493,7 @@ jobs:
           TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
           TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           TF_VAR_custom_domain_target: "d-hctzaliyt6.execute-api.eu-north-1.amazonaws.com"
+          TF_VAR_profile_domain_target: ${{ env.PROFILE_DOMAIN_TARGET }}
 
       - name: 🚀 Deploy Lambda Function
         id: deploy
@@ -629,7 +635,16 @@ jobs:
             echo "⚠️ Contact API response unexpected"
           fi
           
-          # Test 5: Response time
+          # Test 5: Profile subdomain
+          echo "🌐 Testing profile subdomain..."
+          PROFILE_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://profile.${{ env.DOMAIN_NAME }}/" || echo "000")
+          if [ "$PROFILE_STATUS" = "200" ]; then
+            echo "✅ Profile subdomain OK (Status: $PROFILE_STATUS)"
+          else
+            echo "⚠️ Profile subdomain returned: $PROFILE_STATUS (may need DNS propagation)"
+          fi
+          
+          # Test 6: Response time
           echo "⏱️ Testing response time..."
           TIME=$(curl -s -o /dev/null -w "%{time_total}" "$BASE_URL/")
           echo "Response time: ${TIME}s"

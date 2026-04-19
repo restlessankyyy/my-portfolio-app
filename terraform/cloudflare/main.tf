@@ -60,6 +60,12 @@ variable "custom_domain_target" {
   type        = string
 }
 
+variable "profile_domain_target" {
+  description = "AWS API Gateway custom domain target for profile.ankitraj.cloud"
+  type        = string
+  default     = ""
+}
+
 variable "acm_validation_name" {
   description = "ACM certificate validation CNAME name"
   type        = string
@@ -138,6 +144,18 @@ resource "cloudflare_record" "www" {
   comment = "WWW to AWS API Gateway Custom Domain"
 }
 
+# DNS Record - Profile subdomain to AWS API Gateway Custom Domain
+resource "cloudflare_record" "profile" {
+  count   = var.profile_domain_target != "" ? 1 : 0
+  zone_id = var.cloudflare_zone_id
+  name    = "profile"
+  content = var.profile_domain_target
+  type    = "CNAME"
+  ttl     = 1     # Auto
+  proxied = false # DNS only - AWS ACM handles SSL
+  comment = "Profile subdomain to AWS API Gateway Custom Domain"
+}
+
 # ==================== AWS SES DKIM Records ====================
 # These records enable DKIM signing for emails sent from ankitraj.cloud domain
 # Improves email deliverability and prevents spam filtering
@@ -208,4 +226,9 @@ output "acm_validation_record" {
 output "www_record" {
   description = "WWW subdomain CNAME record"
   value       = cloudflare_record.www.hostname
+}
+
+output "profile_record" {
+  description = "Profile subdomain CNAME record"
+  value       = var.profile_domain_target != "" ? cloudflare_record.profile[0].hostname : null
 }
