@@ -212,6 +212,19 @@ resource "cloudflare_record" "dmarc" {
   comment = "DMARC policy for email authentication"
 }
 
+# ==================== Microsoft Entra ID Domain Verification ====================
+
+# Microsoft 365 / Entra ID domain ownership verification
+resource "cloudflare_record" "microsoft_domain_verification" {
+  zone_id = var.cloudflare_zone_id
+  name    = "@"
+  content = "MS=ms91108894"
+  type    = "TXT"
+  ttl     = 3600
+  proxied = false
+  comment = "Microsoft Entra ID domain verification for ankitraj.cloud"
+}
+
 # Outputs
 output "root_record" {
   description = "Root domain CNAME record"
