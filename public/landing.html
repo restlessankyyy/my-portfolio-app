@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ankit Raj — ankitraj.cloud</title>
+    <meta name="description" content="This is Ankit's personal portfolio domain. Multi-Cloud Solution Architect based in Stockholm." />
+    <meta name="author" content="Ankit Raj" />
+    <meta name="theme-color" content="#0a0a0a" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ankit Raj — ankitraj.cloud" />
+    <meta property="og:description" content="This is Ankit's personal portfolio domain." />
+    <meta property="og:url" content="https://ankitraj.cloud" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+      /* ── Reset ── */
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      :root {
+        --bg: #0a0a0a;
+        --fg: #f0ede6;
+        --accent: #6366f1;
+        --muted: #555;
+        --font: 'Space Grotesk', system-ui, sans-serif;
+      }
+
+      html {
+        font-size: 16px;
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body {
+        font-family: var(--font);
+        background: var(--bg);
+        color: var(--fg);
+        overflow-x: hidden;
+        cursor: none;
+      }
+
+      /* ── Custom cursor ── */
+      .cursor {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border: 1.5px solid var(--fg);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
+        mix-blend-mode: difference;
+      }
+
+      .cursor.hover {
+        width: 60px;
+        height: 60px;
+        background: rgba(255,255,255,0.08);
+        border-color: var(--accent);
+      }
+
+      /* ── Noise overlay ── */
+      .noise {
+        position: fixed;
+        inset: 0;
+        z-index: 9998;
+        pointer-events: none;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 256px;
+      }
+
+      /* ── Grid lines ── */
+      .grid-lines {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 8vw;
+      }
+
+      .grid-lines .line {
+        width: 1px;
+        height: 100%;
+        background: rgba(255,255,255,0.03);
+      }
+
+      /* ── Header ── */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 4vw;
+        mix-blend-mode: difference;
+      }
+
+      .logo {
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+
+      .nav-link {
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--fg);
+        text-decoration: none;
+        position: relative;
+        padding-bottom: 2px;
+      }
+
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: var(--fg);
+        transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+
+      .nav-link:hover::after { width: 100%; }
+
+      /* ── Hero section ── */
+      .hero {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 8vw;
+        overflow: hidden;
+      }
+
+      .hero-label {
+        font-size: clamp(0.65rem, 1vw, 0.85rem);
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 2rem;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeUp 1s 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .hero-title {
+        font-size: clamp(3rem, 12vw, 12rem);
+        font-weight: 700;
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+        overflow: hidden;
+      }
+
+      .hero-title .line {
+        display: block;
+        overflow: hidden;
+      }
+
+      .hero-title .line span {
+        display: inline-block;
+        transform: translateY(110%);
+        animation: slideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .hero-title .line:nth-child(2) span { animation-delay: 0.15s; }
+
+      .hero-title .line-accent {
+        color: transparent;
+        -webkit-text-stroke: 1.5px var(--fg);
+      }
+
+      .hero-subtitle {
+        margin-top: 3rem;
+        font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+        font-weight: 300;
+        color: var(--muted);
+        max-width: 40ch;
+        line-height: 1.7;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeUp 1s 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .hero-subtitle em {
+        color: var(--fg);
+        font-style: normal;
+        font-weight: 500;
+      }
+
+      /* ── Scroll indicator ── */
+      .scroll-indicator {
+        position: absolute;
+        bottom: 3rem;
+        left: 8vw;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        opacity: 0;
+        animation: fadeUp 1s 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .scroll-line {
+        width: 40px;
+        height: 1px;
+        background: var(--muted);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .scroll-line::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--fg);
+        animation: scrollPulse 2s ease-in-out infinite;
+      }
+
+      /* ── Statement section ── */
+      .statement {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 10vh 8vw;
+        text-align: center;
+      }
+
+      .statement-text {
+        font-size: clamp(1.8rem, 5vw, 4.5rem);
+        font-weight: 300;
+        line-height: 1.3;
+        max-width: 18ch;
+        opacity: 0;
+        transform: translateY(60px);
+        transition: opacity 1s, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .statement-text.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .statement-text strong {
+        font-weight: 600;
+        background: linear-gradient(135deg, #6366f1, #a78bfa, #818cf8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* ── Marquee ── */
+      .marquee-wrap {
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        padding: 4rem 0;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+      }
+
+      .marquee {
+        display: flex;
+        width: max-content;
+        animation: marquee 20s linear infinite;
+      }
+
+      .marquee span {
+        font-size: clamp(1rem, 2vw, 1.5rem);
+        font-weight: 300;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--muted);
+        white-space: nowrap;
+        padding: 0 3rem;
+      }
+
+      .marquee span::before {
+        content: '◆';
+        margin-right: 3rem;
+        color: var(--accent);
+        font-size: 0.6em;
+      }
+
+      /* ── Links section ── */
+      .links-section {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 10vh 8vw;
+      }
+
+      .links-label {
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 4rem;
+      }
+
+      .link-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 2rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        text-decoration: none;
+        color: var(--fg);
+        transition: color 0.3s;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
+      }
+
+      .link-row.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .link-row:hover { color: var(--accent); }
+
+      .link-row .link-name {
+        font-size: clamp(1.5rem, 4vw, 3.5rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+
+      .link-row .link-arrow {
+        font-size: 1.5rem;
+        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+
+      .link-row:hover .link-arrow {
+        transform: translate(8px, -8px);
+      }
+
+      .link-row .link-desc {
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      /* ── Footer ── */
+      footer {
+        position: relative;
+        z-index: 1;
+        padding: 6rem 8vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        border-top: 1px solid rgba(255,255,255,0.05);
+      }
+
+      .footer-left {
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+        line-height: 2;
+      }
+
+      .footer-right {
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.2);
+      }
+
+      /* ── Floating orbs ── */
+      .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.15;
+      }
+
+      .orb-1 {
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+        top: -10%;
+        right: -5%;
+        animation: orbFloat 12s ease-in-out infinite alternate;
+      }
+
+      .orb-2 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, #a78bfa 0%, transparent 70%);
+        bottom: -5%;
+        left: -5%;
+        animation: orbFloat 15s ease-in-out infinite alternate-reverse;
+      }
+
+      /* ── Animations ── */
+      @keyframes slideUp {
+        to { transform: translateY(0); }
+      }
+
+      @keyframes fadeUp {
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes scrollPulse {
+        0%, 100% { left: -100%; }
+        50% { left: 100%; }
+      }
+
+      @keyframes marquee {
+        to { transform: translateX(-50%); }
+      }
+
+      @keyframes orbFloat {
+        from { transform: translate(0, 0) scale(1); }
+        to { transform: translate(30px, -40px) scale(1.1); }
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 768px) {
+        header { padding: 1.5rem 6vw; }
+        .hero { padding: 0 6vw; }
+        .statement { padding: 10vh 6vw; }
+        .links-section { padding: 10vh 6vw; }
+        footer {
+          flex-direction: column;
+          gap: 2rem;
+          align-items: flex-start;
+          padding: 4rem 6vw;
+        }
+        .link-row .link-desc { display: none; }
+        body { cursor: auto; }
+        .cursor { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+        .marquee { animation: none; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Cursor -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- Noise -->
+    <div class="noise"></div>
+
+    <!-- Grid -->
+    <div class="grid-lines">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+
+    <!-- Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Header -->
+    <header>
+      <div class="logo">ankitraj.cloud</div>
+      <a href="https://profile.ankitraj.cloud" class="nav-link" data-hover>Portfolio ↗</a>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <p class="hero-label">Personal Portfolio Domain</p>
+      <h1 class="hero-title">
+        <span class="line"><span>Ankit</span></span>
+        <span class="line"><span class="line-accent">Raj.</span></span>
+      </h1>
+      <p class="hero-subtitle">
+        This is <em>Ankit's personal portfolio domain</em>.
+        Multi-Cloud Solution Architect building at the
+        intersection of infrastructure and innovation.
+      </p>
+      <div class="scroll-indicator">
+        <div class="scroll-line"></div>
+        Scroll
+      </div>
+    </section>
+
+    <!-- Statement -->
+    <section class="statement">
+      <p class="statement-text" data-reveal>
+        Architecting <strong>cloud infrastructure</strong> that scales with ambition.
+      </p>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee-wrap">
+      <div class="marquee">
+        <span>AWS</span><span>Azure</span><span>GCP</span><span>Kubernetes</span>
+        <span>Terraform</span><span>AI / ML</span><span>Platform Engineering</span><span>Stockholm</span>
+        <span>AWS</span><span>Azure</span><span>GCP</span><span>Kubernetes</span>
+        <span>Terraform</span><span>AI / ML</span><span>Platform Engineering</span><span>Stockholm</span>
+      </div>
+    </div>
+
+    <!-- Links -->
+    <section class="links-section">
+      <p class="links-label">Explore</p>
+
+      <a href="https://profile.ankitraj.cloud" class="link-row" data-hover data-reveal-row>
+        <span class="link-name">Portfolio</span>
+        <span class="link-desc">Full profile & projects</span>
+        <span class="link-arrow">↗</span>
+      </a>
+
+      <a href="https://github.com/restlessankyyy" class="link-row" data-hover data-reveal-row target="_blank" rel="noopener">
+        <span class="link-name">GitHub</span>
+        <span class="link-desc">Open source & code</span>
+        <span class="link-arrow">↗</span>
+      </a>
+
+      <a href="https://linkedin.com/in/raj-ankit" class="link-row" data-hover data-reveal-row target="_blank" rel="noopener">
+        <span class="link-name">LinkedIn</span>
+        <span class="link-desc">Professional network</span>
+        <span class="link-arrow">↗</span>
+      </a>
+
+      <a href="https://medium.com/@restlessankyyy" class="link-row" data-hover data-reveal-row target="_blank" rel="noopener">
+        <span class="link-name">Writing</span>
+        <span class="link-desc">Articles & thoughts</span>
+        <span class="link-arrow">↗</span>
+      </a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-left">
+        Stockholm, Sweden<br />
+        Multi-Cloud Architect &amp; Platform Engineer
+      </div>
+      <div class="footer-right">© 2026 Ankit Raj</div>
+    </footer>
+
+    <script>
+      /* ── Custom cursor ── */
+      const cursor = document.getElementById('cursor');
+      let cx = 0, cy = 0, tx = 0, ty = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        tx = e.clientX;
+        ty = e.clientY;
+      });
+
+      (function loop() {
+        cx += (tx - cx) * 0.12;
+        cy += (ty - cy) * 0.12;
+        cursor.style.left = cx + 'px';
+        cursor.style.top = cy + 'px';
+        requestAnimationFrame(loop);
+      })();
+
+      document.querySelectorAll('[data-hover]').forEach((el) => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+      });
+
+      /* ── Scroll reveals ── */
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible');
+              observer.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
+
+      document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
+
+      /* Staggered link rows */
+      const rowObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e, i) => {
+            if (e.isIntersecting) {
+              setTimeout(() => e.target.classList.add('visible'), i * 120);
+              rowObserver.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      document.querySelectorAll('[data-reveal-row]').forEach((el) => rowObserver.observe(el));
+    </script>
+  </body>
+</html>

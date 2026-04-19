@@ -1,9 +1,26 @@
 const express = require('express');
 const path = require('path');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const app = express();
 
-// Parse JSON bodies
-app.use(express.json());
+// Security headers
+app.use(helmet());
+
+// Parse JSON bodies with size limit to prevent large-payload DoS
+app.use(express.json({ limit: '10kb' }));
+
+// Root domain landing page — ankitraj.cloud / www.ankitraj.cloud
+// profile.ankitraj.cloud serves the full portfolio via static + SPA catch-all below
+const ROOT_HOSTS = ['ankitraj.cloud', 'www.ankitraj.cloud'];
+
+app.get('/', (req, res, next) => {
+  const host = (req.hostname || '').split(':')[0];
+  if (ROOT_HOSTS.includes(host)) {
+    return res.sendFile(path.join(__dirname, 'public', 'landing.html'));
+  }
+  next();
+});
 
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -13,8 +30,27 @@ app.get('/health', (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
+// Rate limit contact form — 5 requests per 15 minutes per IP
+const contactLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Too many requests. Please try again later.' },
+});
+
+// Escape HTML to prevent injection in email templates
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // Contact form API endpoint
-app.post('/api/contact', async (req, res) => {
+app.post('/api/contact', contactLimiter, async (req, res) => {
   try {
     const { name, email, message } = req.body;
     
@@ -35,6 +71,11 @@ app.post('/api/contact', async (req, res) => {
       });
     }
 
+    // Sanitise user input to prevent HTML injection in email template
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeMessage = escapeHtml(message);
+
     // Check if running in Lambda (AWS environment)
     if (process.env.AWS_LAMBDA_FUNCTION_NAME) {
       // Use AWS SES to send email
@@ -49,7 +90,7 @@ app.post('/api/contact', async (req, res) => {
         },
         Message: {
           Subject: {
-            Data: `New Contact from ${name} - ankitraj.cloud`,
+            Data: `New Contact from ${safeName} - ankitraj.cloud`,
             Charset: 'UTF-8'
           },
           Body: {
@@ -73,7 +114,7 @@ app.post('/api/contact', async (req, res) => {
           <strong style="color: #6366f1;">👤 Name:</strong>
         </td>
         <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
-          ${name}
+          ${safeName}
         </td>
       </tr>
       <tr>
@@ -81,7 +122,7 @@ app.post('/api/contact', async (req, res) => {
           <strong style="color: #6366f1;">📧 Email:</strong>
         </td>
         <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
-          <a href="mailto:${email}" style="color: #6366f1;">${email}</a>
+          <a href="mailto:${safeEmail}" style="color: #6366f1;">${safeEmail}</a>
         </td>
       </tr>
     </table>
@@ -89,7 +130,7 @@ app.post('/api/contact', async (req, res) => {
     <div style="margin-top: 20px;">
       <strong style="color: #6366f1;">💬 Message:</strong>
       <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #6366f1;">
-        ${message.replace(/\n/g, '<br>')}
+        ${safeMessage.replace(/\n/g, '<br>')}
       </div>
     </div>
   </div>
@@ -105,7 +146,7 @@ app.post('/api/contact', async (req, res) => {
               Charset: 'UTF-8'
             },
             Text: {
-              Data: `New Portfolio Contact\n\n👤 Name: ${name}\n📧 Email: ${email}\n\n💬 Message:\n${message}\n\n---\nSent from ankitraj.cloud`,
+              Data: `New Portfolio Contact\n\n👤 Name: ${safeName}\n📧 Email: ${safeEmail}\n\n💬 Message:\n${safeMessage}\n\n---\nSent from ankitraj.cloud`,
               Charset: 'UTF-8'
             }
           }
