@@ -38,7 +38,7 @@
   "license": "MIT",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
-    "@aws-sdk/client-ses": "^3.999.0",
+    "@aws-sdk/client-ses": "^3.1032.0",
     "@vendia/serverless-express": "^4.12.6",
     "express": "^4.19.2",
     "express-rate-limit": "^8.3.2",
