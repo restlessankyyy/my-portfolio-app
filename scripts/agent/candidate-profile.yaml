@@ -75,6 +75,9 @@ experience:
       - text: "Established cloud governance framework at enterprise scale — policies, security baselines, RBAC, and compliance controls for 1600+ subscriptions across multi-cloud estate"
         tags: [governance, caf, waf, rbac, security, compliance, landing-zones, azure-policy]
         metrics: { subscriptions: 1600 }
+      - text: "Implemented Cycloid hybrid-cloud DevOps platform as the internal developer portal — standardising self-service infrastructure provisioning, golden-path Terraform stacks, and integrated FinOps cost visibility across AWS, Azure, and Google Cloud for 200+ product teams"
+        tags: [cycloid, platform-engineering, internal-developer-platform, self-service, terraform, finops, multi-cloud, governance]
+        metrics: { teams_supported: 200 }
       - text: "Develop technical content including architecture blueprints, workshops, and best-practice documentation — enabling broader field teams and upskilling 8+ engineers in cloud architecture and system design"
         tags: [mentoring, knowledge-sharing, thought-leadership, workshops, technical-communities]
         metrics: { engineers_mentored: 8 }
