@@ -1,5 +1,5 @@
 # ╔══════════════════════════════════════════════════════════════╗
-# ║  Candidate Profile — Single Source of Truth                 ║
+# ║  Candidate Profile - Single Source of Truth                 ║
 # ║  Used by the agentic resume pipeline to generate            ║
 # ║  tailored resumes for any job description.                  ║
 # ╚══════════════════════════════════════════════════════════════╝
@@ -11,7 +11,7 @@ website: https://ankitraj.cloud
 linkedin: https://linkedin.com/in/raj-ankit
 github: https://github.com/restlessankyyy
 
-# ── Skill Categories (canonical — labels NEVER change across JDs) ──
+# ── Skill Categories (canonical - labels NEVER change across JDs) ──
 # The AI mapper fills the values per JD but MUST use these labels exactly as written.
 skill_categories:
   - Solutions Architecture
@@ -26,20 +26,20 @@ skill_categories:
 
 # ── Education ──
 education:
-  - degree: Bachelor of Technology — Computer Science & Engineering
+  - degree: Bachelor of Technology - Computer Science & Engineering
     school: Galgotias University, Greater Noida, India
-    dates: "2012 — 2016"
+    dates: "2012 - 2016"
     details: "Specialisation in Cloud Computing & Virtualisation. Projects: IoT Heart Rate Monitor, Big Data Analytics."
 
 # ── Certifications ──
 certifications:
-  - name: AWS Certified DevOps Engineer — Professional
+  - name: AWS Certified DevOps Engineer - Professional
     provider: AWS
     tier: professional
-  - name: AWS Certified Developer — Associate
+  - name: AWS Certified Developer - Associate
     provider: AWS
     tier: associate
-  - name: "Microsoft Certified Professional (MCP) — Exam 533: Azure Infrastructure"
+  - name: "Microsoft Certified Professional (MCP) - Exam 533: Azure Infrastructure"
     provider: Microsoft
     tier: professional
   - name: "Microsoft Certified: Azure Fundamentals (AZ-900)"
@@ -54,113 +54,113 @@ certifications:
 
 # ── Experience ──
 experience:
-  - title: Lead Cloud Architect — AI & Multi-Cloud
-    company: Global Fashion Retail
+  - title: Lead Cloud Architect - AI & Multi-Cloud
+    company: H&M Group
     location: Stockholm
-    dates: "2024 — Present"
+    dates: "2024 - Present"
     tags: [cloud-architecture, azure, aws, gcp, ai, executive-advisory, governance, finops, mentoring, caf, waf]
     bullets:
       - text: "Serve as trusted technical advisor to executive stakeholders, translating business requirements into scalable cloud architectures across AWS, Azure, and Google Cloud supporting 200+ product teams globally"
         tags: [trusted-advisor, executive-stakeholders, cloud-architecture, multi-cloud, customer-facing, strategic-advisory]
         metrics: { teams_supported: 200 }
-      - text: "Architect and lead implementation of enterprise AI platforms on AWS Bedrock, Azure AI Foundry, and GCP Vertex AI — designing end-to-end solutions with multi-model orchestration, auto-scaling inference, and A/B model evaluation"
+      - text: "Architect and lead implementation of enterprise AI platforms on AWS Bedrock, Azure AI Foundry, and GCP Vertex AI - designing end-to-end solutions with multi-model orchestration, auto-scaling inference, and A/B model evaluation"
         tags: [azure-ai-foundry, ai-platform, architecture-design, end-to-end-delivery, production-scale-ai]
         metrics: {}
       - text: "Drive cloud migration and modernisation strategy for legacy workloads, enabling digital transformation across fashion retail and supply chain operations"
         tags: [cloud-migration, modernisation, digital-transformation, azure-adoption]
         metrics: {}
-      - text: "Led multi-million SEK FinOps programme — designed cost optimisation architectures reducing cloud spend by 35% through right-sizing, reserved capacity, and automated governance"
+      - text: "Led multi-million SEK FinOps programme - designed cost optimisation architectures reducing cloud spend by 35% through right-sizing, reserved capacity, and automated governance"
         tags: [finops, cost-optimisation, governance, measurable-business-impact]
         metrics: { cost_reduction_pct: 35 }
-      - text: "Established cloud governance framework at enterprise scale — policies, security baselines, RBAC, and compliance controls for 1600+ subscriptions across multi-cloud estate"
+      - text: "Established cloud governance framework at enterprise scale - policies, security baselines, RBAC, and compliance controls for 1600+ subscriptions across multi-cloud estate"
         tags: [governance, caf, waf, rbac, security, compliance, landing-zones, azure-policy]
         metrics: { subscriptions: 1600 }
-      - text: "Implemented Cycloid hybrid-cloud DevOps platform as the internal developer portal — standardising self-service infrastructure provisioning, golden-path Terraform stacks, and integrated FinOps cost visibility across AWS, Azure, and Google Cloud for 200+ product teams"
+      - text: "Implemented Cycloid hybrid-cloud DevOps platform as the internal developer portal, standardising self-service infrastructure provisioning, golden-path Terraform stacks, and integrated FinOps cost visibility across AWS, Azure, and Google Cloud for 200+ product teams"
         tags: [cycloid, platform-engineering, internal-developer-platform, self-service, terraform, finops, multi-cloud, governance]
         metrics: { teams_supported: 200 }
-      - text: "Develop technical content including architecture blueprints, workshops, and best-practice documentation — enabling broader field teams and upskilling 8+ engineers in cloud architecture and system design"
+      - text: "Develop technical content including architecture blueprints, workshops, and best-practice documentation - enabling broader field teams and upskilling 8+ engineers in cloud architecture and system design"
         tags: [mentoring, knowledge-sharing, thought-leadership, workshops, technical-communities]
         metrics: { engineers_mentored: 8 }
-      - text: "Lead enterprise architecture governance using SAP LeanIX, Zachman, and TOGAF frameworks — aligning technology decisions with long-term business strategy"
+      - text: "Lead enterprise architecture governance using SAP LeanIX, Zachman, and TOGAF frameworks - aligning technology decisions with long-term business strategy"
         tags: [enterprise-architecture, strategic-planning, technical-excellence]
         metrics: {}
 
-  - title: Lead Cloud Architect — AML/KYC Modernisation
+  - title: Lead Cloud Architect - AML/KYC Modernisation
     company: Ikano Bank
     location: Stockholm
-    dates: "2025 — 2026"
+    dates: "2025 - 2026"
     tags: [cloud-architecture, serverless, ai, migration, technical-delivery, financial-services]
     bullets:
-      - text: "Led end-to-end cloud migration of AML & KYC APIs from on-premises monolith to serverless architecture — reduced latency by 70% and improved system resilience"
+      - text: "Led end-to-end cloud migration of AML & KYC APIs from on-premises monolith to serverless architecture - reduced latency by 70% and improved system resilience"
         tags: [end-to-end-delivery, cloud-migration, technical-blockers, scalable, resilient]
         metrics: { latency_reduction_pct: 70 }
-      - text: "Designed scalable, flexible architecture using Lambda, Fargate, API Gateway, DynamoDB, and Step Functions — handling 500K+ daily financial transactions with Terraform IaC"
+      - text: "Designed scalable, flexible architecture using Lambda, Fargate, API Gateway, DynamoDB, and Step Functions - handling 500K+ daily financial transactions with Terraform IaC"
         tags: [architecture-design, scalable, secure, infrastructure-as-code, terraform]
         metrics: { daily_transactions: 500000 }
-      - text: "Built LLM-powered autonomous migration agent using Bedrock + Claude for automated API policy conversion, code analysis, and IaC scaffolding — cutting migration delivery time by 60%"
+      - text: "Built LLM-powered autonomous migration agent using Bedrock + Claude for automated API policy conversion, code analysis, and IaC scaffolding - cutting migration delivery time by 60%"
         tags: [ai, genai, repeatable-ip, delivery-acceleration, production-scale-ai]
         metrics: { delivery_time_reduction_pct: 60 }
-      - text: "Architected prompt engineering framework with chain-of-thought templates — reusable components accelerating implementation across parallel workstreams"
+      - text: "Architected prompt engineering framework with chain-of-thought templates - reusable components accelerating implementation across parallel workstreams"
         tags: [repeatable-ip, ai, delivery-acceleration]
         metrics: {}
       - text: "Delivered proof-of-concept demonstrations to executive stakeholders showcasing serverless cost savings and performance improvements, driving consensus for full cloud adoption"
         tags: [executive-stakeholders, delivery-proposals, customer-facing, azure-adoption]
         metrics: {}
-      - text: "Established CI/CD pipeline with GitHub Actions replacing legacy manual deployments — deployment frequency increased 10x"
+      - text: "Established CI/CD pipeline with GitHub Actions replacing legacy manual deployments - deployment frequency increased 10x"
         tags: [github, ci-cd, devops, technical-excellence]
         metrics: { deployment_frequency_increase: "10x" }
 
-  - title: Lead Software Engineer — Platform Engineering
-    company: Global Fashion Retail
+  - title: Lead Software Engineer - Platform Engineering
+    company: H&M Group
     location: Stockholm
-    dates: "2023 — 2024"
+    dates: "2023 - 2024"
     tags: [platform-engineering, azure, gcp, ai, developer-platform]
     bullets:
-      - text: "Engineered multi-cloud platform backbone on Azure & Google Cloud — achieving 99.9% uptime SLA for 200+ product teams across global operations"
+      - text: "Engineered multi-cloud platform backbone on Azure & Google Cloud - achieving 99.9% uptime SLA for 200+ product teams across global operations"
         tags: [azure, multi-cloud, performance, resilient, scalable, enterprise-customers]
         metrics: { uptime_sla: "99.9%", teams_supported: 200 }
-      - text: "Designed and built Internal Developer Platform with self-service provisioning — EventGrid + Functions architecture reducing team onboarding from days to minutes"
+      - text: "Designed and built Internal Developer Platform with self-service provisioning - EventGrid + Functions architecture reducing team onboarding from days to minutes"
         tags: [azure-functions, app-services, architecture-design, repeatable-ip]
         metrics: {}
-      - text: "Evaluated, benchmarked, and deployed AI/ML tools (OpenAI, Claude, Gemini) — shipped developer productivity solutions improving team velocity by 40%"
+      - text: "Evaluated, benchmarked, and deployed AI/ML tools (OpenAI, Claude, Gemini) - shipped developer productivity solutions improving team velocity by 40%"
         tags: [ai, production-scale-ai, technical-excellence, azure-ai]
         metrics: { velocity_improvement_pct: 40 }
       - text: "Conducted deep-dive architecture reviews and design exercises, creating world-class solutions and reusable patterns for cross-team adoption"
         tags: [architecture-design, waf, well-architected-reviews, repeatable-ip]
         metrics: {}
 
-  - title: Senior Software Engineer — Distributed Systems
-    company: Global Fashion Retail
+  - title: Senior Software Engineer - Distributed Systems
+    company: H&M Group
     location: Stockholm
-    dates: "2020 — 2023"
+    dates: "2020 - 2023"
     tags: [distributed-systems, azure, gcp, microservices, ci-cd]
     bullets:
-      - text: "Designed Zero Trust microservices architecture — 15+ services with sub-100ms p99 latency, demonstrating deep infrastructure and networking expertise"
+      - text: "Designed Zero Trust microservices architecture - 15+ services with sub-100ms p99 latency, demonstrating deep infrastructure and networking expertise"
         tags: [architecture-design, secure, zero-trust, infrastructure, networking, performance]
         metrics: { services: 15, latency_p99_ms: 100 }
       - text: "Built high-throughput GraphQL & REST APIs handling 50K+ RPM across distributed systems on Azure + GKE with automated scaling and rate limiting"
         tags: [azure, app-services, performance, scalable, technical-excellence]
         metrics: { rpm: 50000 }
-      - text: "Led CI/CD standardisation using GitHub Actions across 200+ repositories — 95% pipeline success rate, establishing DevOps best practices at enterprise scale"
+      - text: "Led CI/CD standardisation using GitHub Actions across 200+ repositories - 95% pipeline success rate, establishing DevOps best practices at enterprise scale"
         tags: [github, ci-cd, devops, technical-communities, enterprise-customers]
         metrics: { repositories: 200, pipeline_success_pct: 95 }
       - text: "Resolved complex technical problems through root cause analysis across distributed systems, improving platform reliability and developer experience"
         tags: [technical-blockers, technical-excellence, performance, resilient]
         metrics: {}
 
-  - title: DevOps Engineer Consultant — Automotive
+  - title: DevOps Engineer Consultant - Automotive
     company: Volvo Cars
     location: Gothenburg
-    dates: "2019 — 2020"
+    dates: "2019 - 2020"
     tags: [consulting, customer-facing, aks, kubernetes, observability, automotive]
     bullets:
-      - text: "Served as technical consultant to Volvo Cars engineering teams — designing and implementing enterprise observability platform (ELK, Grafana, Prometheus) on AKS monitoring 100+ automotive microservices"
+      - text: "Served as technical consultant to Volvo Cars engineering teams - designing and implementing enterprise observability platform (ELK, Grafana, Prometheus) on AKS monitoring 100+ automotive microservices"
         tags: [customer-facing, trusted-advisor, aks, azure, architecture-design, enterprise-customers]
         metrics: { microservices_monitored: 100 }
       - text: "Managed CI/CD pipelines for OpenShift & Kubernetes clusters; reduced deployment cycle time from hours to 15 minutes across automotive software delivery"
         tags: [ci-cd, kubernetes, delivery-acceleration, technical-excellence]
         metrics: { deployment_time_reduction: "hours to 15 minutes" }
-      - text: "Authored runbooks, architecture documentation, and incident response procedures — achieving 99.5% SLA compliance across production environments"
+      - text: "Authored runbooks, architecture documentation, and incident response procedures - achieving 99.5% SLA compliance across production environments"
         tags: [knowledge-sharing, thought-leadership, delivery-oversight, performance]
         metrics: { sla_compliance_pct: 99.5 }
       - text: "Partnered with cross-functional teams to identify and resolve infrastructure bottlenecks, translating automotive-specific requirements into optimised cloud solutions"
@@ -170,16 +170,16 @@ experience:
   - title: Cloud DevOps Engineer → Cloud Developer
     company: Cognizant Technology Solutions
     location: India → Sweden
-    dates: "2016 — 2019"
+    dates: "2016 - 2019"
     tags: [cloud-engineering, aws, ci-cd, customer-facing, enterprise-customers]
     bullets:
-      - text: "Designed and implemented AWS cloud architectures for 5+ enterprise clients — CI/CD pipelines with CodePipeline, Docker, ECS/Fargate across diverse industry verticals"
+      - text: "Designed and implemented AWS cloud architectures for 5+ enterprise clients - CI/CD pipelines with CodePipeline, Docker, ECS/Fargate across diverse industry verticals"
         tags: [cloud-architecture, customer-facing, enterprise-customers, end-to-end-delivery]
         metrics: { enterprise_clients: 5 }
       - text: "Developed React-based Cloud Management Dashboard providing real-time infrastructure visibility and cost analytics to enterprise customers"
         tags: [app-services, customer-facing, measurable-business-impact]
         metrics: {}
-      - text: "Won 1st place at Enterprise AWS Game Day 2018 (200+ participants) — demonstrating deep technical expertise under production-pressure scenarios"
+      - text: "Won 1st place at Enterprise AWS Game Day 2018 (200+ participants) - demonstrating deep technical expertise under production-pressure scenarios"
         tags: [technical-excellence, growth-mindset, cloud-certifications]
         metrics: { participants: 200 }
       - text: "Provided technical guidance and knowledge transfer to client teams, building cloud fluency across enterprise organisations"
@@ -188,27 +188,27 @@ experience:
 
 # ── Key Projects ──
 projects:
-  - title: Enterprise AI Platform — Multi-Model Orchestration
-    company: Global Fashion Retail
+  - title: Enterprise AI Platform - Multi-Model Orchestration
+    company: H&M Group
     description: "Designed distributed AI orchestration platform serving 200+ teams. Multi-model inference pipelines with auto-scaling, A/B evaluation, and real-time serving. AWS Bedrock, Azure AI Foundry, Vertex AI, OpenAI, Python, TypeScript."
     tags: [azure-ai-foundry, production-scale-ai, architecture-design, enterprise-customers]
 
-  - title: AML/KYC Serverless Migration — Cloud Architecture
+  - title: AML/KYC Serverless Migration - Cloud Architecture
     company: Ikano Bank
     description: "Architected full cloud migration from on-prem to serverless. LLM-powered autonomous agent for automated code conversion. Lambda, Fargate, API Gateway, Bedrock, Terraform. 70% latency reduction, 60% faster delivery."
     tags: [cloud-migration, ai, repeatable-ip, end-to-end-delivery]
 
-  - title: Enterprise FinOps Platform — Cloud Cost Optimisation
-    company: Global Fashion Retail
+  - title: Enterprise FinOps Platform - Cloud Cost Optimisation
+    company: H&M Group
     description: "Multi-agentic AI system reducing multi-million SEK cloud spend. Automated anomaly detection, right-sizing recommendations, and governance dashboards across AWS, Azure, and GCP."
     tags: [finops, governance, measurable-business-impact, multi-cloud]
 
-  - title: OpenClaw Tesla — AI Vehicle Agent (Open Source)
+  - title: OpenClaw Tesla - AI Vehicle Agent (Open Source)
     company: Personal
     description: "AI agent plugin for Tesla Fleet API with 21 voice-controlled actions. Demonstrates IoT, automotive API integration, OAuth 2.0, and intelligent agent orchestration. TypeScript, REST APIs."
     tags: [ai, open-source, github, technical-communities]
 
-  - title: Rubin — AI Coding Assistant (Open Source)
+  - title: Rubin - AI Coding Assistant (Open Source)
     company: Personal
     description: "Privacy-first local AI coding assistant with 14-tool agent mode, MCP server integration, streaming chat. Demonstrates AI/ML product thinking and developer tooling expertise. TypeScript, VS Code API."
     tags: [ai, github, open-source, thought-leadership, technical-communities]

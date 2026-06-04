@@ -32,7 +32,7 @@ Produce exactly one output bullet per resolved_bullet, in the same order, same c
 You MUST PRESERVE in every output bullet:
 • Every specific service/product name: Lambda, Fargate, AWS Bedrock, Azure AI Foundry, Azure OpenAI, GCP Vertex AI, GKE, AKS, GitHub Actions, Event Grid, GraphQL, REST APIs, DynamoDB, Step Functions, Prometheus, Grafana, ELK, SAP LeanIX, TOGAF, Zachman, OpenShift, CodePipeline, ECS, React, etc.
 • Every metric and number: 35%, 70%, 50K+ RPM, 200+ teams, 500K+ daily transactions, 99.9% uptime, 10x, 60%, 200+ repos, 95%, 100+ microservices, 8+ engineers, 15+ services, 5+ enterprise clients, etc.
-• Every proper noun: Global Fashion Retail, Ikano Bank, Volvo Cars, Cognizant, NVIDIA, Tesla, AWS, Azure, Google Cloud, etc.
+• Every proper noun: H&M Group, Ikano Bank, Volvo Cars, Cognizant, NVIDIA, Tesla, AWS, Azure, Google Cloud, etc.
 
 You MAY:
 • Strengthen the opening action verb (Architected, Engineered, Designed, Led, Drove, Delivered, Established, Accelerated, Owned)
