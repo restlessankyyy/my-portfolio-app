@@ -317,7 +317,11 @@ jobs:
           TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
           TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           TF_VAR_custom_domain_target: "d-hctzaliyt6.execute-api.eu-north-1.amazonaws.com"
-          TF_VAR_profile_domain_target: ""
+          # Use the live profile custom-domain target (the AWS stack always
+          # provisions profile.ankitraj.cloud) so the plan preview matches what
+          # apply does. Passing "" here made count=0 and showed a phantom
+          # destroy of cloudflare_record.profile on every plan.
+          TF_VAR_profile_domain_target: "d-892wmteha9.execute-api.eu-north-1.amazonaws.com"
           TF_VAR_ci_probe_secret: ${{ secrets.CF_PROBE_SECRET }}
 
       - name: 📤 Upload Terraform Plan

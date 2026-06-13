@@ -119,6 +119,16 @@ data "aws_iam_policy_document" "deploy" {
       "logs:TagResource",
       "logs:UntagResource",
       "logs:ListTagsForResource",
+      # Required by API Gateway v2 UpdateStage to set OR clear a stage's access
+      # log settings. AWS validates these even when logging is being disabled,
+      # so they are needed to remove logging from the existing prod stage.
+      "logs:CreateLogDelivery",
+      "logs:DeleteLogDelivery",
+      "logs:GetLogDelivery",
+      "logs:UpdateLogDelivery",
+      "logs:ListLogDeliveries",
+      "logs:PutResourcePolicy",
+      "logs:DescribeResourcePolicies",
     ]
     resources = ["*"]
   }
