@@ -6,7 +6,6 @@
 |----------|---------|---------|
 | `ci-cd.yml` | Push to `main`, PRs to `main` | Full pipeline: lint → scan → test → build → deploy → smoke test |
 | `codeql.yml` | Push/PR to `main` + weekly | CodeQL static analysis for JavaScript |
-| `security-scan.yml` | Weekly + manual | Gitleaks (secrets) + Trivy (vulnerabilities) |
 | `security-audit.yml` | Push/PR (package changes) | npm audit + outdated packages |
 | `resume-pdf.yml` | Push (`resume-aws-sa.html`) + manual | Auto-regenerate Profile.pdf |
 | `resume-nordic-pdf.yml` | Push (`resume-photo.html`) + manual | Auto-regenerate Profile-Nordic.pdf |
@@ -25,7 +24,7 @@ flowchart TD
     PR[Pull Request to main]:::trigger --> CQ
     PUSH[Push to main]:::trigger --> CQ
 
-    CQ[1. Code Quality<br/>ESLint, Prettier, npm audit] --> SS[2. Security Scan<br/>Gitleaks, Trivy]
+    CQ[1. Code Quality<br/>ESLint, Prettier, npm audit] --> SS[2. Security Scan<br/>Dependency Review, Secret Scanning]
     SS --> TST[3. Tests<br/>8 unit tests]
     TST --> TFV[4. Terraform Validate<br/>fmt, init, validate, plan]
 
@@ -49,7 +48,7 @@ flowchart TD
 | Stage | Job | What it does |
 |-------|-----|-------------|
 | 1 | `code-quality` | ESLint, Prettier, npm audit |
-| 2 | `security-scan` | Gitleaks, Trivy |
+| 2 | `security-scan` | Dependency Review (GitHub Advisory DB) + Secret Scanning |
 | 3 | `test` | Unit tests (8 cases) |
 | 4 | `terraform-validate` | IaC format check + plan |
 | 5 | `build` | Lambda package creation |

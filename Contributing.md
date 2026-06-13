@@ -60,7 +60,7 @@ ci: add CodeQL security scanning
 ## Security
 
 - Never commit secrets or API keys
-- Gitleaks runs in CI to catch leaked secrets
+- GitHub Secret Scanning + Push Protection catch leaked secrets
 - CodeQL + npm audit check for vulnerabilities
 - Dependabot keeps dependencies updated
 

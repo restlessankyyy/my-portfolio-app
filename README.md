@@ -40,7 +40,7 @@ Premium cinematic portfolio website for **Ankit Raj**, Lead Solution Architect a
 | **DNS/CDN** | Cloudflare (DNS, SSL, Page Rules) |
 | **IaC** | Terraform (AWS + Cloudflare) |
 | **CI/CD** | GitHub Actions (7 workflows), keyless AWS via OIDC |
-| **Security** | CodeQL, Dependabot, npm audit, Gitleaks, Trivy |
+| **Security** | CodeQL, Dependabot, npm audit, Dependency Review, Secret Scanning |
 
 ## 📁 Project Structure
 
@@ -261,8 +261,8 @@ npm test
 - **CodeQL** static analysis for JavaScript vulnerabilities
 - **Dependabot** automated dependency updates
 - **npm audit** CI check for known CVEs (0 vulnerabilities)
-- **Gitleaks** secret detection in commits
-- **Trivy** vulnerability scanning
+- **Dependency Review** blocks vulnerable dependencies on PRs (GitHub Advisory DB)
+- **Secret Scanning + Push Protection** native secret detection
 - **OIDC** keyless AWS deploys (no static credentials in CI)
 - **npm overrides** pinned `fast-xml-parser >=5.3.8` to patch CVEs
 - **IAM** least-privilege roles for Lambda and deploy

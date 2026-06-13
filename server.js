@@ -4,17 +4,30 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const app = express();
 
+// Behind API Gateway / Lambda, trust the first proxy hop so the rate
+// limiter keys on the real client IP (X-Forwarded-For) rather than the proxy.
+app.set('trust proxy', 1);
+
 // Security headers
 app.use(helmet());
 
 // Parse JSON bodies with size limit to prevent large-payload DoS
 app.use(express.json({ limit: '10kb' }));
 
-// Root domain landing page — ankitraj.cloud / www.ankitraj.cloud
+// General rate limit for page/file-serving routes to bound abuse of the
+// filesystem-backed handlers (landing page + SPA catch-all).
+const pageLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Root domain landing page: ankitraj.cloud / www.ankitraj.cloud
 // profile.ankitraj.cloud serves the full portfolio via static + SPA catch-all below
 const ROOT_HOSTS = ['ankitraj.cloud', 'www.ankitraj.cloud'];
 
-app.get('/', (req, res, next) => {
+app.get('/', pageLimiter, (req, res, next) => {
   const host = (req.hostname || '').split(':')[0];
   if (ROOT_HOSTS.includes(host)) {
     return res.sendFile(path.join(__dirname, 'public', 'landing.html'));
@@ -62,9 +75,10 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
       });
     }
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Email validation. Length guard + non-backtracking regex (domain labels
+    // exclude dots so quantifiers cannot overlap) to avoid polynomial ReDoS.
+    const emailRegex = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/;
+    if (typeof email !== 'string' || email.length > 254 || !emailRegex.test(email)) {
       return res.status(400).json({ 
         success: false, 
         error: 'Invalid email address' 
@@ -183,7 +197,7 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
 });
 
 // Catch all handler: send back index.html for SPA routing
-app.get('*', (req, res) => {
+app.get('*', pageLimiter, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
