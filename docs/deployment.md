@@ -87,8 +87,7 @@ docker run -p 3000:3000 portfolio
 
 | Secret | Description |
 |--------|-------------|
-| `AWS_ACCESS_KEY_ID` | AWS IAM access key |
-| `AWS_SECRET_ACCESS_KEY` | AWS IAM secret key |
+| `AWS_ROLE_ARN` | IAM role ARN assumed via GitHub OIDC (keyless; see `terraform/github-oidc/`) |
 | `CLOUDFLARE_API_TOKEN` | Cloudflare API token |
 | `CLOUDFLARE_ZONE_ID` | Cloudflare zone ID |
 | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |

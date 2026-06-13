@@ -85,8 +85,7 @@ Configure these secrets in your repository settings (`Settings` → `Secrets and
 
 | Secret | Description | Required |
 |--------|-------------|----------|
-| `AWS_ACCESS_KEY_ID` | AWS IAM access key | ✅ |
-| `AWS_SECRET_ACCESS_KEY` | AWS IAM secret key | ✅ |
+| `AWS_ROLE_ARN` | IAM role ARN assumed via GitHub OIDC (from `terraform/github-oidc/`) | ✅ |
 | `CLOUDFLARE_API_TOKEN` | Cloudflare API token | ✅ |
 | `CLOUDFLARE_ZONE_ID` | Cloudflare Zone ID | ✅ |
 | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Account ID | ✅ |

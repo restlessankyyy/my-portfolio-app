@@ -256,35 +256,37 @@ class PortfolioEnhancer {
     }
 
     // Text-cursor over paragraphs & headings
-    document.querySelectorAll("p, .section-desc, .tl-desc-text").forEach((el) => {
-      el.addEventListener("mouseenter", () => {
-        document.body.classList.remove("cursor-hover", "cursor-expand");
-        document.body.classList.add("cursor-text");
+    document
+      .querySelectorAll("p, .section-desc, .tl-desc-text")
+      .forEach((el) => {
+        el.addEventListener("mouseenter", () => {
+          document.body.classList.remove("cursor-hover", "cursor-expand");
+          document.body.classList.add("cursor-text");
+        });
+        el.addEventListener("mouseleave", () => {
+          document.body.classList.remove("cursor-text");
+        });
       });
-      el.addEventListener("mouseleave", () => {
-        document.body.classList.remove("cursor-text");
-      });
-    });
 
     // Expand-cursor over images and card images
-    document.querySelectorAll(".card-img, .hero-container img").forEach((el) => {
-      el.addEventListener("mouseenter", () => {
-        document.body.classList.remove("cursor-hover", "cursor-text");
-        document.body.classList.add("cursor-expand");
+    document
+      .querySelectorAll(".card-img, .hero-container img")
+      .forEach((el) => {
+        el.addEventListener("mouseenter", () => {
+          document.body.classList.remove("cursor-hover", "cursor-text");
+          document.body.classList.add("cursor-expand");
+        });
+        el.addEventListener("mouseleave", () => {
+          document.body.classList.remove("cursor-expand");
+        });
       });
-      el.addEventListener("mouseleave", () => {
-        document.body.classList.remove("cursor-expand");
-      });
-    });
   }
 
   /* ── Section Fade on Scroll — subtle opacity+translate per section ── */
   setupSectionFadeOnScroll() {
     if (this.prefersReducedMotion) return;
 
-    const sections = document.querySelectorAll(
-      ".section, .section-alt",
-    );
+    const sections = document.querySelectorAll(".section, .section-alt");
 
     const observer = new IntersectionObserver(
       (entries) => {

@@ -1,0 +1,11 @@
+# Outputs for the GitHub Actions OIDC bootstrap module
+
+output "role_arn" {
+  description = "ARN of the IAM role for GitHub Actions. Set this as the AWS_ROLE_ARN repo secret."
+  value       = aws_iam_role.github_deploy.arn
+}
+
+output "oidc_provider_arn" {
+  description = "ARN of the GitHub Actions OIDC identity provider"
+  value       = aws_iam_openid_connect_provider.github.arn
+}

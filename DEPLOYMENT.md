@@ -22,7 +22,7 @@ Cloudflare (DNS/SSL) → API Gateway (HTTP v2) → Lambda (Node.js 22) → SES /
 
 1. **AWS CLI** configured with appropriate permissions
 2. **Terraform** >= 1.0
-3. **Node.js** >= 22.x
+3. **Node.js** >= 24.x
 
 ### Setup
 
