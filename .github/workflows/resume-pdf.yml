@@ -3,7 +3,7 @@ name: 📄 Resume PDF (ATS — No Photo)
 on:
   push:
     paths:
-      - 'scripts/resume.html'
+      - 'scripts/resume-aws-sa.html'
       - 'scripts/generate-pdf.js'
     branches: [main]
   workflow_dispatch:
