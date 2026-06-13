@@ -78,6 +78,13 @@ variable "acm_validation_value" {
   default     = "_a21d0ea08f7f5d4ec86278a9b3b41242.jkddzztszm.acm-validations.aws."
 }
 
+variable "ci_probe_secret" {
+  description = "Shared secret sent in the x-ci-probe header by CI health/smoke checks. Requests carrying this value skip Cloudflare WAF/bot products so CI runner IPs are not falsely blocked. Leave empty to disable the bypass rule."
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
 # ==================== SSL/TLS Settings ====================
 
 # Set SSL mode to Full (Cloudflare connects to origin via HTTPS)
@@ -223,6 +230,49 @@ resource "cloudflare_record" "microsoft_domain_verification" {
   ttl     = 3600
   proxied = false
   comment = "Microsoft Entra ID domain verification for ankitraj.cloud"
+}
+
+# ==================== WAF: CI Probe Bypass ====================
+
+# Allow the GitHub Actions health/smoke probe past Cloudflare bot management
+# and managed WAF rules. CI runners share datacenter IP ranges that Cloudflare
+# bot protection challenges or blocks (HTTP 403), producing false-negative
+# smoke tests even when the edge is healthy. The probe sends a secret header;
+# this rule skips security products only for requests carrying the correct
+# secret, so genuine edge errors (5xx / 52x / connection failures) are still
+# caught by the pipeline. Count-gated so an empty secret disables the rule.
+resource "cloudflare_ruleset" "ci_probe_bypass" {
+  count = var.ci_probe_secret != "" ? 1 : 0
+
+  zone_id     = var.cloudflare_zone_id
+  name        = "CI probe WAF bypass"
+  description = "Skip WAF/bot products for the authenticated CI health probe"
+  kind        = "zone"
+  phase       = "http_request_firewall_custom"
+
+  rules {
+    ref         = "ci_probe_skip"
+    description = "Skip free-tier security products for the CI probe on /health only"
+    expression  = "(http.request.uri.path eq \"/health\" and http.request.headers[\"x-ci-probe\"][0] eq \"${var.ci_probe_secret}\")"
+    action      = "skip"
+
+    # Free-tier note: Bot Fight Mode (basic) cannot be skipped by custom rules;
+    # only these products are honored on the free plan. Managed WAF, Super Bot
+    # Fight Mode (http_request_sbfm), Zone Lockdown and Rate Limiting are Pro+
+    # and are intentionally omitted.
+    action_parameters {
+      products = [
+        "bic",
+        "hot",
+        "securityLevel",
+        "uaBlock",
+      ]
+    }
+
+    logging {
+      enabled = true
+    }
+  }
 }
 
 # Outputs
