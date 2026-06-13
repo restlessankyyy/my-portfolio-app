@@ -252,23 +252,20 @@ resource "cloudflare_ruleset" "ci_probe_bypass" {
 
   rules {
     ref         = "ci_probe_skip"
-    description = "Skip security products when the CI probe secret header is present"
-    expression  = "(http.request.headers[\"x-ci-probe\"][0] eq \"${var.ci_probe_secret}\")"
+    description = "Skip free-tier security products for the CI probe on /health only"
+    expression  = "(http.request.uri.path eq \"/health\" and http.request.headers[\"x-ci-probe\"][0] eq \"${var.ci_probe_secret}\")"
     action      = "skip"
 
+    # Free-tier note: Bot Fight Mode (basic) cannot be skipped by custom rules;
+    # only these products are honored on the free plan. Managed WAF, Super Bot
+    # Fight Mode (http_request_sbfm), Zone Lockdown and Rate Limiting are Pro+
+    # and are intentionally omitted.
     action_parameters {
-      phases = [
-        "http_request_firewall_managed",
-        "http_request_sbfm",
-      ]
       products = [
         "bic",
         "hot",
-        "rateLimit",
         "securityLevel",
         "uaBlock",
-        "waf",
-        "zoneLockdown",
       ]
     }
 
