@@ -133,15 +133,15 @@ resource "cloudflare_record" "acm_validation" {
   comment = "AWS ACM Certificate Validation"
 }
 
-# DNS Record - WWW subdomain to AWS API Gateway Custom Domain (AWS handles SSL)
+# DNS Record - WWW subdomain to AWS API Gateway Custom Domain (Cloudflare handles SSL)
 resource "cloudflare_record" "www" {
   zone_id = var.cloudflare_zone_id
   name    = "www"
   content = var.custom_domain_target # AWS API Gateway custom domain target
   type    = "CNAME"
-  ttl     = 1     # Auto
-  proxied = false # DNS only - AWS ACM handles SSL
-  comment = "WWW to AWS API Gateway Custom Domain"
+  ttl     = 1    # Auto
+  proxied = true # Cloudflare proxy ON - Cloudflare terminates SSL for www.ankitraj.cloud
+  comment = "WWW to AWS API Gateway Custom Domain - Cloudflare proxied for SSL"
 }
 
 # DNS Record - Profile subdomain to AWS API Gateway Custom Domain
