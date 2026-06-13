@@ -1,32 +1,30 @@
-# 🚀 Ankit Raj — Portfolio
+# 🚀 Ankit Raj Portfolio
 
 [![CI/CD Pipeline](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/ci-cd.yml)
 [![CodeQL](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/codeql.yml/badge.svg)](https://github.com/restlessankyyy/my-portfolio-app/actions/workflows/codeql.yml)
 [![Node.js](https://img.shields.io/badge/Node.js-24-green)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Premium cinematic portfolio website for **Ankit Raj** — Lead Solution Architect & Multi-Cloud Engineer specializing in AWS, Azure, and GCP.
+Premium cinematic portfolio website for **Ankit Raj**, Lead Solution Architect and Multi-Cloud Engineer specializing in AWS, Azure, and GCP.
 
 🌐 **Live Site:** [https://www.ankitraj.cloud](https://www.ankitraj.cloud)
 
 ## ✨ Features
 
-- 🎬 **Cinematic Dark Theme** — Premium design inspired by zoox.com with grain overlay & parallax
-- 🖱️ **Custom Cursor** — Animated dot + ring cursor that reacts to interactive elements
-- ✍️ **Typing Effect** — Dynamic hero text cycling through roles & specialties
-- 🎨 **Glassmorphism Nav** — Frosted glass navigation with scroll progress indicator
-- 🌙 **Dark/Light Mode** — Persistent theme toggle with smooth transitions
-- 🏷️ **Project Filters** — Filter 9 showcase projects by Enterprise / Open Source / AI
-- 📜 **Experience Timeline** — Staggered animated career timeline
-- 🎓 **Certifications Marquee** — Auto-scrolling certification badges
-- 📄 **AI Resume** — Auto-generated PDF from HTML via Puppeteer + GitHub Actions
-- 🤖 **Agentic Resume Pipeline** — 4-agent AI system (Azure OpenAI / Claude) generates ATS-optimized resumes from job descriptions
-- 📱 **Fully Responsive** — Breakpoints at 1024 / 768 / 480px
-- ⚡ **Serverless** — AWS Lambda + API Gateway deployment
-- 🔒 **Secure** — HTTPS, DKIM, SPF, DMARC, CodeQL, Dependabot
-- 📧 **Contact Form** — EmailJS + AWS SES fallback
-- 🚀 **CI/CD** — Automated deployments, security scans, resume generation
-- 🏗️ **Infrastructure as Code** — Terraform for AWS & Cloudflare
+- 🎬 **Cinematic Dark Theme** with grain overlay and parallax
+- 🖱️ **Custom Cursor** that reacts to interactive elements
+- ✍️ **Typing Effect** cycling through roles and specialties
+- 🎨 **Glassmorphism Nav** with scroll progress indicator
+- 🌙 **Dark/Light Mode** persisted via localStorage
+- 🏷️ **Project Filters** (Enterprise, Open Source, AI)
+- 📜 **Animated Experience Timeline** and certifications marquee
+- 📄 **Auto-generated Resume PDFs** via Puppeteer and GitHub Actions
+- 🤖 **Agentic Resume Pipeline**: 4-agent AI system (Azure OpenAI or Claude) builds ATS-optimized resumes from job descriptions
+- 📱 **Fully Responsive** (1024 / 768 / 480px breakpoints)
+- ⚡ **Serverless** on AWS Lambda and API Gateway
+- 🔒 **Secure**: keyless OIDC deploys, HTTPS, DKIM/SPF/DMARC, CodeQL, Dependabot
+- 📧 **Contact Form** via EmailJS with AWS SES fallback
+- 🏗️ **Infrastructure as Code** with Terraform for AWS and Cloudflare
 
 ## 🛠️ Tech Stack
 
@@ -35,56 +33,50 @@ Premium cinematic portfolio website for **Ankit Raj** — Lead Solution Architec
 | **Frontend** | HTML5, CSS3 (custom properties, glassmorphism), Vanilla JS (ES6+ classes) |
 | **Fonts** | Space Grotesk, JetBrains Mono |
 | **Icons** | Font Awesome 6.5.0 |
-| **Backend** | Node.js 24, Express.js |
-| **PDF Gen** | Puppeteer (HTML → PDF) |
+| **Backend** | Node.js 24 (dev/CI), Express.js |
+| **Runtime** | AWS Lambda (Node.js 22.x) |
+| **PDF Gen** | Puppeteer (HTML to PDF) |
 | **Cloud** | AWS Lambda, API Gateway, SES, ACM, S3 |
 | **DNS/CDN** | Cloudflare (DNS, SSL, Page Rules) |
-| **IaC** | Terraform |
-| **CI/CD** | GitHub Actions (6 workflows) |
+| **IaC** | Terraform (AWS + Cloudflare) |
+| **CI/CD** | GitHub Actions (7 workflows), keyless AWS via OIDC |
 | **Security** | CodeQL, Dependabot, npm audit, Gitleaks, Trivy |
 
 ## 📁 Project Structure
 
 ```text
 my-portfolio-app/
-├── public/                     # Static assets
-│   ├── index.html              # Main HTML — cinematic portfolio
-│   ├── assets/
-│   │   ├── Profile.pdf         # Primary resume (AWS SA variant)
-│   │   └── Profile-Nordic.pdf  # Nordic photo resume variant
-│   ├── css/
-│   │   └── modern-style.css    # Full styling (dark/light themes, animations)
-│   ├── js/
-│   │   ├── modern-portfolio.js # Core: cursor, typing, filters, theme, nav
-│   │   ├── enhanced-portfolio.js # Perf: lazy load, a11y, parallax
-│   │   └── emailjs-config.js   # EmailJS integration
-│   └── img/
-│       └── ankit.png           # Profile photo
+├── public/                     # Static assets served by Express
+│   ├── index.html              # Main cinematic portfolio page
+│   ├── landing.html            # Landing variant
+│   ├── assets/                 # Generated resume PDFs + ATS reports
+│   ├── css/                    # modern-style.css (+ minified)
+│   ├── js/                     # modern-portfolio.js, enhanced-portfolio.js, emailjs-config.js
+│   └── img/                    # Profile photos + certification badges
 ├── scripts/
-│   ├── resume-aws-sa.html      # Primary resume HTML (AWS Solutions Architect)
+│   ├── resume-aws-sa.html      # Primary resume (AWS Solutions Architect)
+│   ├── resume-microsoft-csa.html # Microsoft CSA resume variant
 │   ├── resume-photo.html       # Nordic resume with photo
-│   ├── generate-pdf-aws-sa.js  # Puppeteer: resume-aws-sa.html → Profile.pdf
-│   ├── generate-pdf-photo.js   # Puppeteer: resume-photo.html → Profile-Nordic.pdf
-│   ├── generate-pdf.js         # Alias (also generates Profile.pdf)
+│   ├── generate-pdf-*.js       # Puppeteer HTML to PDF generators
 │   ├── build-lambda.sh         # Lambda package builder
-│   ├── deploy.sh               # Deployment script
-│   ├── destroy.sh              # Teardown script
-│   └── agent/                  # 🤖 Agentic Resume Pipeline
-│       ├── generate.js         # Orchestrator — CLI entry point
-│       ├── jd-analyzer.js      # Agent 1: parse JD → requirements
-│       ├── experience-mapper.js# Agent 2: map profile → JD bullets
+│   ├── deploy.sh / destroy.sh  # Deploy and teardown scripts
+│   └── agent/                  # Agentic Resume Pipeline (4 agents)
+│       ├── generate.js         # Orchestrator and CLI entry point
+│       ├── jd-analyzer.js      # Agent 1: parse JD to requirements
+│       ├── experience-mapper.js # Agent 2: map profile to JD bullets
 │       ├── resume-writer.js    # Agent 3: enhance bullets (ENHANCE mode)
 │       ├── ats-scorer.js       # Agent 4: score resume vs JD
 │       ├── client.js           # Unified AI client (Azure OpenAI + Anthropic)
 │       ├── candidate-profile.yaml # Single source of truth for candidate data
-│       └── jds/                # Job description text files (trigger pipeline)
+│       ├── templates/          # Handlebars resume template
+│       └── jds/                # Job descriptions (adding a .txt triggers pipeline)
 ├── terraform/                  # Infrastructure as Code
 │   ├── main.tf                 # AWS resources (Lambda, API GW, IAM, S3)
-│   ├── variables.tf            # Input variables
-│   ├── outputs.tf              # Output values
+│   ├── variables.tf / outputs.tf
+│   ├── github-oidc/            # OIDC provider + keyless deploy role
 │   ├── cloudflare/             # Cloudflare DNS config
 │   └── backend/                # S3 remote state config
-├── docs/                       # 📚 Documentation
+├── docs/                       # Documentation
 │   ├── architecture.md         # System architecture (AWS + Cloudflare)
 │   ├── agentic-pipeline.md     # 4-agent AI resume pipeline
 │   ├── cicd.md                 # CI/CD workflows reference
@@ -92,40 +84,30 @@ my-portfolio-app/
 │   └── contributing.md         # Contributing guidelines
 ├── .github/
 │   ├── dependabot.yml          # Weekly npm + Actions dependency updates
-│   └── workflows/
-│       ├── ci-cd.yml           # Full CI/CD pipeline
-│       ├── codeql.yml          # CodeQL security scanning
-│       ├── security-scan.yml   # Gitleaks + Trivy scheduled scan
-│       ├── security-audit.yml  # npm audit + outdated check
-│       ├── resume-pdf.yml      # Auto-regenerate resume PDF
-│       ├── agentic-resume.yml  # 4-agent pipeline via Claude
-│       ├── agentic-resume-foundry.yml # 4-agent pipeline via Azure OpenAI
-│       └── dependency-update.yml # Dependency update checks
-├── tests/
-│   └── server.test.js          # Unit tests (8 test cases)
+│   └── workflows/              # 7 GitHub Actions workflows
+├── tests/server.test.js        # Unit tests (8 cases)
 ├── server.js                   # Express server (port 3000)
 ├── lambda.js                   # AWS Lambda handler
 ├── Dockerfile                  # Docker image (node:24-alpine)
-├── package.json                # Dependencies + npm overrides
-└── _config.yml                 # GitHub Pages config
+└── package.json                # Dependencies + npm overrides
 ```
 
-## � Documentation
+## 📚 Documentation
 
 | Doc | Description |
 |-----|-------------|
-| [docs/architecture.md](docs/architecture.md) | System architecture — AWS, Cloudflare, remote state |
-| [docs/agentic-pipeline.md](docs/agentic-pipeline.md) | 4-agent AI resume pipeline — architecture, usage, CI/CD |
+| [docs/architecture.md](docs/architecture.md) | System architecture: AWS, Cloudflare, remote state |
+| [docs/agentic-pipeline.md](docs/agentic-pipeline.md) | 4-agent AI resume pipeline: architecture, usage, CI/CD |
 | [docs/cicd.md](docs/cicd.md) | All GitHub Actions workflows reference |
 | [docs/deployment.md](docs/deployment.md) | Deployment guide, Terraform config, secrets |
 | [docs/contributing.md](docs/contributing.md) | Contributing guidelines |
 
-## �🚀 Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
 
 - Node.js 24+ (`nvm install 24`)
-- npm 10+
+- npm 11+
 - AWS CLI configured (for deployment)
 - Terraform 1.0+ (for infrastructure)
 
@@ -179,77 +161,119 @@ node scripts/generate-pdf-photo.js
 
 ### AWS Resources
 
-- **Lambda Function** — `portfolio-ankit-prod-*` (Node.js 22.x, 512MB, 30s timeout)
-- **API Gateway** — HTTP API v2 with CORS
-- **ACM Certificate** — SSL for custom domain
-- **SES** — Email sending with DKIM verified
-- **S3** — Static assets + Terraform state
-- **CloudWatch** — Logs (14-day retention) + metrics
+- **Lambda Function** `portfolio-ankit-prod-*` (Node.js 22.x, 512MB, 30s timeout)
+- **API Gateway** HTTP API v2 with CORS
+- **ACM Certificate** SSL for custom domain
+- **SES** email sending with DKIM verified
+- **S3** static assets and Terraform state
+- **CloudWatch** logs (14-day retention) and metrics
 
 ### Cloudflare
 
-- **DNS** — A, CNAME, TXT records
-- **SSL** — Full (strict) mode
-- **Page Rules** — Root domain redirect to www
+- **DNS** A, CNAME, TXT records
+- **SSL** Full (strict) mode
+- **Page Rules** root domain redirect to www
 
 ### Remote State
 
-Terraform state stored in S3 with DynamoDB locking:
+Terraform state is stored in S3 with DynamoDB locking:
 
 - **Bucket**: `portfolio-ankit-terraform-state`
 - **Lock Table**: `portfolio-ankit-terraform-locks`
 
 ## 🔄 CI/CD Pipeline
 
-See [docs/cicd.md](docs/cicd.md) for the full workflow reference.
+Pushes to `main` and pull requests run the full pipeline. All AWS access is keyless: every AWS-touching job assumes an IAM role via GitHub OIDC, so no static AWS keys are stored.
+
+```mermaid
+flowchart LR
+    TRIG[Push to main / PR]:::trigger --> CQ[Code Quality]
+    CQ --> SS[Security Scan]
+    SS --> TST[Tests]
+    TST --> TFV[Terraform Validate]
+    TFV --> BLD[Build]
+    BLD --> DEP[Deploy]
+    DEP --> SMK[Smoke Tests]
+    SMK --> NTF[Notify]
+
+    TFV -. OIDC .-> AWS[(AWS eu-north-1)]:::aws
+    DEP -. OIDC .-> AWS
+
+    classDef trigger fill:#2563eb,stroke:#1e40af,color:#fff
+    classDef aws fill:#ff9900,stroke:#cc7a00,color:#000
+```
+
+See [docs/cicd.md](docs/cicd.md) for the full workflow reference and stage detail.
 
 | Workflow | Trigger | Purpose |
 |----------|---------|---------|
-| **ci-cd.yml** | Push to `main` | Full pipeline: lint → scan → test → build → deploy → smoke test |
+| **ci-cd.yml** | Push / PR to `main` | Full pipeline: quality, scan, test, terraform, build, deploy, smoke |
 | **codeql.yml** | Push/PR to `main` + weekly | CodeQL security analysis for JavaScript |
-| **security-scan.yml** | Weekly + manual | Gitleaks (secrets) + Trivy (vulnerabilities) |
-| **security-audit.yml** | Push/PR (package changes) | npm audit + outdated packages report |
-| **resume-pdf.yml** | Push (resume HTML changes) + manual | Auto-regenerate Profile.pdf |
-| **resume-nordic-pdf.yml** | Push (resume-photo.html changes) + manual | Auto-regenerate Profile-Nordic.pdf |
+| **resume-pdf.yml** | Push (resume HTML changes) + manual | Regenerate Profile.pdf |
+| **resume-nordic-pdf.yml** | Push (resume-photo.html changes) + manual | Regenerate Profile-Nordic.pdf |
 | **agentic-resume.yml** | Push (`jds/*.txt`) + manual | 4-agent resume pipeline via Claude (Anthropic) |
 | **agentic-resume-foundry.yml** | Push (`jds/*.txt`) + manual | 4-agent resume pipeline via Azure OpenAI (Foundry) |
-| **dependency-update.yml** | Scheduled | Check for dependency updates |
+| **docs-lint.yml** | Push/PR (docs changes) | Markdown lint and link check |
 
 ### Dependabot
 
-- **npm** — Weekly Monday updates, grouped by dev/prod
-- **GitHub Actions** — Weekly Monday updates, grouped
-- **Labels** — `dependencies`, `ci`
-- **PR Limit** — 10 open PRs max
-
-### CI/CD Stages
-
-```text
-Code Quality → Security Scan → Tests → Terraform Validate → Build → Deploy → Smoke Tests → Notify
-```
+- **npm**: weekly Monday updates, grouped by dev/prod
+- **GitHub Actions**: weekly Monday updates, grouped
+- **Labels**: `dependencies`, `ci`
+- **PR limit**: 10 open PRs max
 
 ### Required Secrets
 
-See [docs/deployment.md](docs/deployment.md) for full secrets and IAM permissions.
+See [docs/deployment.md](docs/deployment.md) for the full secrets and IAM permissions.
+
+## 🔁 Application Lifecycle
+
+```mermaid
+flowchart LR
+    DEV[Local dev]:::dev --> VAL[npm run validate]
+    VAL --> PR[Open PR to main]
+    PR --> CI[CI checks]
+    CI --> MERGE[Merge to main]:::main
+    MERGE --> CD[Keyless deploy via Terraform]
+    CD --> INFRA[AWS Lambda + API Gateway]:::aws
+    INFRA --> CDN[Cloudflare DNS + SSL]
+    CDN --> PROD[Live: www.ankitraj.cloud]:::prod
+
+    classDef dev fill:#10b981,stroke:#047857,color:#fff
+    classDef main fill:#2563eb,stroke:#1e40af,color:#fff
+    classDef aws fill:#ff9900,stroke:#cc7a00,color:#000
+    classDef prod fill:#7c3aed,stroke:#5b21b6,color:#fff
+```
 
 ## 🤖 Agentic Resume Pipeline
 
-4-agent AI system (JD Analyzer → Experience Mapper → Resume Writer → ATS Scorer) generating ATS-optimized resume PDFs. Supports **Azure OpenAI (gpt-5.4)** and **Anthropic Claude**.
+A 4-agent AI system (JD Analyzer, Experience Mapper, Resume Writer, ATS Scorer) that generates ATS-optimized resume PDFs. Supports **Azure OpenAI (gpt-5.4)** and **Anthropic Claude**.
 
 ```bash
 # Run locally
 node scripts/agent/generate.js --jd scripts/agent/jds/microsoft-csa.txt --model gpt-5.4
 ```
 
-→ See [docs/agentic-pipeline.md](docs/agentic-pipeline.md) for full architecture, design decisions, and CI/CD integration.
+See [docs/agentic-pipeline.md](docs/agentic-pipeline.md) for full architecture, design decisions, and CI/CD integration.
 
 ## 📊 Architecture
 
-```text
-Cloudflare (DNS/SSL) → API Gateway (HTTP v2) → Lambda (Node.js 24) → SES / S3 / CloudWatch
+```mermaid
+flowchart LR
+    USER([User]) --> CF[Cloudflare<br/>DNS + SSL]
+    CF --> APIGW[API Gateway<br/>HTTP v2]
+    APIGW --> LAMBDA[Lambda<br/>Node.js 22.x + Express]
+    LAMBDA --> SES[SES<br/>contact email]
+    LAMBDA --> S3[S3<br/>static assets]
+    LAMBDA --> CW[CloudWatch<br/>logs + metrics]
+
+    classDef edge fill:#f97316,stroke:#c2410c,color:#fff
+    classDef aws fill:#ff9900,stroke:#cc7a00,color:#000
+    class CF edge
+    class APIGW,LAMBDA,SES,S3,CW aws
 ```
 
-→ See [docs/architecture.md](docs/architecture.md) for full diagrams and resource details.
+See [docs/architecture.md](docs/architecture.md) for full resource details.
 
 ## 🧪 Testing
 
@@ -271,19 +295,20 @@ npm test
 
 ## 🛡️ Security
 
-- **CodeQL** — Static analysis for JavaScript vulnerabilities
-- **Dependabot** — Automated dependency updates
-- **npm audit** — CI check for known CVEs (0 vulnerabilities)
-- **Gitleaks** — Secret detection in commits
-- **Trivy** — Container vulnerability scanning
-- **npm overrides** — Pinned `fast-xml-parser >=5.3.8` to patch CVEs
-- **IAM** — Least privilege roles for Lambda
-- **API Gateway** — Throttling configured
-- **HTTPS** — Full strict SSL via Cloudflare
+- **CodeQL** static analysis for JavaScript vulnerabilities
+- **Dependabot** automated dependency updates
+- **npm audit** CI check for known CVEs (0 vulnerabilities)
+- **Gitleaks** secret detection in commits
+- **Trivy** vulnerability scanning
+- **OIDC** keyless AWS deploys (no static credentials in CI)
+- **npm overrides** pinned `fast-xml-parser >=5.3.8` to patch CVEs
+- **IAM** least-privilege roles for Lambda and deploy
+- **API Gateway** throttling configured
+- **HTTPS** full strict SSL via Cloudflare
 
 ## 🚢 Deployment
 
-→ See [docs/deployment.md](docs/deployment.md) for full deployment guide, Terraform config, and infrastructure details.
+See [docs/deployment.md](docs/deployment.md) for the full deployment guide, Terraform config, and infrastructure details.
 
 ## 📝 Contributing
 
@@ -291,11 +316,11 @@ See [docs/contributing.md](docs/contributing.md) for guidelines.
 
 ## 📜 License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## 👤 Author
 
-**Ankit Raj** — Lead Solution Architect & Multi-Cloud Engineer
+**Ankit Raj**, Lead Solution Architect and Multi-Cloud Engineer
 
 - 🌐 Website: [ankitraj.cloud](https://www.ankitraj.cloud)
 - 💻 GitHub: [@restlessankyyy](https://github.com/restlessankyyy)
