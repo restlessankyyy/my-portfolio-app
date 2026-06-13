@@ -73,10 +73,10 @@ jobs:
 
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🟢 Setup Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -170,7 +170,7 @@ jobs:
 
       - name: 📤 Upload Resume PDF
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: resume-pdf
           path: public/assets/Profile-*.pdf
@@ -178,7 +178,7 @@ jobs:
 
       - name: 📤 Upload ATS Report
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ats-report
           path: public/assets/*-ats-report.json
@@ -186,7 +186,7 @@ jobs:
 
       - name: 📤 Upload Debug HTML
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: debug-html
           path: public/assets/resume-debug.html

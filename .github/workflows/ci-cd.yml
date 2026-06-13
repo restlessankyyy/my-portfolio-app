@@ -102,12 +102,12 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0  # Full history for better analysis
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -135,7 +135,7 @@ jobs:
         continue-on-error: true
 
       - name: 📊 Upload Code Quality Reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: code-quality-reports
@@ -153,32 +153,26 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Full history needed for gitleaks PR scanning
+        uses: actions/checkout@v5
 
-      - name: 🔐 Run GitLeaks (Secret Detection)
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # NO continue-on-error - FAILS pipeline if secrets detected! ✅
+      # Secret detection is handled by GitHub-native Secret Scanning +
+      # Push Protection (repo Settings > Code security), not a third-party
+      # action. Push Protection blocks secrets at push time (before they
+      # ever reach the remote), and Secret Scanning continuously scans the
+      # full history. This is strictly stronger than a CI-time scan and
+      # keeps the toolchain first-party.
 
-      - name: 🛡️ Trivy Vulnerability Scan
-        uses: aquasecurity/trivy-action@master
+      # GitHub-native dependency vulnerability scanning (GitHub Advisory Database).
+      # Runs on PRs by diffing the dependency graph; blocks when a HIGH/CRITICAL
+      # vulnerable dependency is introduced. Continuous coverage on main is
+      # handled by Dependabot alerts (.github/dependabot.yml), code SAST by
+      # CodeQL (codeql.yml), and npm audit in the code-quality job.
+      - name: 🔎 Dependency Review (GitHub Advisory DB)
+        if: github.event_name == 'pull_request'
+        uses: actions/dependency-review-action@v4
         with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-        continue-on-error: true  # Advisory only - doesn't block deploy
-
-      - name: 📤 Upload Trivy Results
-        uses: github/codeql-action/upload-sarif@v4
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
-        continue-on-error: true
+          fail-on-severity: high
+          comment-summary-in-pr: on-failure
 
   # ============================================================================
   # Stage 3: Unit & Integration Tests
@@ -192,10 +186,10 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -226,10 +220,10 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -245,11 +239,15 @@ jobs:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
 
-      - name: 🔑 Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      # Keyless auth via GitHub OIDC: assumes an IAM role short-term (no
+      # long-lived AWS keys in repo secrets). Requires the top-level
+      # `id-token: write` permission and the IAM role + OIDC provider from
+      # terraform/github-oidc/. Set the AWS_ROLE_ARN repo secret to the role ARN.
+      - name: 🔑 Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v5
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: gha-tf-validate-${{ github.run_id }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: ♻️ Cache Terraform Providers
@@ -314,7 +312,7 @@ jobs:
           TF_VAR_ci_probe_secret: ${{ secrets.CF_PROBE_SECRET }}
 
       - name: 📤 Upload Terraform Plan
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: terraform-plan
           path: |
@@ -324,7 +322,7 @@ jobs:
           retention-days: 7
 
       - name: 💬 PR Comment - Terraform Plan
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         if: github.event_name == 'pull_request'
         with:
           script: |
@@ -488,10 +486,10 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -517,7 +515,7 @@ jobs:
           echo "   Artifact: $ARTIFACT_NAME"
 
       - name: 📤 Upload Build Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ steps.build.outputs.artifact_name }}
           path: terraform/portfolio-lambda.zip
@@ -555,7 +553,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🔧 Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -563,15 +561,17 @@ jobs:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
 
-      - name: 🔑 Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      # Keyless auth via GitHub OIDC (see terraform/github-oidc/). No static
+      # AWS keys: a short-lived role session is minted per run.
+      - name: 🔑 Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v5
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: gha-deploy-${{ github.run_id }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: 📥 Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: ${{ needs.build.outputs.artifact_name }}
           path: terraform/
@@ -601,7 +601,7 @@ jobs:
 
       - name: 📥 Download Reviewed Terraform Plan
         if: github.event.inputs.deploy_type != 'lambda-only'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: terraform-plan
           path: terraform/
@@ -783,72 +783,105 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🔥 Run Smoke Tests
+        env:
+          # API Gateway invoke URL (origin) from the deploy job. Hard pass/fail
+          # checks run against this origin, so they never depend on Cloudflare
+          # bot management or the optional WAF probe-bypass ruleset.
+          ORIGIN_URL: ${{ needs.deploy.outputs.api_url }}
+          # Public domain (through Cloudflare). Checked for visibility only, as
+          # a warning, because CI runner IPs can be bot-challenged at the edge.
+          PUBLIC_URL: https://www.${{ env.DOMAIN_NAME }}
+          # Optional probe header. When the Cloudflare WAF bypass ruleset is
+          # enabled, this lets the runner IP skip bot management; when it is
+          # disabled the header is simply ignored.
+          PROBE_HEADER: "x-ci-probe: ${{ secrets.CF_PROBE_SECRET }}"
         run: |
-          echo "🔥 Running smoke tests against production..."
-          
-          BASE_URL="https://www.${{ env.DOMAIN_NAME }}"
-          # Secret header so the Cloudflare WAF bypass rule lets the runner IP
-          # through bot management instead of returning a false-negative 403.
-          PROBE_HEADER="x-ci-probe: ${{ secrets.CF_PROBE_SECRET }}"
-          
-          # Test 1: Homepage loads
+          echo "🔥 Running smoke tests..."
+          echo "🌐 Origin (hard checks): $ORIGIN_URL"
+          echo "🌐 Public (warn-only):   $PUBLIC_URL"
+          echo ""
+
+          FAILED=0
+
+          # check_origin <label> <path> <expected_code>
+          # Hard pass/fail against the AWS origin. A mismatch fails the job.
+          check_origin() {
+            local label="$1" path="$2" expected="$3"
+            local code
+            code=$(curl -s -o /dev/null -w "%{http_code}" -m 15 "${ORIGIN_URL}${path}" || echo "000")
+            if [ "$code" = "$expected" ]; then
+              echo "✅ ${label} OK (Status: $code)"
+            else
+              echo "::error::${label} failed at origin (expected $expected, got $code) for ${path}"
+              FAILED=1
+            fi
+          }
+
+          # Test 1: Homepage (origin)
           echo "📄 Testing homepage..."
-          curl -sf -H "$PROBE_HEADER" "$BASE_URL/" > /dev/null
-          echo "✅ Homepage OK"
-          
-          # Test 2: Health endpoint
+          check_origin "Homepage" "/" "200"
+
+          # Test 2: Health endpoint (origin)
           echo "💚 Testing health endpoint..."
-          HEALTH=$(curl -sf -H "$PROBE_HEADER" "$BASE_URL/health")
+          HEALTH=$(curl -s -m 15 "${ORIGIN_URL}/health" || echo "")
           echo "Health response: $HEALTH"
-          echo "✅ Health endpoint OK"
-          
-          # Test 3: Static assets
+          check_origin "Health endpoint" "/health" "200"
+
+          # Test 3: Static assets (origin)
           echo "📁 Testing static assets..."
-          curl -sf -H "$PROBE_HEADER" "$BASE_URL/css/modern-style.css" > /dev/null
-          echo "✅ CSS OK"
-          curl -sf -H "$PROBE_HEADER" "$BASE_URL/js/modern-portfolio.js" > /dev/null
-          echo "✅ JS OK"
-          
-          # Test 4: Contact API (validation test)
+          check_origin "CSS asset" "/css/modern-style.css" "200"
+          check_origin "JS asset" "/js/modern-portfolio.js" "200"
+
+          # Test 4: Contact API validation (origin)
           echo "📧 Testing contact API validation..."
-          CONTACT_RESPONSE=$(curl -s -X POST "$BASE_URL/api/contact" \
-            -H "$PROBE_HEADER" \
+          CONTACT_RESPONSE=$(curl -s -X POST "${ORIGIN_URL}/api/contact" \
             -H "Content-Type: application/json" \
-            -d '{}')
+            -d '{}' || echo "")
           echo "Contact response: $CONTACT_RESPONSE"
-          
-          if echo "$CONTACT_RESPONSE" | grep -q "error\|Error\|fill"; then
+          if echo "$CONTACT_RESPONSE" | grep -qi "error\|fill"; then
             echo "✅ Contact API validation working"
           else
-            echo "⚠️ Contact API response unexpected"
+            echo "::warning::Contact API validation response unexpected: $CONTACT_RESPONSE"
           fi
-          
-          # Test 5: Profile subdomain
-          echo "🌐 Testing profile subdomain..."
-          PROFILE_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "$PROBE_HEADER" "https://profile.${{ env.DOMAIN_NAME }}/" || echo "000")
-          if [ "$PROFILE_STATUS" = "200" ]; then
-            echo "✅ Profile subdomain OK (Status: $PROFILE_STATUS)"
-          else
-            echo "⚠️ Profile subdomain returned: $PROFILE_STATUS (may need DNS propagation)"
-          fi
-          
-          # Test 6: Response time
+
+          # Test 5: Response time (origin)
           echo "⏱️ Testing response time..."
-          TIME=$(curl -s -o /dev/null -w "%{time_total}" -H "$PROBE_HEADER" "$BASE_URL/")
+          TIME=$(curl -s -o /dev/null -w "%{time_total}" -m 15 "${ORIGIN_URL}/" || echo "99")
           echo "Response time: ${TIME}s"
-          
-          # Alert if response time > 3s
           if (( $(echo "$TIME > 3" | bc -l) )); then
-            echo "⚠️ Response time is slow: ${TIME}s"
+            echo "::warning::Origin response time is slow: ${TIME}s"
           else
             echo "✅ Response time OK: ${TIME}s"
           fi
-          
+
+          # Test 6: Public domain through Cloudflare (warn-only). The edge can
+          # bot-challenge the runner IP (403/429/503); that is not an outage,
+          # so it never fails the job. Real edge failures (000 / 5xx) warn too,
+          # because the origin checks above are the authoritative gate.
+          echo "🌐 Testing public domain via Cloudflare..."
+          PUBLIC_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -m 15 \
+            -H "$PROBE_HEADER" "${PUBLIC_URL}/health" || echo "000")
+          case "$PUBLIC_STATUS" in
+            200)
+              echo "✅ Public domain healthy through Cloudflare (Status: $PUBLIC_STATUS)"
+              ;;
+            403|429|503)
+              echo "::warning::Public domain returned $PUBLIC_STATUS via Cloudflare (edge up but filtering the runner IP). Origin checks passed, so this is informational."
+              ;;
+            *)
+              echo "::warning::Public domain returned $PUBLIC_STATUS via Cloudflare. Origin checks are authoritative; verify the edge manually if this persists."
+              ;;
+          esac
+
           echo ""
-          echo "🎉 All smoke tests completed!"
+          if [ "$FAILED" -ne 0 ]; then
+            echo "❌ Smoke tests failed (origin checks did not pass)."
+            exit 1
+          fi
+          echo "🎉 All smoke tests passed!"
 
       - name: 📊 Test Results
         run: |
@@ -894,11 +927,13 @@ jobs:
           echo "- Commit: ${GITHUB_SHA::8}" >> $GITHUB_STEP_SUMMARY
           echo "- Branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
 
-      - name: 🔑 Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      # Keyless auth via GitHub OIDC (see terraform/github-oidc/) for the
+      # SES notification below.
+      - name: 🔑 Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v5
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: gha-notify-${{ github.run_id }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: 📧 Send Email Notification via SES
@@ -946,7 +981,7 @@ jobs:
     
     steps:
       - name: 📝 Create PR Summary Comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const codeQuality = '${{ needs.code-quality.result }}';

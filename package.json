@@ -37,7 +37,7 @@
   "author": "Ankit Raj <rajankit749@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.90.0",
+    "@anthropic-ai/sdk": "^0.104.1",
     "@aws-sdk/client-ses": "^3.999.0",
     "@vendia/serverless-express": "^4.12.6",
     "express": "^4.19.2",
@@ -55,13 +55,13 @@
     "openai": "^6.32.0",
     "prettier": "^3.1.0",
     "puppeteer": "^24.37.5",
-    "serverless": "^4.19.1",
+    "serverless": "^4.37.0",
     "serverless-http": "^4.0.0",
     "uglify-js": "^3.17.0"
   },
   "engines": {
-    "node": ">=22.0.0",
-    "npm": ">=10.0.0"
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
   },
   "repository": {
     "type": "git",

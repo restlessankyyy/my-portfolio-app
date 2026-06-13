@@ -48,7 +48,7 @@ npm run deploy:destroy
 
 ## Required Secrets
 
-- `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`
+- `AWS_ROLE_ARN` (GitHub OIDC role, keyless; see `terraform/github-oidc/`)
 - `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ZONE_ID`, `CLOUDFLARE_ACCOUNT_ID`
 
 ## Notes
