@@ -33,7 +33,7 @@ This repository implements an **enterprise-grade CI/CD pipeline** using GitHub A
 | Stage | Job | Description |
 |-------|-----|-------------|
 | 1 | `code-quality` | ESLint, Prettier, npm audit |
-| 2 | `security-scan` | GitLeaks, Trivy vulnerability scanning |
+| 2 | `security-scan` | Dependency Review (GitHub Advisory DB) + native Secret Scanning |
 | 3 | `test` | Unit tests, integration tests |
 | 4 | `terraform-validate` | IaC validation, format check, plan |
 | 5 | `build` | Lambda package creation, artifact upload |
@@ -47,16 +47,15 @@ This repository implements an **enterprise-grade CI/CD pipeline** using GitHub A
 - Pull requests to `main`
 - Manual workflow dispatch
 
-### 2. Security Scan (`security-scan.yml`)
+### 2. Security Scanning (GitHub-native)
 
-**Scheduled weekly security scanning:**
+**Continuous, first-party security coverage:**
 
-- 📦 NPM dependency audit
-- 🔐 Secret detection (GitLeaks)
-- 🛡️ Trivy vulnerability scanner
-- 🏗️ Checkov IaC security scan
-
-**Schedule:** Every Monday at 9:00 AM UTC
+- 📦 NPM dependency audit (`code-quality` job)
+- 🔎 Dependency Review on PRs (GitHub Advisory Database)
+- 🔐 Secret Scanning + Push Protection (repo Settings)
+- 🤖 Dependabot alerts + updates
+- 🧠 CodeQL SAST (`codeql.yml`)
 
 ### 3. Dependency Update (`dependency-update.yml`)
 

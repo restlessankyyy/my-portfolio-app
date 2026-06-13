@@ -80,7 +80,7 @@ lambda.js                → AWS Lambda handler (@vendia/serverless-express)
 
 - Run `npm run validate` before committing (lint + format check + tests)
 - ESLint for JS, Prettier for formatting
-- Security: CodeQL, Dependabot, npm audit, Gitleaks, Trivy all run in CI
+- Security (all GitHub-native): CodeQL, Dependabot, npm audit, Dependency Review, Secret Scanning + Push Protection
 
 ### Git
 
