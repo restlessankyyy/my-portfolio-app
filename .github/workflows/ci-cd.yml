@@ -731,7 +731,7 @@ jobs:
               echo "::warning::Public domain returned $PUBLIC_STATUS via Cloudflare (edge is up but filtering the runner IP; check the CF_PROBE_SECRET WAF rule). Origin is healthy, so the deploy is considered successful."
               ;;
             000|5*)
-              echo "❌ Public domain check failed at the Cloudflare edge (Status: $PUBLIC_STATUS) — DNS/TLS down or edge cannot reach origin"
+              echo "❌ Public domain check failed at the Cloudflare edge (Status: $PUBLIC_STATUS): DNS/TLS down or edge cannot reach origin"
               exit 1
               ;;
             *)
