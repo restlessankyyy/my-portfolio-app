@@ -21,13 +21,16 @@ variable "role_name" {
 variable "subject_claims" {
   description = <<-EOT
     Allowed GitHub OIDC `sub` claims that may assume the deploy role.
-    Defaults to the main branch and any pull request from this repo. Tighten
-    or widen as needed (for example, add an environment claim).
+    Covers the main branch, pull requests, and the deployment environments
+    (jobs that target a GitHub Environment get an `environment:` sub claim
+    instead of a `ref:` one). Tighten or widen as needed.
   EOT
   type        = list(string)
   default = [
     "repo:restlessankyyy/my-portfolio-app:ref:refs/heads/main",
     "repo:restlessankyyy/my-portfolio-app:pull_request",
+    "repo:restlessankyyy/my-portfolio-app:environment:production",
+    "repo:restlessankyyy/my-portfolio-app:environment:staging",
   ]
 }
 

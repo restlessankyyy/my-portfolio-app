@@ -144,3 +144,6 @@ dist
 .pnp.*
 .DS_Store
 modernise.js
+
+# Accidentally nested git repo (not a submodule)
+restlessankyyy/
