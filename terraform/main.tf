@@ -140,7 +140,7 @@ resource "aws_lambda_function" "portfolio" {
 # CloudWatch Log Group
 resource "aws_cloudwatch_log_group" "lambda_logs" {
   name              = "/aws/lambda/${var.project_name}-${var.environment}-${random_string.suffix.result}"
-  retention_in_days = 14
+  retention_in_days = var.log_retention_days
 }
 
 # API Gateway
@@ -185,7 +185,47 @@ resource "aws_apigatewayv2_stage" "portfolio_stage" {
 # CloudWatch Log Group for API Gateway
 resource "aws_cloudwatch_log_group" "api_gw_logs" {
   name              = "/aws/apigateway/${var.project_name}-${var.environment}-${random_string.suffix.result}"
-  retention_in_days = 14
+  retention_in_days = var.log_retention_days
+}
+
+# ==================== Cost Guardrail ====================
+
+# Monthly cost budget with email alerts. Catches unexpected spend (e.g. abusive
+# traffic inflating API Gateway / data-transfer charges on the public endpoint)
+# well before it becomes material. Budgets and their notifications are free.
+resource "aws_budgets_budget" "monthly_cost" {
+  name         = "${var.project_name}-monthly-cost"
+  budget_type  = "COST"
+  limit_amount = tostring(var.monthly_budget_limit_usd)
+  limit_unit   = "USD"
+  time_unit    = "MONTHLY"
+
+  # Alert when actual spend reaches 80% of the limit.
+  notification {
+    comparison_operator        = "GREATER_THAN"
+    threshold                  = 80
+    threshold_type             = "PERCENTAGE"
+    notification_type          = "ACTUAL"
+    subscriber_email_addresses = var.budget_alert_emails
+  }
+
+  # Alert when actual spend exceeds 100% of the limit.
+  notification {
+    comparison_operator        = "GREATER_THAN"
+    threshold                  = 100
+    threshold_type             = "PERCENTAGE"
+    notification_type          = "ACTUAL"
+    subscriber_email_addresses = var.budget_alert_emails
+  }
+
+  # Early warning: alert when forecasted month-end spend exceeds the limit.
+  notification {
+    comparison_operator        = "GREATER_THAN"
+    threshold                  = 100
+    threshold_type             = "PERCENTAGE"
+    notification_type          = "FORECASTED"
+    subscriber_email_addresses = var.budget_alert_emails
+  }
 }
 
 # API Gateway Integration

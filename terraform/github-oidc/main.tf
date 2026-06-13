@@ -133,6 +133,23 @@ data "aws_iam_policy_document" "deploy" {
     resources = ["*"]
   }
 
+  # Manage the monthly cost budget and its alert notifications. The Budgets API
+  # is global and does not support resource-level permissions, so the actions
+  # are granted on "*".
+  statement {
+    sid    = "Budgets"
+    effect = "Allow"
+    actions = [
+      "budgets:ViewBudget",
+      "budgets:ModifyBudget",
+      "budgets:CreateBudgetAction",
+      "budgets:DeleteBudgetAction",
+      "budgets:UpdateBudgetAction",
+      "budgets:DescribeBudgetActionsForBudget",
+    ]
+    resources = ["*"]
+  }
+
   statement {
     sid    = "AcmRead"
     effect = "Allow"
