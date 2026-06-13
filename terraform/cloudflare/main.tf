@@ -85,6 +85,12 @@ variable "ci_probe_secret" {
   default     = ""
 }
 
+variable "enable_ci_probe_ruleset" {
+  description = "Create the CI probe WAF bypass ruleset. Requires the Cloudflare API token to have the Zone > Firewall Services > Edit (rulesets) permission. Leave false when the token only has DNS edit scope; the origin-gated CI health check works without this rule."
+  type        = bool
+  default     = false
+}
+
 # ==================== SSL/TLS Settings ====================
 
 # Set SSL mode to Full (Cloudflare connects to origin via HTTPS)
@@ -240,9 +246,11 @@ resource "cloudflare_record" "microsoft_domain_verification" {
 # smoke tests even when the edge is healthy. The probe sends a secret header;
 # this rule skips security products only for requests carrying the correct
 # secret, so genuine edge errors (5xx / 52x / connection failures) are still
-# caught by the pipeline. Count-gated so an empty secret disables the rule.
+# caught by the pipeline. Opt-in: requires both a secret and a token granted
+# the Zone > Firewall Services > Edit permission, otherwise the apply fails
+# with Cloudflare Authentication error (10000).
 resource "cloudflare_ruleset" "ci_probe_bypass" {
-  count = var.ci_probe_secret != "" ? 1 : 0
+  count = var.enable_ci_probe_ruleset && var.ci_probe_secret != "" ? 1 : 0
 
   zone_id     = var.cloudflare_zone_id
   name        = "CI probe WAF bypass"
