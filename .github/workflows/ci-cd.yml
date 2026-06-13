@@ -311,6 +311,7 @@ jobs:
           TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           TF_VAR_custom_domain_target: "d-hctzaliyt6.execute-api.eu-north-1.amazonaws.com"
           TF_VAR_profile_domain_target: ""
+          TF_VAR_ci_probe_secret: ${{ secrets.CF_PROBE_SECRET }}
 
       - name: 📤 Upload Terraform Plan
         uses: actions/upload-artifact@v4
@@ -363,6 +364,38 @@ jobs:
               return `🔵 **${label}:** review plan below`;
             };
 
+            // Parse the raw plan into a per-resource change list so reviewers
+            // can see exactly what changes without expanding the raw output.
+            const changeRows = (text, label) => {
+              if (!text) return [];
+              const re = /^\s*#\s+(.+?)\s+(?:will be|must be)\s+(created|destroyed|replaced|updated in-place)/gm;
+              const rows = [];
+              let m;
+              while ((m = re.exec(text)) !== null) {
+                const action = m[2];
+                const sym = action === 'created' ? '🟢 create'
+                  : action === 'destroyed' ? '🔴 destroy'
+                  : action === 'replaced' ? '🟠 replace'
+                  : '🟡 update';
+                rows.push(`| ${label} | \`${m[1]}\` | ${sym} |`);
+              }
+              return rows;
+            };
+
+            const changeTable = () => {
+              const rows = [...changeRows(awsPlan, 'AWS'), ...changeRows(cfPlan, 'Cloudflare')];
+              if (!rows.length) {
+                return ['_No resource changes planned. Both providers match their configuration._'];
+              }
+              return [
+                '### 📋 Planned resource changes',
+                '',
+                '| Provider | Resource | Action |',
+                '| :--- | :--- | :---: |',
+                ...rows,
+              ];
+            };
+
             const fmtBlock = (text) => {
               if (!text) return '_No plan output captured._';
               const body = text.length > MAX
@@ -390,6 +423,8 @@ jobs:
               `| Init | ${icon('${{ steps.init.outcome }}')} | ${icon('${{ steps.cf_init.outcome }}')} |`,
               `| Validate | ${icon('${{ steps.validate.outcome }}')} | ${icon('${{ steps.cf_validate.outcome }}')} |`,
               `| Plan | ${icon('${{ steps.plan.outcome }}')} | ${icon('${{ steps.cf_plan.outcome }}')} |`,
+              '',
+              ...changeTable(),
               '',
               '<details><summary>📄 AWS plan output</summary>',
               '',
@@ -605,6 +640,7 @@ jobs:
           TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           TF_VAR_custom_domain_target: "d-hctzaliyt6.execute-api.eu-north-1.amazonaws.com"
           TF_VAR_profile_domain_target: ${{ env.PROFILE_DOMAIN_TARGET }}
+          TF_VAR_ci_probe_secret: ${{ secrets.CF_PROBE_SECRET }}
 
       - name: 🚀 Deploy Lambda Function
         id: deploy
@@ -677,14 +713,31 @@ jobs:
             exit 1
           fi
 
-          # Public domain check (through Cloudflare) is informational only.
-          # Do not fail the deploy on this: Cloudflare may 403 the runner IP.
-          PUBLIC_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://www.${{ env.DOMAIN_NAME }}/health" || echo "000")
-          if [ "$PUBLIC_STATUS" = "200" ]; then
-            echo "✅ Public domain reachable through Cloudflare (Status: $PUBLIC_STATUS)"
-          else
-            echo "::warning::Public domain returned $PUBLIC_STATUS via Cloudflare (likely WAF/bot-management blocking the runner IP). Origin is healthy, so the deploy is considered successful."
-          fi
+          # Public domain check (through Cloudflare). The probe sends a secret
+          # header that a Cloudflare WAF rule (terraform/cloudflare) uses to skip
+          # bot management, so a CI runner IP is not falsely blocked. We classify
+          # the result: 200 = healthy; 403/429/503 = edge is up but still
+          # filtering (warn only); 000 / 5xx / 52x = a real edge or origin
+          # failure that must fail the deploy.
+          PUBLIC_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "x-ci-probe: ${{ secrets.CF_PROBE_SECRET }}" \
+            "https://www.${{ env.DOMAIN_NAME }}/health" || echo "000")
+
+          case "$PUBLIC_STATUS" in
+            200)
+              echo "✅ Public domain healthy through Cloudflare (Status: $PUBLIC_STATUS)"
+              ;;
+            403|429|503)
+              echo "::warning::Public domain returned $PUBLIC_STATUS via Cloudflare (edge is up but filtering the runner IP; check the CF_PROBE_SECRET WAF rule). Origin is healthy, so the deploy is considered successful."
+              ;;
+            000|5*)
+              echo "❌ Public domain check failed at the Cloudflare edge (Status: $PUBLIC_STATUS) — DNS/TLS down or edge cannot reach origin"
+              exit 1
+              ;;
+            *)
+              echo "::warning::Public domain returned unexpected status $PUBLIC_STATUS via Cloudflare. Origin is healthy, so the deploy is considered successful."
+              ;;
+          esac
 
           echo "✅ All health checks passed!"
 
@@ -737,28 +790,32 @@ jobs:
           echo "🔥 Running smoke tests against production..."
           
           BASE_URL="https://www.${{ env.DOMAIN_NAME }}"
+          # Secret header so the Cloudflare WAF bypass rule lets the runner IP
+          # through bot management instead of returning a false-negative 403.
+          PROBE_HEADER="x-ci-probe: ${{ secrets.CF_PROBE_SECRET }}"
           
           # Test 1: Homepage loads
           echo "📄 Testing homepage..."
-          curl -sf "$BASE_URL/" > /dev/null
+          curl -sf -H "$PROBE_HEADER" "$BASE_URL/" > /dev/null
           echo "✅ Homepage OK"
           
           # Test 2: Health endpoint
           echo "💚 Testing health endpoint..."
-          HEALTH=$(curl -sf "$BASE_URL/health")
+          HEALTH=$(curl -sf -H "$PROBE_HEADER" "$BASE_URL/health")
           echo "Health response: $HEALTH"
           echo "✅ Health endpoint OK"
           
           # Test 3: Static assets
           echo "📁 Testing static assets..."
-          curl -sf "$BASE_URL/css/modern-style.css" > /dev/null
+          curl -sf -H "$PROBE_HEADER" "$BASE_URL/css/modern-style.css" > /dev/null
           echo "✅ CSS OK"
-          curl -sf "$BASE_URL/js/modern-portfolio.js" > /dev/null
+          curl -sf -H "$PROBE_HEADER" "$BASE_URL/js/modern-portfolio.js" > /dev/null
           echo "✅ JS OK"
           
           # Test 4: Contact API (validation test)
           echo "📧 Testing contact API validation..."
           CONTACT_RESPONSE=$(curl -s -X POST "$BASE_URL/api/contact" \
+            -H "$PROBE_HEADER" \
             -H "Content-Type: application/json" \
             -d '{}')
           echo "Contact response: $CONTACT_RESPONSE"
@@ -771,7 +828,7 @@ jobs:
           
           # Test 5: Profile subdomain
           echo "🌐 Testing profile subdomain..."
-          PROFILE_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://profile.${{ env.DOMAIN_NAME }}/" || echo "000")
+          PROFILE_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "$PROBE_HEADER" "https://profile.${{ env.DOMAIN_NAME }}/" || echo "000")
           if [ "$PROFILE_STATUS" = "200" ]; then
             echo "✅ Profile subdomain OK (Status: $PROFILE_STATUS)"
           else
@@ -780,7 +837,7 @@ jobs:
           
           # Test 6: Response time
           echo "⏱️ Testing response time..."
-          TIME=$(curl -s -o /dev/null -w "%{time_total}" "$BASE_URL/")
+          TIME=$(curl -s -o /dev/null -w "%{time_total}" -H "$PROBE_HEADER" "$BASE_URL/")
           echo "Response time: ${TIME}s"
           
           # Alert if response time > 3s
