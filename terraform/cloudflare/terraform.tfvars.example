@@ -25,3 +25,10 @@ acm_validation_value = "_a21d0ea08f7f5d4ec86278a9b3b41242.jkddzztszm.acm-validat
 # Generate a random value (e.g. openssl rand -hex 24) and keep it secret.
 # Leave empty to disable the WAF bypass rule.
 ci_probe_secret = "YOUR_CI_PROBE_SECRET"
+
+# Opt-in toggle for the CI probe WAF bypass ruleset. Keep false unless the
+# Cloudflare API token has the "Zone > Firewall Services > Edit" (rulesets)
+# permission; otherwise the apply fails with Authentication error (10000).
+# The origin-gated CI health check works without this rule, so leaving it off
+# is the safe default.
+enable_ci_probe_ruleset = false
