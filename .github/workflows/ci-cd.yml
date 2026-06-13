@@ -638,38 +638,54 @@ jobs:
       - name: 🧪 Post-Deployment Health Check
         id: health_check
         run: |
-          echo "🔍 Running health checks..."
-          
+          echo "🔍 Running health checks against the API Gateway origin..."
+
+          # Gate on the API Gateway invoke URL (origin), not the Cloudflare-fronted
+          # domain. Cloudflare WAF/bot-management can return 403 to CI runner IPs,
+          # which produced false-negative deploy failures even when the app is healthy.
+          ORIGIN_URL="${{ steps.deploy.outputs.api_url }}"
+          echo "🌐 Origin: $ORIGIN_URL"
+
           MAX_RETRIES=5
           RETRY_COUNT=0
-          
+          HTTP_STATUS="000"
+
           while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://www.${{ env.DOMAIN_NAME }}/health" || echo "000")
-            
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$ORIGIN_URL/health" || echo "000")
+
             if [ "$HTTP_STATUS" = "200" ]; then
-              echo "✅ Health check passed (Status: $HTTP_STATUS)"
+              echo "✅ Origin health check passed (Status: $HTTP_STATUS)"
               break
             fi
-            
+
             RETRY_COUNT=$((RETRY_COUNT + 1))
             echo "⏳ Retry $RETRY_COUNT/$MAX_RETRIES (Status: $HTTP_STATUS)"
             sleep 10
           done
-          
+
           if [ "$HTTP_STATUS" != "200" ]; then
-            echo "❌ Health check failed after $MAX_RETRIES retries"
+            echo "❌ Origin health check failed after $MAX_RETRIES retries"
             exit 1
           fi
-          
-          # Test main page
-          MAIN_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://www.${{ env.DOMAIN_NAME }}/" || echo "000")
-          echo "📄 Main page status: $MAIN_STATUS"
-          
+
+          # Test the origin main page (also bypasses Cloudflare)
+          MAIN_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$ORIGIN_URL/" || echo "000")
+          echo "📄 Origin main page status: $MAIN_STATUS"
+
           if [ "$MAIN_STATUS" != "200" ]; then
-            echo "❌ Main page check failed"
+            echo "❌ Origin main page check failed"
             exit 1
           fi
-          
+
+          # Public domain check (through Cloudflare) is informational only.
+          # Do not fail the deploy on this: Cloudflare may 403 the runner IP.
+          PUBLIC_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://www.${{ env.DOMAIN_NAME }}/health" || echo "000")
+          if [ "$PUBLIC_STATUS" = "200" ]; then
+            echo "✅ Public domain reachable through Cloudflare (Status: $PUBLIC_STATUS)"
+          else
+            echo "::warning::Public domain returned $PUBLIC_STATUS via Cloudflare (likely WAF/bot-management blocking the runner IP). Origin is healthy, so the deploy is considered successful."
+          fi
+
           echo "✅ All health checks passed!"
 
       - name: 🔙 Rollback on Failure
