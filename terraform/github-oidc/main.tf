@@ -156,6 +156,11 @@ data "aws_iam_policy_document" "deploy" {
       "budgets:DeleteBudgetAction",
       "budgets:UpdateBudgetAction",
       "budgets:DescribeBudgetActionsForBudget",
+      # The provider applies default_tags to the budget, so creating or updating
+      # it calls TagResource/UntagResource on the budget ARN.
+      "budgets:TagResource",
+      "budgets:UntagResource",
+      "budgets:ListTagsForResource",
     ]
     resources = ["*"]
   }
