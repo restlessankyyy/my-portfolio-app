@@ -44,53 +44,16 @@ Premium cinematic portfolio website for **Ankit Raj**, Lead Solution Architect a
 
 ## 📁 Project Structure
 
-```text
-my-portfolio-app/
-├── public/                     # Static assets served by Express
-│   ├── index.html              # Main cinematic portfolio page
-│   ├── landing.html            # Landing variant
-│   ├── assets/                 # Generated resume PDFs + ATS reports
-│   ├── css/                    # modern-style.css (+ minified)
-│   ├── js/                     # modern-portfolio.js, enhanced-portfolio.js, emailjs-config.js
-│   └── img/                    # Profile photos + certification badges
-├── scripts/
-│   ├── resume-aws-sa.html      # Primary resume (AWS Solutions Architect)
-│   ├── resume-microsoft-csa.html # Microsoft CSA resume variant
-│   ├── resume-photo.html       # Nordic resume with photo
-│   ├── generate-pdf-*.js       # Puppeteer HTML to PDF generators
-│   ├── build-lambda.sh         # Lambda package builder
-│   ├── deploy.sh / destroy.sh  # Deploy and teardown scripts
-│   └── agent/                  # Agentic Resume Pipeline (4 agents)
-│       ├── generate.js         # Orchestrator and CLI entry point
-│       ├── jd-analyzer.js      # Agent 1: parse JD to requirements
-│       ├── experience-mapper.js # Agent 2: map profile to JD bullets
-│       ├── resume-writer.js    # Agent 3: enhance bullets (ENHANCE mode)
-│       ├── ats-scorer.js       # Agent 4: score resume vs JD
-│       ├── client.js           # Unified AI client (Azure OpenAI + Anthropic)
-│       ├── candidate-profile.yaml # Single source of truth for candidate data
-│       ├── templates/          # Handlebars resume template
-│       └── jds/                # Job descriptions (adding a .txt triggers pipeline)
-├── terraform/                  # Infrastructure as Code
-│   ├── main.tf                 # AWS resources (Lambda, API GW, IAM, S3)
-│   ├── variables.tf / outputs.tf
-│   ├── github-oidc/            # OIDC provider + keyless deploy role
-│   ├── cloudflare/             # Cloudflare DNS config
-│   └── backend/                # S3 remote state config
-├── docs/                       # Documentation
-│   ├── architecture.md         # System architecture (AWS + Cloudflare)
-│   ├── agentic-pipeline.md     # 4-agent AI resume pipeline
-│   ├── cicd.md                 # CI/CD workflows reference
-│   ├── deployment.md           # Deployment guide
-│   └── contributing.md         # Contributing guidelines
-├── .github/
-│   ├── dependabot.yml          # Weekly npm + Actions dependency updates
-│   └── workflows/              # 7 GitHub Actions workflows
-├── tests/server.test.js        # Unit tests (8 cases)
-├── server.js                   # Express server (port 3000)
-├── lambda.js                   # AWS Lambda handler
-├── Dockerfile                  # Docker image (node:24-alpine)
-└── package.json                # Dependencies + npm overrides
-```
+| Path | Purpose |
+|------|---------|
+| `public/` | Static frontend served by Express (HTML, CSS, JS, images) |
+| `scripts/` | Resume HTML templates and Puppeteer PDF generators |
+| `scripts/agent/` | Agentic Resume Pipeline (4 agents: JD Analyzer, Experience Mapper, Resume Writer, ATS Scorer) |
+| `terraform/` | Infrastructure as Code (AWS, Cloudflare, OIDC, remote state) |
+| `docs/` | Architecture, pipeline, CI/CD, and deployment guides |
+| `.github/` | GitHub Actions workflows and Dependabot config |
+| `tests/` | Unit tests (8 cases) |
+| `server.js` / `lambda.js` | Express server and AWS Lambda handler |
 
 ## 📚 Documentation
 
