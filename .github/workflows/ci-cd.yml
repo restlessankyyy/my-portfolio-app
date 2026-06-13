@@ -465,17 +465,44 @@ jobs:
             --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
             --query 'Configuration.Version' \
             --output text 2>/dev/null || echo "NONE")
-          
+
           echo "previous_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+          # Download the currently-live code so we can truly restore it on failure
+          CODE_URL=$(aws lambda get-function \
+            --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
+            --query 'Code.Location' \
+            --output text 2>/dev/null || echo "")
+          if [ -n "$CODE_URL" ]; then
+            curl -sf "$CODE_URL" -o /tmp/rollback.zip \
+              && echo "📸 Saved rollback artifact ($(du -h /tmp/rollback.zip | cut -f1))" \
+              || echo "⚠️ Could not save rollback artifact"
+          fi
           echo "📸 Backed up current version: $CURRENT_VERSION"
+
+      - name: 📥 Download Reviewed Terraform Plan
+        if: github.event.inputs.deploy_type != 'lambda-only'
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-plan
+          path: terraform/
+        continue-on-error: true
 
       - name: 🏗️ Deploy AWS Infrastructure
         if: github.event.inputs.deploy_type != 'lambda-only'
         run: |
           cd terraform
           terraform init -input=false
-          terraform apply -auto-approve -input=false
-          
+          # Apply the exact plan that was reviewed in terraform-validate.
+          # Fall back to a fresh plan+apply if the artifact is unavailable.
+          if [ -f tfplan ]; then
+            echo "📋 Applying reviewed plan (tfplan)"
+            terraform apply -input=false tfplan
+          else
+            echo "⚠️ No saved plan found; planning and applying fresh"
+            terraform apply -auto-approve -input=false
+          fi
+
           # Capture profile domain target for Cloudflare
           PROFILE_TARGET=$(terraform output -raw profile_domain_target 2>/dev/null || echo "")
           echo "PROFILE_DOMAIN_TARGET=$PROFILE_TARGET" >> $GITHUB_ENV
@@ -564,12 +591,19 @@ jobs:
       - name: 🔙 Rollback on Failure
         if: failure() && steps.backup.outputs.previous_version != 'NONE'
         run: |
-          echo "🔙 Rolling back to version: ${{ steps.backup.outputs.previous_version }}"
-          
-          # This would require Lambda versioning to be properly set up
-          # For now, we log the rollback attempt
-          echo "::error::Deployment failed! Manual rollback may be required."
-          echo "Previous version was: ${{ steps.backup.outputs.previous_version }}"
+          echo "🔙 Rolling back Lambda to pre-deployment code (version ${{ steps.backup.outputs.previous_version }})"
+          if [ -f /tmp/rollback.zip ]; then
+            aws lambda update-function-code \
+              --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
+              --zip-file fileb:///tmp/rollback.zip \
+              --publish
+            aws lambda wait function-updated \
+              --function-name ${{ env.LAMBDA_FUNCTION_NAME }}
+            echo "✅ Rollback complete — restored previous Lambda code"
+          else
+            echo "::error::No rollback artifact available — manual rollback required."
+            exit 1
+          fi
 
       - name: 📊 Deployment Summary
         if: success()
