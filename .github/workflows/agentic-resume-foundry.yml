@@ -88,7 +88,17 @@ jobs:
       - name: 📦 Install dependencies
         run: npm ci
 
+      - name: ♻️ Cache Puppeteer Chromium
+        id: puppeteer-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/puppeteer
+          key: puppeteer-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            puppeteer-${{ runner.os }}-
+
       - name: 🔧 Install Chromium for Puppeteer
+        if: steps.puppeteer-cache.outputs.cache-hit != 'true'
         run: npx puppeteer browsers install chrome
 
       # If JD text was pasted via workflow_dispatch, write it to a temp file
