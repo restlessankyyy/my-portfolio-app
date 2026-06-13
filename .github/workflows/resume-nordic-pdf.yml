@@ -25,6 +25,14 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Cache Puppeteer Chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/puppeteer
+          key: puppeteer-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            puppeteer-${{ runner.os }}-
+
       - name: Install dependencies
         run: npm ci
 
@@ -36,7 +44,7 @@ jobs:
         with:
           name: Profile-Nordic
           path: public/assets/Profile-Nordic.pdf
-          retention-days: 90
+          retention-days: 14
 
       - name: Check for changes
         id: diff
