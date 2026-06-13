@@ -279,11 +279,20 @@ jobs:
       - name: 📊 Terraform Plan
         id: plan
         run: |
+          set +e
           terraform plan -no-color -input=false -out=tfplan \
             -detailed-exitcode 2>&1 | tee plan.txt
-          echo "exitcode=$?" >> $GITHUB_OUTPUT
+          code=${PIPESTATUS[0]}
+          echo "exitcode=$code" >> $GITHUB_OUTPUT
+          # detailed-exitcode: 0 = no changes, 2 = changes present, 1 = error.
+          # Fail fast on a genuine planning error so an incomplete plan is never
+          # uploaded as an artifact and applied by the deploy job.
+          if [ "$code" -eq 1 ]; then
+            echo "::error::Terraform plan failed (exit code 1); not uploading an incomplete plan."
+            exit 1
+          fi
+          exit 0
         working-directory: terraform
-        continue-on-error: true
         env:
           TF_VAR_aws_region: ${{ env.AWS_REGION }}
 
