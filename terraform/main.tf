@@ -143,6 +143,22 @@ resource "aws_cloudwatch_log_group" "lambda_logs" {
   retention_in_days = var.log_retention_days
 }
 
+# CloudWatch Log Group for API Gateway access logs.
+#
+# API Gateway v2 does not support clearing access logging in place: an empty
+# AccessLogSettings is treated as "no change" and empty destination/format
+# values are rejected, so logging that was once enabled cannot be removed
+# without recreating the stage (which would cascade to the live custom-domain
+# mappings). Instead of disabling it, we keep access logging on but make the
+# destination Terraform-managed with the same short retention as the Lambda
+# logs. This bounds cost to a single day of ingestion (effectively zero at this
+# traffic level) and, critically, guarantees the log destination always exists
+# so stage updates never fail with LogDestinationNotFoundException.
+resource "aws_cloudwatch_log_group" "apigw_access_logs" {
+  name              = "/aws/apigateway/${var.project_name}-${var.environment}-${random_string.suffix.result}"
+  retention_in_days = var.log_retention_days
+}
+
 # API Gateway
 resource "aws_apigatewayv2_api" "portfolio_api" {
   name          = "${var.project_name}-api-${random_string.suffix.result}"
@@ -165,10 +181,25 @@ resource "aws_apigatewayv2_stage" "portfolio_stage" {
   name        = var.environment
   auto_deploy = true
 
-  # Access logging is intentionally disabled to avoid CloudWatch Logs ingestion
-  # and storage cost. The /health smoke check validates the edge via the HTTP
-  # response, not these logs, and Lambda runtime logs remain available for
-  # debugging.
+  # Access logging is intentionally kept minimal rather than disabled. API
+  # Gateway v2 cannot clear access logging in place once it has been enabled, so
+  # we point it at a Terraform-managed log group with one-day retention (see
+  # aws_cloudwatch_log_group.apigw_access_logs). This keeps ingestion cost
+  # negligible while ensuring the destination always exists, so stage updates
+  # never fail with LogDestinationNotFoundException.
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.apigw_access_logs.arn
+    format = jsonencode({
+      httpMethod     = "$context.httpMethod"
+      ip             = "$context.identity.sourceIp"
+      protocol       = "$context.protocol"
+      requestId      = "$context.requestId"
+      requestTime    = "$context.requestTime"
+      responseLength = "$context.responseLength"
+      routeKey       = "$context.routeKey"
+      status         = "$context.status"
+    })
+  }
 }
 
 # ==================== Cost Guardrail ====================
