@@ -220,6 +220,17 @@ data "aws_iam_policy_document" "deploy" {
       "s3:GetObject",
       "s3:PutObject",
       "s3:DeleteObject",
+      # The aws_s3_bucket provider refreshes these sub-configurations on every
+      # plan. Their IAM action names do not match the s3:GetBucket*/s3:PutBucket*
+      # wildcards, so they must be granted explicitly.
+      "s3:GetLifecycleConfiguration",
+      "s3:PutLifecycleConfiguration",
+      "s3:GetEncryptionConfiguration",
+      "s3:PutEncryptionConfiguration",
+      "s3:GetReplicationConfiguration",
+      "s3:PutReplicationConfiguration",
+      "s3:GetAccelerateConfiguration",
+      "s3:PutAccelerateConfiguration",
     ]
     resources = [
       "arn:aws:s3:::${var.project_name}-*",
