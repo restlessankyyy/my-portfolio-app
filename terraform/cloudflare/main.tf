@@ -91,6 +91,12 @@ variable "enable_ci_probe_ruleset" {
   default     = false
 }
 
+variable "enable_cache_rule" {
+  description = "Create the edge cache rule that caches static HTML responses at Cloudflare to cut API Gateway requests and origin data-transfer. Requires the Cloudflare API token to have the Zone > Cache Rules > Edit permission. Leave false when the token only has DNS edit scope."
+  type        = bool
+  default     = false
+}
+
 # ==================== SSL/TLS Settings ====================
 
 # Set SSL mode to Full (Cloudflare connects to origin via HTTPS)
@@ -279,6 +285,47 @@ resource "cloudflare_ruleset" "ci_probe_bypass" {
 
     logging {
       enabled = true
+    }
+  }
+}
+
+# ==================== Cache: Static HTML at the Edge ====================
+
+# Cache static HTML responses at Cloudflare so repeat visitors are served from
+# the edge instead of hitting API Gateway -> Lambda on every request. This cuts
+# both API Gateway request count ($1.00 / million) and origin data-transfer.
+# Dynamic and health paths are excluded so the contact API and CI smoke probe
+# always reach the origin. Opt-in: requires the token to have the
+# Zone > Cache Rules > Edit permission, otherwise the apply fails with
+# Cloudflare Authentication error (10000).
+resource "cloudflare_ruleset" "cache_static_html" {
+  count = var.enable_cache_rule ? 1 : 0
+
+  zone_id     = var.cloudflare_zone_id
+  name        = "Cache static HTML"
+  description = "Edge-cache static HTML to reduce origin requests and data transfer"
+  kind        = "zone"
+  phase       = "http_request_cache_settings"
+
+  rules {
+    ref         = "cache_static_html"
+    description = "Cache HTML responses except the contact API and health probe"
+    expression  = "(not starts_with(http.request.uri.path, \"/api\") and http.request.uri.path ne \"/health\")"
+    action      = "set_cache_settings"
+
+    action_parameters {
+      cache = true
+
+      edge_ttl {
+        mode = "override_origin"
+        # 1 hour. Bounds staleness after a deploy while still cutting most
+        # repeat-visit origin requests. CI purges cache on deploy.
+        default = 3600
+      }
+
+      browser_ttl {
+        mode = "respect_origin"
+      }
     }
   }
 }

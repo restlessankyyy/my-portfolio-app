@@ -47,3 +47,21 @@ variable "wildcard_certificate_arn" {
   type        = string
   default     = "arn:aws:acm:eu-north-1:157539276388:certificate/be572efd-37be-4806-b8a7-53a7f45f9970"
 }
+
+variable "log_retention_days" {
+  description = "CloudWatch Logs retention (days) for the Lambda log group. Lower values reduce storage cost."
+  type        = number
+  default     = 1
+}
+
+variable "monthly_budget_limit_usd" {
+  description = "Monthly AWS cost budget in USD. An alert fires when actual or forecasted spend crosses the configured thresholds."
+  type        = number
+  default     = 5
+}
+
+variable "budget_alert_emails" {
+  description = "Email addresses that receive the AWS Budgets cost alert notifications."
+  type        = list(string)
+  default     = ["rajankit749@gmail.com"]
+}
