@@ -165,27 +165,10 @@ resource "aws_apigatewayv2_stage" "portfolio_stage" {
   name        = var.environment
   auto_deploy = true
 
-  access_log_settings {
-    destination_arn = aws_cloudwatch_log_group.api_gw_logs.arn
-    format = jsonencode({
-      requestId      = "$context.requestId"
-      ip             = "$context.identity.sourceIp"
-      requestTime    = "$context.requestTime"
-      httpMethod     = "$context.httpMethod"
-      routeKey       = "$context.routeKey"
-      status         = "$context.status"
-      protocol       = "$context.protocol"
-      responseLength = "$context.responseLength"
-    })
-  }
-
-  depends_on = [aws_cloudwatch_log_group.api_gw_logs]
-}
-
-# CloudWatch Log Group for API Gateway
-resource "aws_cloudwatch_log_group" "api_gw_logs" {
-  name              = "/aws/apigateway/${var.project_name}-${var.environment}-${random_string.suffix.result}"
-  retention_in_days = var.log_retention_days
+  # Access logging is intentionally disabled to avoid CloudWatch Logs ingestion
+  # and storage cost. The /health smoke check validates the edge via the HTTP
+  # response, not these logs, and Lambda runtime logs remain available for
+  # debugging.
 }
 
 # ==================== Cost Guardrail ====================

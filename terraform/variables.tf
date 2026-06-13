@@ -49,9 +49,9 @@ variable "wildcard_certificate_arn" {
 }
 
 variable "log_retention_days" {
-  description = "CloudWatch Logs retention (days) for the Lambda and API Gateway log groups. Lower values reduce storage cost."
+  description = "CloudWatch Logs retention (days) for the Lambda log group. Lower values reduce storage cost."
   type        = number
-  default     = 7
+  default     = 1
 }
 
 variable "monthly_budget_limit_usd" {
