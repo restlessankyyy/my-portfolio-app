@@ -1,0 +1,251 @@
+# ============================================================================
+# Green Room CI/CD (subproject of my-portfolio-app)
+# ============================================================================
+# Path-filtered pipeline that builds and deploys ONLY the green-room/ app to
+# meet.ankitraj.cloud. Reuses the repo's shared plumbing:
+#   - keyless AWS auth via the existing GitHub OIDC role (secret AWS_ROLE_ARN)
+#   - the shared Terraform state bucket + lock table
+#   - the Cloudflare zone (secrets CLOUDFLARE_API_TOKEN / CLOUDFLARE_ZONE_ID)
+# The portfolio app and its own ci-cd.yml are untouched.
+# ============================================================================
+name: Green Room CI/CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'green-room/**'
+      - '.github/workflows/green-room.yml'
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'green-room/**'
+      - '.github/workflows/green-room.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: green-room-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  AWS_REGION: eu-north-1
+  NODE_VERSION: '22'
+  TERRAFORM_VERSION: '1.9.8'
+  DOMAIN_NAME: meet.ankitraj.cloud
+  APP_DIR: green-room
+  TF_DIR: green-room/terraform
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+  security-events: write
+
+jobs:
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: green-room
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: green-room/package-lock.json
+      - run: npm ci
+      - name: ESLint
+        run: npm run lint || echo "::warning::Linting issues found"
+        continue-on-error: true
+      - name: Security audit
+        run: npm audit --audit-level=critical || echo "::warning::Vulnerabilities found"
+        continue-on-error: true
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: green-room
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: green-room/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - name: Start server and health check
+        run: |
+          npm start &
+          sleep 4
+          curl -fsS http://localhost:3000/health
+          kill %1
+
+  terraform-validate:
+    name: Terraform Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: green-room/package-lock.json
+      - name: Build Lambda package (for validation)
+        working-directory: green-room
+        run: |
+          chmod +x scripts/build-lambda.sh
+          ./scripts/build-lambda.sh
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: gha-greenroom-validate-${{ github.run_id }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Terraform fmt / init / validate / plan
+        working-directory: green-room/terraform
+        env:
+          TF_VAR_certificate_arn: ${{ secrets.GREENROOM_CERT_ARN }}
+        run: |
+          terraform fmt -check -recursive || echo "::warning::terraform fmt drift"
+          terraform init -input=false
+          terraform validate -no-color
+          terraform plan -no-color -input=false -out=tfplan
+      - name: Upload plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: greenroom-tfplan
+          path: green-room/terraform/tfplan
+          retention-days: 7
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [code-quality, test, terraform-validate]
+    outputs:
+      artifact_name: ${{ steps.build.outputs.artifact_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: green-room/package-lock.json
+      - name: Build Lambda package
+        id: build
+        working-directory: green-room
+        run: |
+          chmod +x scripts/build-lambda.sh
+          ./scripts/build-lambda.sh
+          HASH=$(sha256sum terraform/greenroom-lambda.zip | cut -d ' ' -f1 | head -c 8)
+          echo "artifact_name=greenroom-${GITHUB_SHA::8}-${HASH}" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.artifact_name }}
+          path: green-room/terraform/greenroom-lambda.zip
+          retention-days: 7
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    environment:
+      name: production
+      url: https://meet.ankitraj.cloud
+    outputs:
+      api_url: ${{ steps.deploy.outputs.api_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: gha-greenroom-deploy-${{ github.run_id }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.artifact_name }}
+          path: green-room/terraform/
+      - name: Deploy AWS infrastructure
+        working-directory: green-room/terraform
+        env:
+          TF_VAR_certificate_arn: ${{ secrets.GREENROOM_CERT_ARN }}
+        run: |
+          terraform init -input=false
+          terraform apply -auto-approve -input=false
+      - name: Deploy Lambda code
+        id: deploy
+        working-directory: green-room/terraform
+        run: |
+          FN=$(terraform output -raw lambda_function_name)
+          aws lambda update-function-code --function-name "$FN" \
+            --zip-file fileb://greenroom-lambda.zip --publish
+          aws lambda wait function-updated --function-name "$FN"
+          API_URL=$(terraform output -raw api_gateway_url)
+          echo "api_url=$API_URL" >> "$GITHUB_OUTPUT"
+          echo "custom_domain_target=$(terraform output -raw custom_domain_target)" >> "$GITHUB_ENV"
+      - name: Deploy Cloudflare DNS
+        working-directory: green-room/terraform/cloudflare
+        continue-on-error: true
+        env:
+          TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          TF_VAR_custom_domain_target: ${{ env.custom_domain_target }}
+          TF_VAR_acm_validation_name: ${{ secrets.GREENROOM_ACM_VALIDATION_NAME }}
+          TF_VAR_acm_validation_value: ${{ secrets.GREENROOM_ACM_VALIDATION_VALUE }}
+          TF_VAR_ci_probe_secret: ${{ secrets.CF_PROBE_SECRET }}
+        run: |
+          if [ -z "${TF_VAR_cloudflare_api_token}" ]; then
+            echo "::warning::Cloudflare secrets not set; skipping DNS apply."
+            exit 0
+          fi
+          terraform init -input=false
+          terraform apply -auto-approve -input=false
+      - name: Post-deployment health check (origin)
+        run: |
+          ORIGIN_URL="${{ steps.deploy.outputs.api_url }}"
+          for i in $(seq 1 5); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$ORIGIN_URL/health" || echo "000")
+            [ "$STATUS" = "200" ] && echo "Origin healthy" && exit 0
+            echo "Retry $i/5 (status $STATUS)"; sleep 8
+          done
+          echo "::error::Origin health check failed"; exit 1
+
+  smoke-tests:
+    name: Smoke Tests
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    if: needs.deploy.result == 'success'
+    steps:
+      - name: Smoke tests
+        env:
+          ORIGIN_URL: ${{ needs.deploy.outputs.api_url }}
+          PUBLIC_URL: https://meet.ankitraj.cloud
+        run: |
+          FAILED=0
+          check() {
+            local label="$1" path="$2" expected="$3" code
+            code=$(curl -s -o /dev/null -w "%{http_code}" -m 15 "${ORIGIN_URL}${path}" || echo "000")
+            if [ "$code" = "$expected" ]; then echo "OK  $label ($code)"; else echo "::error::$label expected $expected got $code"; FAILED=1; fi
+          }
+          check "Homepage" "/" "200"
+          check "Health" "/health" "200"
+          PUB=$(curl -s -o /dev/null -w "%{http_code}" -m 15 "${PUBLIC_URL}/health" || echo "000")
+          [ "$PUB" = "200" ] && echo "Public domain healthy" || echo "::warning::Public domain returned $PUB (DNS/cert may still be propagating)"
+          [ "$FAILED" -eq 0 ] || { echo "Smoke tests failed"; exit 1; }
+          echo "All smoke tests passed"
