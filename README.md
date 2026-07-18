@@ -120,98 +120,17 @@ node scripts/generate-pdf-photo.js
 | `npm run deploy` | Deploy to AWS via Terraform |
 | `npm run deploy:destroy` | Tear down AWS infrastructure |
 
-## 🏗️ Infrastructure
+## 🔄 CI/CD & Infrastructure
 
-### AWS Resources
+Serverless on **AWS Lambda + API Gateway** (eu-north-1), fronted by **Cloudflare** DNS/SSL, provisioned with **Terraform** (remote state in S3 + DynamoDB lock). Pushes to `main` and PRs run the full GitHub Actions pipeline; all AWS access is keyless via GitHub OIDC (no static keys).
 
-- **Lambda Function** `portfolio-ankit-prod-*` (Node.js 22.x, 512MB, 30s timeout)
-- **API Gateway** HTTP API v2 with CORS
-- **ACM Certificate** SSL for custom domain
-- **SES** email sending with DKIM verified
-- **S3** static assets and Terraform state
-- **CloudWatch** logs (14-day retention) and metrics
+Terraform Validation is **path-aware** — on PRs it runs only when infra files change, and Dependabot PRs skip it. Dependabot updates are grouped, and minor/patch (plus all GitHub Actions) auto-merge once checks pass.
 
-### Cloudflare
-
-- **DNS** A, CNAME, TXT records
-- **SSL** Full (strict) mode
-- **Page Rules** root domain redirect to www
-
-### Remote State
-
-Terraform state is stored in S3 with DynamoDB locking:
-
-- **Bucket**: `portfolio-ankit-terraform-state`
-- **Lock Table**: `portfolio-ankit-terraform-locks`
-
-## 🔄 CI/CD Pipeline
-
-Pushes to `main` and pull requests run the full pipeline. All AWS access is keyless: every AWS-touching job assumes an IAM role via GitHub OIDC, so no static AWS keys are stored.
-
-```mermaid
-flowchart LR
-    TRIG[Push to main / PR]:::trigger --> DET[Detect Changes]
-    DET --> CQ[Code Quality]
-    CQ --> SS[Security Scan]
-    SS --> TST[Tests]
-    TST --> TFV{Terraform Validate<br/>infra changed?}
-    TFV -- yes / push to main --> BLD[Build]
-    TFV -. app-only PR: skipped .-> BLD
-    BLD --> DEP[Deploy]
-    DEP --> SMK[Smoke Tests]
-    SMK --> NTF[Notify]
-
-    TFV -. OIDC .-> AWS[(AWS eu-north-1)]:::aws
-    DEP -. OIDC .-> AWS
-
-    classDef trigger fill:#2563eb,stroke:#1e40af,color:#fff
-    classDef aws fill:#ff9900,stroke:#cc7a00,color:#000
-```
-
-Terraform Validation is **path-aware**: on pull requests it runs only when infrastructure files (`terraform/**`, the Lambda build script, or this workflow) change, so app-only PRs skip the slow AWS plan. Pushes to `main` and manual dispatch always run it so `deploy` gets a fresh plan. Dependabot PRs skip it entirely (their read-only token cannot assume the AWS role).
-
-See [docs/cicd.md](docs/cicd.md) for the full workflow reference and stage detail.
-
-| Workflow | Trigger | Purpose |
-|----------|---------|---------|
-| **ci-cd.yml** | Push / PR to `main` | Full pipeline: quality, scan, test, terraform, build, deploy, smoke |
-| **codeql.yml** | Push/PR to `main` + weekly | CodeQL security analysis for JavaScript |
-| **resume-pdf.yml** | Push (resume HTML changes) + manual | Regenerate Profile.pdf |
-| **resume-nordic-pdf.yml** | Push (resume-photo.html changes) + manual | Regenerate Profile-Nordic.pdf |
-| **agentic-resume.yml** | Push (`jds/*.txt`) + manual | 4-agent resume pipeline via Claude (Anthropic) |
-| **agentic-resume-foundry.yml** | Push (`jds/*.txt`) + manual | 4-agent resume pipeline via Azure OpenAI (Foundry) |
-| **docs-lint.yml** | Push/PR (docs changes) | Markdown lint and link check |
-
-### Dependabot
-
-- **npm**: weekly Monday updates, grouped by dev/prod
-- **GitHub Actions**: weekly Monday updates, grouped into a single PR
-- **Auto-merge**: minor + patch updates (all ecosystems) and **all** GitHub Actions updates auto-merge (squash) once checks pass; npm majors stay manual. Handled by `dependabot-automerge.yml` with repo `Allow auto-merge` enabled.
-- **Labels**: `dependencies`, `ci`
-- **PR limit**: 10 open PRs max
-
-### Required Secrets
-
-See [docs/deployment.md](docs/deployment.md) for the full secrets and IAM permissions.
-
-## 🔁 Application Lifecycle
-
-```mermaid
-flowchart LR
-    DEV[Local dev]:::dev --> VAL[npm run validate]
-    VAL --> PR[Open PR to main]
-    PR --> CI[CI checks]
-    CI --> MERGE[Merge to main]:::main
-    MERGE --> CD[Keyless deploy via Terraform]
-    CD --> INFRA[AWS Lambda + API Gateway]:::aws
-    INFRA --> CDN[Cloudflare DNS + SSL]
-    CDN --> PROD[Live: www.ankitraj.cloud]:::prod
-
-    classDef dev fill:#10b981,stroke:#047857,color:#fff
-    classDef main fill:#2563eb,stroke:#1e40af,color:#fff
-    classDef aws fill:#ff9900,stroke:#cc7a00,color:#000
-    classDef prod fill:#7c3aed,stroke:#5b21b6,color:#fff
-```
+| Topic | Doc |
+|-------|-----|
+| Architecture + AWS/Cloudflare resources + security | [docs/architecture.md](docs/architecture.md) |
+| Pipeline stages, workflows, Dependabot | [docs/cicd.md](docs/cicd.md) |
+| Deployment, Terraform config, secrets | [docs/deployment.md](docs/deployment.md) |
 
 ## 🤖 Agentic Resume Pipeline
 
@@ -246,33 +165,12 @@ See [docs/architecture.md](docs/architecture.md) for full resource details.
 ## 🧪 Testing
 
 ```bash
-npm test
-
-# Expected output:
-# 🧪 Running Server Tests...
-# ✅ Health endpoint returns 200
-# ✅ Health endpoint returns JSON
-# ✅ Homepage returns HTML
-# ✅ Static CSS is served
-# ✅ Static JS is served
-# ✅ Contact API requires fields
-# ✅ Contact API validates email
-# ✅ Unknown routes return index.html (SPA)
-# 📊 Results: 8 passed, 0 failed
+npm test   # 8 unit tests (health, homepage, static assets, contact API, SPA fallback)
 ```
 
 ## 🛡️ Security
 
-- **CodeQL** static analysis for JavaScript vulnerabilities
-- **Dependabot** automated dependency updates
-- **npm audit** CI check for known CVEs (0 vulnerabilities)
-- **Dependency Review** blocks vulnerable dependencies on PRs (GitHub Advisory DB)
-- **Secret Scanning + Push Protection** native secret detection
-- **OIDC** keyless AWS deploys (no static credentials in CI)
-- **npm overrides** pinned `fast-xml-parser >=5.3.8` to patch CVEs
-- **IAM** least-privilege roles for Lambda and deploy
-- **API Gateway** throttling configured
-- **HTTPS** full strict SSL via Cloudflare
+CodeQL, Dependabot, npm audit, Dependency Review, Secret Scanning + Push Protection, keyless OIDC deploys, least-privilege IAM, and full-strict HTTPS. See [docs/architecture.md](docs/architecture.md#security) for the full posture.
 
 ## 🚢 Deployment
 

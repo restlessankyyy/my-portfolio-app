@@ -80,6 +80,19 @@ Change detection uses `dorny/paths-filter`; the infra path list lives in the `de
 
 See [cicd.md](cicd.md) for the full stage-by-stage reference.
 
+## Security
+
+- **CodeQL** — static analysis for JavaScript vulnerabilities (push/PR + weekly).
+- **Dependabot** — automated dependency updates (see [cicd.md](cicd.md#dependabot)).
+- **npm audit** — CI check for known CVEs (0 vulnerabilities).
+- **Dependency Review** — blocks vulnerable dependencies on PRs (GitHub Advisory DB).
+- **Secret Scanning + Push Protection** — native secret detection.
+- **OIDC** — keyless AWS deploys; no static credentials in CI.
+- **npm overrides** — pinned `fast-xml-parser >=5.3.8` to patch CVEs.
+- **IAM** — least-privilege roles for Lambda and deploy.
+- **API Gateway** — request throttling configured.
+- **HTTPS** — full strict SSL via Cloudflare.
+
 ## Agentic Resume Pipeline
 
 See [agentic-pipeline.md](agentic-pipeline.md) for the full 4-agent AI architecture.
