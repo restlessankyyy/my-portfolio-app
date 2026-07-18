@@ -50,8 +50,8 @@ jobs:
       run:
         working-directory: green-room
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -71,8 +71,8 @@ jobs:
       run:
         working-directory: green-room
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -92,8 +92,8 @@ jobs:
     name: Terraform Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -103,12 +103,12 @@ jobs:
         run: |
           chmod +x scripts/build-lambda.sh
           ./scripts/build-lambda.sh
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
       - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           role-session-name: gha-greenroom-validate-${{ github.run_id }}
@@ -121,7 +121,7 @@ jobs:
           terraform validate -no-color
           terraform plan -no-color -input=false -out=tfplan
       - name: Upload plan
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: greenroom-tfplan
           path: green-room/terraform/tfplan
@@ -134,8 +134,8 @@ jobs:
     outputs:
       artifact_name: ${{ steps.build.outputs.artifact_name }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -148,7 +148,7 @@ jobs:
           ./scripts/build-lambda.sh
           HASH=$(sha256sum terraform/greenroom-lambda.zip | cut -d ' ' -f1 | head -c 8)
           echo "artifact_name=greenroom-${GITHUB_SHA::8}-${HASH}" >> "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.build.outputs.artifact_name }}
           path: green-room/terraform/greenroom-lambda.zip
@@ -165,19 +165,19 @@ jobs:
     outputs:
       api_url: ${{ steps.deploy.outputs.api_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
+      - uses: actions/checkout@v7
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
       - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           role-session-name: gha-greenroom-deploy-${{ github.run_id }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Download build artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: ${{ needs.build.outputs.artifact_name }}
           path: green-room/terraform/

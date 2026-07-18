@@ -102,12 +102,12 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0  # Full history for better analysis
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -135,7 +135,7 @@ jobs:
         continue-on-error: true
 
       - name: 📊 Upload Code Quality Reports
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: code-quality-reports
@@ -153,7 +153,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       # Secret detection is handled by GitHub-native Secret Scanning +
       # Push Protection (repo Settings > Code security), not a third-party
@@ -169,7 +169,7 @@ jobs:
       # CodeQL (codeql.yml), and npm audit in the code-quality job.
       - name: 🔎 Dependency Review (GitHub Advisory DB)
         if: github.event_name == 'pull_request'
-        uses: actions/dependency-review-action@v4
+        uses: actions/dependency-review-action@v5
         with:
           fail-on-severity: high
           comment-summary-in-pr: on-failure
@@ -186,10 +186,10 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -220,10 +220,10 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -234,7 +234,7 @@ jobs:
           ./scripts/build-lambda.sh
 
       - name: 🔧 Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
@@ -244,14 +244,14 @@ jobs:
       # `id-token: write` permission and the IAM role + OIDC provider from
       # terraform/github-oidc/. Set the AWS_ROLE_ARN repo secret to the role ARN.
       - name: 🔑 Configure AWS Credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           role-session-name: gha-tf-validate-${{ github.run_id }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: ♻️ Cache Terraform Providers
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             terraform/.terraform
@@ -331,7 +331,7 @@ jobs:
           TF_VAR_ci_probe_secret: ${{ secrets.CF_PROBE_SECRET }}
 
       - name: 📤 Upload Terraform Plan
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: terraform-plan
           path: |
@@ -341,7 +341,7 @@ jobs:
           retention-days: 7
 
       - name: 💬 PR Comment - Terraform Plan
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         if: github.event_name == 'pull_request'
         with:
           script: |
@@ -505,10 +505,10 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -534,7 +534,7 @@ jobs:
           echo "   Artifact: $ARTIFACT_NAME"
 
       - name: 📤 Upload Build Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.build.outputs.artifact_name }}
           path: terraform/portfolio-lambda.zip
@@ -572,10 +572,10 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: 🔧 Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
@@ -583,14 +583,14 @@ jobs:
       # Keyless auth via GitHub OIDC (see terraform/github-oidc/). No static
       # AWS keys: a short-lived role session is minted per run.
       - name: 🔑 Configure AWS Credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           role-session-name: gha-deploy-${{ github.run_id }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: 📥 Download Build Artifact
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: ${{ needs.build.outputs.artifact_name }}
           path: terraform/
@@ -620,7 +620,7 @@ jobs:
 
       - name: 📥 Download Reviewed Terraform Plan
         if: github.event.inputs.deploy_type != 'lambda-only'
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: terraform-plan
           path: terraform/
@@ -802,7 +802,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: 🔥 Run Smoke Tests
         env:
@@ -949,7 +949,7 @@ jobs:
       # Keyless auth via GitHub OIDC (see terraform/github-oidc/) for the
       # SES notification below.
       - name: 🔑 Configure AWS Credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           role-session-name: gha-notify-${{ github.run_id }}
@@ -1000,7 +1000,7 @@ jobs:
     
     steps:
       - name: 📝 Create PR Summary Comment
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const codeQuality = '${{ needs.code-quality.result }}';
