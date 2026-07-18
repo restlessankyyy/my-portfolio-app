@@ -150,11 +150,13 @@ Pushes to `main` and pull requests run the full pipeline. All AWS access is keyl
 
 ```mermaid
 flowchart LR
-    TRIG[Push to main / PR]:::trigger --> CQ[Code Quality]
+    TRIG[Push to main / PR]:::trigger --> DET[Detect Changes]
+    DET --> CQ[Code Quality]
     CQ --> SS[Security Scan]
     SS --> TST[Tests]
-    TST --> TFV[Terraform Validate]
-    TFV --> BLD[Build]
+    TST --> TFV{Terraform Validate<br/>infra changed?}
+    TFV -- yes / push to main --> BLD[Build]
+    TFV -. app-only PR: skipped .-> BLD
     BLD --> DEP[Deploy]
     DEP --> SMK[Smoke Tests]
     SMK --> NTF[Notify]
@@ -165,6 +167,8 @@ flowchart LR
     classDef trigger fill:#2563eb,stroke:#1e40af,color:#fff
     classDef aws fill:#ff9900,stroke:#cc7a00,color:#000
 ```
+
+Terraform Validation is **path-aware**: on pull requests it runs only when infrastructure files (`terraform/**`, the Lambda build script, or this workflow) change, so app-only PRs skip the slow AWS plan. Pushes to `main` and manual dispatch always run it so `deploy` gets a fresh plan. Dependabot PRs skip it entirely (their read-only token cannot assume the AWS role).
 
 See [docs/cicd.md](docs/cicd.md) for the full workflow reference and stage detail.
 
@@ -181,7 +185,8 @@ See [docs/cicd.md](docs/cicd.md) for the full workflow reference and stage detai
 ### Dependabot
 
 - **npm**: weekly Monday updates, grouped by dev/prod
-- **GitHub Actions**: weekly Monday updates, grouped
+- **GitHub Actions**: weekly Monday updates, grouped into a single PR
+- **Auto-merge**: minor + patch updates (all ecosystems) and **all** GitHub Actions updates auto-merge (squash) once checks pass; npm majors stay manual. Handled by `dependabot-automerge.yml` with repo `Allow auto-merge` enabled.
 - **Labels**: `dependencies`, `ci`
 - **PR limit**: 10 open PRs max
 
