@@ -1,0 +1,24 @@
+{
+  "name": "green-room",
+  "version": "1.0.0",
+  "description": "Green Room: senior Solutions Architect interview practice, served serverless on AWS Lambda + API Gateway.",
+  "private": true,
+  "main": "lambda.js",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test",
+    "lint": "eslint .",
+    "format": "prettier --write \"public/**/*.{js,css,html}\""
+  },
+  "dependencies": {
+    "@vendia/serverless-express": "^4.12.6",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2"
+  }
+}

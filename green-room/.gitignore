@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Lambda build artifact
+terraform/*.zip
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+!*.tfvars.example
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Env / secrets
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Terraform lock (regenerated per-platform in CI)
+.terraform.lock.hcl

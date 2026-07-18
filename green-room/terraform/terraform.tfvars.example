@@ -1,0 +1,16 @@
+# Green Room deployment variables.
+# Copy to terraform.tfvars and customise. Do NOT commit terraform.tfvars.
+
+aws_region   = "eu-north-1"
+environment  = "prod"
+project_name = "portfolio-ankit-greenroom"
+
+domain_name          = "meet.ankitraj.cloud"
+enable_custom_domain = true
+
+# ACM certificate for meet.ankitraj.cloud (regional, same region as aws_region).
+# Create it once with an admin identity, validate via the Cloudflare CNAME, then
+# paste the ARN here (or pass TF_VAR_certificate_arn in CI):
+#   aws acm request-certificate --domain-name meet.ankitraj.cloud \
+#     --validation-method DNS --region eu-north-1
+certificate_arn = "arn:aws:acm:eu-north-1:157539276388:certificate/REPLACE_ME"
