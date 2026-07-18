@@ -215,6 +215,11 @@ jobs:
   terraform-validate:
     name: 🏗️ Terraform Validation
     runs-on: ubuntu-latest
+    # Dependabot PRs run with a read-only token and no access to repo secrets or
+    # OIDC, so AWS_ROLE_ARN is empty and the plan cannot authenticate. Skip this
+    # job for Dependabot; the plan artifact is only consumed by the deploy job
+    # (push to main), never on a PR, so nothing downstream is affected.
+    if: github.actor != 'dependabot[bot]'
     outputs:
       plan_exitcode: ${{ steps.plan.outputs.exitcode }}
     
@@ -497,7 +502,7 @@ jobs:
       always() &&
       (needs.code-quality.result == 'success' || needs.code-quality.result == 'skipped') &&
       (needs.test.result == 'success' || needs.test.result == 'skipped') &&
-      (needs.terraform-validate.result == 'success')
+      (needs.terraform-validate.result == 'success' || needs.terraform-validate.result == 'skipped')
     outputs:
       artifact_name: ${{ steps.build.outputs.artifact_name }}
       package_size: ${{ steps.build.outputs.package_size }}
