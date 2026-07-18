@@ -102,7 +102,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0  # Full history for better analysis
 
@@ -153,7 +153,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       # Secret detection is handled by GitHub-native Secret Scanning +
       # Push Protection (repo Settings > Code security), not a third-party
@@ -186,7 +186,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v5
@@ -220,7 +220,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v5
@@ -505,7 +505,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v5
@@ -572,7 +572,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: 🔧 Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -802,7 +802,7 @@ jobs:
     
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: 🔥 Run Smoke Tests
         env:
