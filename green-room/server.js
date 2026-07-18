@@ -57,7 +57,6 @@ app.get('*', (req, res) => {
 if (require.main === module) {
   const port = process.env.PORT || 3000;
   app.listen(port, () => {
-    // eslint-disable-next-line no-console
     console.log(`Green Room running on http://localhost:${port}`);
   });
 }
