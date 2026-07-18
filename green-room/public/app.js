@@ -982,7 +982,7 @@ delivery: ${a.eval.delivery.join(" | ") || "clean"}`).join("\n\n");
   renderHome(); // refresh history behind the scenes
 }
 
-function renderReport(s, isSaved) {
+function renderReport(s, _isSaved) {
   $("reportTitle").textContent = `${window.TRACKS[s.track]?.label || s.track} — session report`;
   $("reportMeta").textContent = `${new Date(s.date).toLocaleString()} · ${s.answers.length} answered · difficulty: ${s.difficulty}`;
 
