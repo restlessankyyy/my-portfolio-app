@@ -91,6 +91,31 @@ permissions:
 
 jobs:
   # ============================================================================
+  # Stage 0: Change Detection
+  # ============================================================================
+  # Detect whether infrastructure files changed so we can skip the (slow,
+  # AWS-authenticated) Terraform plan on app-only PRs. On push/dispatch the
+  # gate below always runs Terraform so deploy still gets its plan artifact.
+  detect-changes:
+    name: 🔎 Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      infra: ${{ steps.filter.outputs.infra }}
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: 🔎 Filter Paths
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            infra:
+              - 'terraform/**'
+              - 'scripts/build-lambda.sh'
+              - '.github/workflows/ci-cd.yml'
+
+  # ============================================================================
   # Stage 1: Code Quality & Security Analysis
   # ============================================================================
   code-quality:
@@ -215,11 +240,15 @@ jobs:
   terraform-validate:
     name: 🏗️ Terraform Validation
     runs-on: ubuntu-latest
-    # Dependabot PRs run with a read-only token and no access to repo secrets or
-    # OIDC, so AWS_ROLE_ARN is empty and the plan cannot authenticate. Skip this
-    # job for Dependabot; the plan artifact is only consumed by the deploy job
-    # (push to main), never on a PR, so nothing downstream is affected.
-    if: github.actor != 'dependabot[bot]'
+    needs: [detect-changes]
+    # Run Terraform only when it can and should:
+    #  - never for Dependabot (read-only token, no secrets/OIDC to assume the AWS role);
+    #  - always on push to main / manual dispatch (deploy needs the plan artifact);
+    #  - on PRs, only when infra files actually changed (skip the slow AWS plan
+    #    for app-only PRs). The downstream build gate accepts a skipped result.
+    if: >-
+      github.actor != 'dependabot[bot]' &&
+      (github.event_name != 'pull_request' || needs.detect-changes.outputs.infra == 'true')
     outputs:
       plan_exitcode: ${{ steps.plan.outputs.exitcode }}
     
@@ -1001,7 +1030,7 @@ jobs:
     name: 📝 PR Summary
     runs-on: ubuntu-latest
     needs: [code-quality, security-scan, terraform-validate, build]
-    if: github.event_name == 'pull_request'
+    if: always() && github.event_name == 'pull_request'
     
     steps:
       - name: 📝 Create PR Summary Comment
