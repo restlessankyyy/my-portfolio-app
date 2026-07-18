@@ -10,12 +10,7 @@ output "lambda_function_name" {
   value       = aws_lambda_function.app.function_name
 }
 
-output "custom_domain_target" {
-  description = "API Gateway regional target domain, used as the Cloudflare CNAME content for meet.ankitraj.cloud."
-  value       = var.enable_custom_domain ? aws_apigatewayv2_domain_name.app[0].domain_name_configuration[0].target_domain_name : null
-}
-
-output "custom_domain_hosted_zone_id" {
-  description = "Hosted zone ID for the API Gateway regional custom domain."
-  value       = var.enable_custom_domain ? aws_apigatewayv2_domain_name.app[0].domain_name_configuration[0].hosted_zone_id : null
+output "api_endpoint_host" {
+  description = "API Gateway default endpoint host (Cloudflare CNAME target for meet.ankitraj.cloud)."
+  value       = replace(aws_apigatewayv2_api.app.api_endpoint, "https://", "")
 }

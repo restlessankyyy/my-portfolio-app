@@ -61,18 +61,8 @@ variable "record_name" {
   default     = "meet"
 }
 
-variable "custom_domain_target" {
-  description = "API Gateway custom-domain target (from the AWS stack output custom_domain_target)."
-  type        = string
-}
-
-variable "acm_validation_name" {
-  description = "ACM certificate validation CNAME name for meet.ankitraj.cloud."
-  type        = string
-}
-
-variable "acm_validation_value" {
-  description = "ACM certificate validation CNAME value for meet.ankitraj.cloud."
+variable "origin_host" {
+  description = "API Gateway default endpoint host (from the AWS stack output api_endpoint_host). Cloudflare proxies meet.ankitraj.cloud to this origin."
   type        = string
 }
 
@@ -91,27 +81,17 @@ variable "enable_ci_probe_ruleset" {
 
 # ==================== DNS records ====================
 
-# ACM certificate validation (DNS only, must not be proxied).
-resource "cloudflare_record" "acm_validation" {
-  zone_id = var.cloudflare_zone_id
-  name    = var.acm_validation_name
-  content = var.acm_validation_value
-  type    = "CNAME"
-  ttl     = 1
-  proxied = false
-  comment = "AWS ACM certificate validation for meet.ankitraj.cloud"
-}
-
-# App subdomain -> API Gateway custom domain. Proxied so Cloudflare terminates
-# TLS for meet.ankitraj.cloud at the edge.
+# App subdomain -> API Gateway default endpoint. Proxied so Cloudflare
+# terminates public TLS at the edge (Universal SSL) and connects to the AWS
+# origin over its built-in *.execute-api certificate (Full mode). No ACM cert.
 resource "cloudflare_record" "app" {
   zone_id = var.cloudflare_zone_id
   name    = var.record_name
-  content = var.custom_domain_target
+  content = var.origin_host
   type    = "CNAME"
   ttl     = 1
   proxied = true
-  comment = "meet.ankitraj.cloud to Green Room API Gateway custom domain"
+  comment = "meet.ankitraj.cloud to Green Room API Gateway endpoint"
 }
 
 # ==================== WAF: CI probe bypass (opt-in) ====================
@@ -153,9 +133,4 @@ resource "cloudflare_ruleset" "ci_probe_bypass" {
 output "app_record" {
   description = "App subdomain CNAME record."
   value       = cloudflare_record.app.hostname
-}
-
-output "acm_validation_record" {
-  description = "ACM validation CNAME record."
-  value       = cloudflare_record.acm_validation.hostname
 }

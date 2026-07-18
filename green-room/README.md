@@ -112,19 +112,16 @@ The pipeline is `.github/workflows/green-room.yml`, path-filtered to
 Terraform, updates the function code (keyless via OIDC), and updates Cloudflare
 DNS.
 
+TLS is handled entirely by Cloudflare: `meet.ankitraj.cloud` is a proxied CNAME
+to the API Gateway default endpoint, so Cloudflare's Universal SSL terminates
+public HTTPS and connects to the AWS origin over its built-in `*.execute-api`
+certificate. There is no ACM certificate to manage.
+
 ### One-time setup
 
-1. Request a regional ACM certificate for `meet.ankitraj.cloud` in `eu-north-1`
-   and validate it via the Cloudflare CNAME:
-
-   ```bash
-   aws acm request-certificate --domain-name meet.ankitraj.cloud \
-     --validation-method DNS --region eu-north-1
-   ```
-
-2. Add repository secrets: `GREENROOM_CERT_ARN`, `GREENROOM_ACM_VALIDATION_NAME`,
-   `GREENROOM_ACM_VALIDATION_VALUE` (reusing `AWS_ROLE_ARN`, `CLOUDFLARE_API_TOKEN`,
-   `CLOUDFLARE_ZONE_ID`, and optionally `CF_PROBE_SECRET`).
+Add repository secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ZONE_ID` (reusing the
+existing `AWS_ROLE_ARN`, and optionally `CF_PROBE_SECRET`). No ACM/certificate
+secrets are needed.
 
 Infra config lives in `terraform/terraform.tfvars.example` and
 `terraform/cloudflare/terraform.tfvars.example`.

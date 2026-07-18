@@ -113,8 +113,6 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       - name: Terraform fmt / init / validate / plan
         working-directory: green-room/terraform
-        env:
-          TF_VAR_certificate_arn: ${{ secrets.GREENROOM_CERT_ARN }}
         run: |
           terraform fmt -check -recursive || echo "::warning::terraform fmt drift"
           terraform init -input=false
@@ -183,8 +181,6 @@ jobs:
           path: green-room/terraform/
       - name: Deploy AWS infrastructure
         working-directory: green-room/terraform
-        env:
-          TF_VAR_certificate_arn: ${{ secrets.GREENROOM_CERT_ARN }}
         run: |
           terraform init -input=false
           terraform apply -auto-approve -input=false
@@ -198,16 +194,14 @@ jobs:
           aws lambda wait function-updated --function-name "$FN"
           API_URL=$(terraform output -raw api_gateway_url)
           echo "api_url=$API_URL" >> "$GITHUB_OUTPUT"
-          echo "custom_domain_target=$(terraform output -raw custom_domain_target)" >> "$GITHUB_ENV"
+          echo "origin_host=$(terraform output -raw api_endpoint_host)" >> "$GITHUB_ENV"
       - name: Deploy Cloudflare DNS
         working-directory: green-room/terraform/cloudflare
         continue-on-error: true
         env:
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          TF_VAR_custom_domain_target: ${{ env.custom_domain_target }}
-          TF_VAR_acm_validation_name: ${{ secrets.GREENROOM_ACM_VALIDATION_NAME }}
-          TF_VAR_acm_validation_value: ${{ secrets.GREENROOM_ACM_VALIDATION_VALUE }}
+          TF_VAR_origin_host: ${{ env.origin_host }}
           TF_VAR_ci_probe_secret: ${{ secrets.CF_PROBE_SECRET }}
         run: |
           if [ -z "${TF_VAR_cloudflare_api_token}" ]; then
