@@ -94,6 +94,31 @@ resource "cloudflare_record" "app" {
   comment = "meet.ankitraj.cloud to Green Room API Gateway endpoint"
 }
 
+# ==================== Origin Rule: Host header override ====================
+# API Gateway's default (regional) endpoint returns 403 for any Host header that
+# is not its own *.execute-api name. Cloudflare proxies the visitor's Host
+# (meet.ankitraj.cloud), so without this rule every request is rejected. This
+# Origin Rule rewrites only the Host header sent to the origin to the execute-api
+# host; SNI stays as the CNAME target, so it still matches AWS's built-in cert.
+resource "cloudflare_ruleset" "app_origin_host" {
+  zone_id     = var.cloudflare_zone_id
+  name        = "Green Room origin Host header override"
+  description = "Send API Gateway's execute-api host as the origin Host header"
+  kind        = "zone"
+  phase       = "http_request_origin"
+
+  rules {
+    ref         = "greenroom_origin_host_override"
+    description = "Rewrite Host to the API Gateway endpoint for ${var.domain_name}"
+    expression  = "(http.host eq \"${var.domain_name}\")"
+    action      = "route"
+
+    action_parameters {
+      host_header = var.origin_host
+    }
+  }
+}
+
 # ==================== WAF: CI probe bypass (opt-in) ====================
 # Lets the GitHub Actions health/smoke probe skip Cloudflare bot management on
 # /health only, so CI runner IPs are not falsely challenged. Requires a token

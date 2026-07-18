@@ -262,7 +262,7 @@ jobs:
 
       - name: 📋 Terraform Format Check
         id: fmt
-        run: terraform fmt -check -recursive
+        run: terraform fmt -check
         working-directory: terraform
         continue-on-error: true
 
@@ -295,6 +295,12 @@ jobs:
         working-directory: terraform
         env:
           TF_VAR_aws_region: ${{ env.AWS_REGION }}
+
+      - name: ☁️ Cloudflare Terraform Format Check
+        id: cf_fmt
+        run: terraform fmt -check
+        working-directory: terraform/cloudflare
+        continue-on-error: true
 
       - name: ☁️ Cloudflare Terraform Init
         id: cf_init
@@ -430,7 +436,7 @@ jobs:
               '',
               '| Check | AWS | Cloudflare |',
               '| :--- | :---: | :---: |',
-              `| Format | ${icon('${{ steps.fmt.outcome }}')} | n/a |`,
+              `| Format | ${icon('${{ steps.fmt.outcome }}')} | ${icon('${{ steps.cf_fmt.outcome }}')} |`,
               `| Init | ${icon('${{ steps.init.outcome }}')} | ${icon('${{ steps.cf_init.outcome }}')} |`,
               `| Validate | ${icon('${{ steps.validate.outcome }}')} | ${icon('${{ steps.cf_validate.outcome }}')} |`,
               `| Plan | ${icon('${{ steps.plan.outcome }}')} | ${icon('${{ steps.cf_plan.outcome }}')} |`,
