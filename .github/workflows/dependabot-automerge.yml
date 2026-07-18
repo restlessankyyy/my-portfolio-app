@@ -1,8 +1,9 @@
 name: Dependabot auto-merge
 
-# Auto-merges Dependabot PRs for minor and patch updates once required
-# checks pass. Major updates are left for manual review (possible breaking
-# changes). Requires "Allow auto-merge" enabled on the repository.
+# Auto-merges Dependabot PRs once required checks pass:
+#   - npm ecosystem: minor and patch only (majors left for manual review).
+#   - github-actions ecosystem: all updates, including majors.
+# Requires "Allow auto-merge" enabled on the repository.
 
 on: pull_request
 
@@ -21,6 +22,13 @@ jobs:
 
       - name: Enable auto-merge for minor and patch updates
         if: steps.meta.outputs.update-type == 'version-update:semver-minor' || steps.meta.outputs.update-type == 'version-update:semver-patch'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge for major GitHub Actions updates
+        if: steps.meta.outputs.package-ecosystem == 'github_actions' && steps.meta.outputs.update-type == 'version-update:semver-major'
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
