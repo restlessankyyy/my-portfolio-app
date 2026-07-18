@@ -3,6 +3,7 @@
 Green Room is a browser-based interview practice tool for Senior Solutions Architect prep.
 
 It gives you:
+
 - Track-based interview sessions
 - Timed answers with target ranges
 - Optional camera and mic recording
@@ -52,6 +53,7 @@ python3 -m http.server 8000 --directory public   # http://localhost:8000
 ## AI Evaluator Setup
 
 The app auto-detects provider from API key format:
+
 - `sk-ant-...` -> Anthropic
 - `AIza...` -> Google Gemini
 
@@ -59,6 +61,7 @@ The app auto-detects provider from API key format:
 
 Use the Gemini model dropdown in the UI to pick a model.
 Current options include:
+
 - `gemini-3.5-flash`
 - `gemini-3.1-pro-preview`
 - `gemini-2.5-pro`
@@ -75,12 +78,14 @@ In that mode, timing, transcript, and recording features work, but AI feedback i
 The session screen shows an animated interviewer avatar that asks each question out loud.
 
 Two voice modes:
+
 - Standard voice: browser speech synthesis (works everywhere, robotic).
 - Realistic AI voice: Kokoro neural TTS running fully in your browser (natural human voice). Enable the "Realistic AI voice" checkbox. The model (~86MB) downloads once and is cached by the browser; WebGPU is used automatically when available, otherwise WASM.
 
 When the realistic voice is on, the avatar's mouth moves in real time from the actual audio waveform, so it looks like the interviewer is speaking.
 
 Controls (session sidebar):
+
 - Interviewer voice on/off
 - Realistic AI voice on/off
 - Interviewer voice selector (American/British, male/female)
@@ -90,9 +95,9 @@ Controls (session sidebar):
 ### Making it look like a real live interview
 
 For a photorealistic, lip-synced human face, the app can be extended with:
+
 - A 3D talking-head avatar (for example the open-source TalkingHead library with a Ready Player Me avatar), driven by the same in-browser Kokoro audio for real lip-sync. Fully client-side, no paid API.
 - Or a hosted talking-avatar video service (HeyGen, D-ID, Azure TTS Avatar) for a real human face, which requires an API key and network calls.
-
 
 ## Deployment (meet.ankitraj.cloud)
 

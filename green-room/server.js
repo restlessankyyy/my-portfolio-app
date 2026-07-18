@@ -2,8 +2,13 @@
 
 const path = require('path');
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
+
+// Trust the API Gateway / Cloudflare proxy so the rate limiter keys on the
+// real client IP (X-Forwarded-For) rather than the proxy address.
+app.set('trust proxy', 1);
 
 // Basic hardening: drop the framework fingerprint header.
 app.disable('x-powered-by');
@@ -17,6 +22,17 @@ app.use((req, res, next) => {
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   next();
 });
+
+// Rate limit every route as a defense-in-depth backstop behind the edge
+// (Cloudflare / API Gateway). Per-instance and best-effort under Lambda, but it
+// caps abusive bursts that reach the origin and gates the file-serving routes.
+const limiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 120,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(limiter);
 
 // Health endpoint used by the CI/CD post-deployment gate and smoke tests.
 app.get('/health', (req, res) => {

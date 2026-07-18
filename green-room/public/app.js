@@ -17,7 +17,6 @@ const GEMINI_URL = (m) => `https://generativelanguage.googleapis.com/v1beta/mode
 // Provider is auto-detected from the key prefix: sk-ant-… → Anthropic, AIza… → Gemini.
 const detectProvider = (key) => key.startsWith("AIza") ? "gemini" : "anthropic";
 const LS = {
-  key: "gr_api_key",
   sessions: "gr_sessions",
   asked: "gr_asked_ids",
   geminiModel: "gr_gemini_model",
@@ -25,6 +24,11 @@ const LS = {
   realisticVoice: "gr_realistic_voice",
   kokoroVoice: "gr_kokoro_voice",
 };
+
+// The API key is held in memory only for the current page session and is never
+// written to localStorage/disk (secure by design: no clear-text credential at
+// rest). It is intentionally lost on reload, so the user re-enters it per session.
+let apiKey = "";
 
 // In-browser neural TTS (Kokoro) — natural human interviewer voice, no server, no API key.
 const KOKORO_CDN = "https://esm.sh/kokoro-js@1.2.1";
@@ -367,7 +371,7 @@ function renderModelPicker() {
 }
 
 function renderKeyStatus() {
-  const key = localStorage.getItem(LS.key) || "";
+  const key = apiKey;
   $("inpApiKey").value = key;
   $("keyStatus").textContent = key
     ? `Key saved in this browser. AI feedback via ${detectProvider(key) === "gemini" ? `Gemini (${getGeminiModel()})` : `Claude (${CLAUDE_MODEL})`}.`
@@ -771,7 +775,7 @@ async function callGemini(key, system, tool, userContent, maxTokens) {
 }
 
 async function callAI(system, tool, userContent, maxTokens) {
-  const key = localStorage.getItem(LS.key);
+  const key = apiKey;
   if (!key) throw new Error("NO_KEY");
   return detectProvider(key) === "gemini"
     ? callGemini(key, system, tool, userContent, maxTokens)
@@ -797,7 +801,7 @@ async function submitAnswer() {
     fillerPer100: stats.per100, words: stats.words, eval: null,
   };
 
-  const hasKey = !!localStorage.getItem(LS.key);
+  const hasKey = !!apiKey;
   if (!hasKey) {
     // practice mode without AI
     state.session.answers.push(answer);
@@ -940,7 +944,7 @@ async function finishSession() {
   renderReport(s, false);
 
   // AI session summary (needs key + at least 2 evaluated answers)
-  if (localStorage.getItem(LS.key) && scored.length >= 2) {
+  if (apiKey && scored.length >= 2) {
     $("summaryLoading").classList.remove("hidden");
     try {
       const digest = scored.map((a,i) =>
@@ -1144,7 +1148,7 @@ $("brandHome").onclick = () => {
 };
 $("inpApiKey").addEventListener("change", () => {
   const v = $("inpApiKey").value.trim();
-  if (v) localStorage.setItem(LS.key, v); else localStorage.removeItem(LS.key);
+  apiKey = v;
   renderKeyStatus();
 });
 $("selGeminiModel").addEventListener("change", () => {
