@@ -117,7 +117,7 @@ jobs:
           terraform fmt -check -recursive || echo "::warning::terraform fmt drift"
           terraform init -input=false
           terraform validate -no-color
-          terraform plan -no-color -input=false -out=tfplan
+          terraform plan -no-color -input=false -lock-timeout=5m -out=tfplan
       - name: Upload plan
         uses: actions/upload-artifact@v4
         with:
@@ -183,7 +183,7 @@ jobs:
         working-directory: green-room/terraform
         run: |
           terraform init -input=false
-          terraform apply -auto-approve -input=false
+          terraform apply -auto-approve -input=false -lock-timeout=5m
       - name: Deploy Lambda code
         id: deploy
         working-directory: green-room/terraform
@@ -210,7 +210,7 @@ jobs:
             exit 0
           fi
           terraform init -input=false
-          terraform apply -auto-approve -input=false
+          terraform apply -auto-approve -input=false -lock-timeout=5m
       - name: Post-deployment health check (origin)
         run: |
           ORIGIN_URL="${{ steps.deploy.outputs.api_url }}"

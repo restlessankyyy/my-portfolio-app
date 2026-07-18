@@ -280,7 +280,7 @@ jobs:
         id: plan
         run: |
           set +e
-          terraform plan -no-color -input=false -out=tfplan \
+          terraform plan -no-color -input=false -lock-timeout=5m -out=tfplan \
             -detailed-exitcode 2>&1 | tee plan.txt
           code=${PIPESTATUS[0]}
           echo "exitcode=$code" >> $GITHUB_OUTPUT
@@ -315,7 +315,7 @@ jobs:
       - name: ☁️ Cloudflare Terraform Plan
         id: cf_plan
         run: |
-          terraform plan -no-color -input=false 2>&1 | tee cf-plan.txt
+          terraform plan -no-color -input=false -lock-timeout=5m 2>&1 | tee cf-plan.txt
         working-directory: terraform/cloudflare
         continue-on-error: true
         env:
@@ -635,10 +635,10 @@ jobs:
           # Fall back to a fresh plan+apply if the artifact is unavailable.
           if [ -f tfplan ]; then
             echo "📋 Applying reviewed plan (tfplan)"
-            terraform apply -input=false tfplan
+            terraform apply -input=false -lock-timeout=5m tfplan
           else
             echo "⚠️ No saved plan found; planning and applying fresh"
-            terraform apply -auto-approve -input=false
+            terraform apply -auto-approve -input=false -lock-timeout=5m
           fi
 
           # Capture profile domain target for Cloudflare
@@ -652,7 +652,7 @@ jobs:
         run: |
           cd terraform/cloudflare
           terraform init -input=false
-          terraform apply -auto-approve -input=false
+          terraform apply -auto-approve -input=false -lock-timeout=5m
         env:
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
