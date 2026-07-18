@@ -1,9 +1,10 @@
 # ============================================================================
-# Cloudflare DNS for meet.ankitraj.cloud (Green Room)
+# Cloudflare for meet.ankitraj.cloud (Green Room)
 # ============================================================================
-# Mirrors the portfolio's Cloudflare module. Reuses the same ankitraj.cloud zone
-# and the shared Terraform state bucket (distinct key). Manages the app CNAME
-# (meet -> API Gateway custom-domain target) and the ACM validation CNAME.
+# Reuses the ankitraj.cloud zone and the shared Terraform state bucket (distinct
+# key). Manages the proxied app CNAME plus an edge proxy Worker that forwards
+# meet.ankitraj.cloud/* to the API Gateway execute-api origin (Free plan cannot
+# override the origin Host header, which is Enterprise-only).
 # ============================================================================
 terraform {
   required_version = ">= 1.0"
@@ -49,6 +50,11 @@ variable "cloudflare_zone_id" {
   type        = string
 }
 
+variable "cloudflare_account_id" {
+  description = "Cloudflare Account ID that owns ankitraj.cloud. Required to deploy the edge proxy Worker."
+  type        = string
+}
+
 variable "domain_name" {
   description = "Fully qualified subdomain served by Green Room."
   type        = string
@@ -81,9 +87,11 @@ variable "enable_ci_probe_ruleset" {
 
 # ==================== DNS records ====================
 
-# App subdomain -> API Gateway default endpoint. Proxied so Cloudflare
-# terminates public TLS at the edge (Universal SSL) and connects to the AWS
-# origin over its built-in *.execute-api certificate (Full mode). No ACM cert.
+# App subdomain. Proxied so Cloudflare terminates public TLS at the edge
+# (Universal SSL) and the edge proxy Worker (below) intercepts every request on
+# meet.ankitraj.cloud/* before it reaches an origin. The CNAME target is only a
+# placeholder for the proxied record; the Worker forwards to the execute-api
+# host itself, so this content value is never actually contacted.
 resource "cloudflare_record" "app" {
   zone_id = var.cloudflare_zone_id
   name    = var.record_name
@@ -91,32 +99,32 @@ resource "cloudflare_record" "app" {
   type    = "CNAME"
   ttl     = 1
   proxied = true
-  comment = "meet.ankitraj.cloud to Green Room API Gateway endpoint"
+  comment = "meet.ankitraj.cloud served by the Green Room edge proxy Worker"
 }
 
-# ==================== Origin Rule: Host header override ====================
-# API Gateway's default (regional) endpoint returns 403 for any Host header that
-# is not its own *.execute-api name. Cloudflare proxies the visitor's Host
-# (meet.ankitraj.cloud), so without this rule every request is rejected. This
-# Origin Rule rewrites only the Host header sent to the origin to the execute-api
-# host; SNI stays as the CNAME target, so it still matches AWS's built-in cert.
-resource "cloudflare_ruleset" "app_origin_host" {
-  zone_id     = var.cloudflare_zone_id
-  name        = "Green Room origin Host header override"
-  description = "Send API Gateway's execute-api host as the origin Host header"
-  kind        = "zone"
-  phase       = "http_request_origin"
+# ==================== Edge proxy Worker ====================
+# API Gateway's default endpoint returns 403 for any Host header other than its
+# own *.execute-api name. Cloudflare's Free plan cannot override the origin Host
+# header (Origin Rules Host-header override is Enterprise-only), so a Worker on
+# meet.ankitraj.cloud/* forwards each request straight to the execute-api origin
+# (sending the execute-api Host/SNI), which API Gateway accepts.
+resource "cloudflare_workers_script" "app" {
+  account_id         = var.cloudflare_account_id
+  name               = "greenroom-edge-proxy"
+  content            = file("${path.module}/worker/proxy.js")
+  module             = true
+  compatibility_date = "2024-11-01"
 
-  rules {
-    ref         = "greenroom_origin_host_override"
-    description = "Rewrite Host to the API Gateway endpoint for ${var.domain_name}"
-    expression  = "(http.host eq \"${var.domain_name}\")"
-    action      = "route"
-
-    action_parameters {
-      host_header = var.origin_host
-    }
+  plain_text_binding {
+    name = "ORIGIN_HOST"
+    text = var.origin_host
   }
+}
+
+resource "cloudflare_workers_route" "app" {
+  zone_id     = var.cloudflare_zone_id
+  pattern     = "${var.domain_name}/*"
+  script_name = cloudflare_workers_script.app.name
 }
 
 # ==================== WAF: CI probe bypass (opt-in) ====================
@@ -158,4 +166,9 @@ resource "cloudflare_ruleset" "ci_probe_bypass" {
 output "app_record" {
   description = "App subdomain CNAME record."
   value       = cloudflare_record.app.hostname
+}
+
+output "worker_route" {
+  description = "Edge proxy Worker route pattern."
+  value       = cloudflare_workers_route.app.pattern
 }
