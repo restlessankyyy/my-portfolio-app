@@ -131,8 +131,11 @@ resource "aws_apigatewayv2_api" "app" {
 }
 
 resource "aws_apigatewayv2_stage" "app" {
-  api_id      = aws_apigatewayv2_api.app.id
-  name        = var.environment
+  api_id = aws_apigatewayv2_api.app.id
+  # $default exposes the API at the base URL with no stage path, so Cloudflare
+  # can proxy meet.ankitraj.cloud straight to the API Gateway endpoint without a
+  # custom domain or ACM cert (Cloudflare terminates public TLS at the edge).
+  name        = "$default"
   auto_deploy = true
 
   access_log_settings {
@@ -177,25 +180,8 @@ resource "aws_lambda_permission" "api_gw" {
   source_arn    = "${aws_apigatewayv2_api.app.execution_arn}/*/*"
 }
 
-# ==================== Custom domain (meet.ankitraj.cloud) ====================
-# The ACM certificate is created out-of-band (the shared deploy role has ACM
-# read-only permissions), then its ARN is passed in via var.certificate_arn.
-# DNS (the app CNAME + the ACM validation CNAME) is managed in the Cloudflare
-# module (terraform/cloudflare).
-resource "aws_apigatewayv2_domain_name" "app" {
-  count       = var.enable_custom_domain ? 1 : 0
-  domain_name = var.domain_name
+# DNS for meet.ankitraj.cloud is handled entirely by Cloudflare
+# (terraform/cloudflare): a proxied CNAME to the API Gateway default endpoint.
+# Cloudflare provides the public TLS certificate (Universal SSL), so no API
+# Gateway custom domain or ACM certificate is required here.
 
-  domain_name_configuration {
-    certificate_arn = var.certificate_arn
-    endpoint_type   = "REGIONAL"
-    security_policy = "TLS_1_2"
-  }
-}
-
-resource "aws_apigatewayv2_api_mapping" "app" {
-  count       = var.enable_custom_domain ? 1 : 0
-  api_id      = aws_apigatewayv2_api.app.id
-  domain_name = aws_apigatewayv2_domain_name.app[0].id
-  stage       = aws_apigatewayv2_stage.app.id
-}

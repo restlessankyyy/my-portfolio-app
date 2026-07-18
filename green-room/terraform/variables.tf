@@ -24,18 +24,6 @@ variable "domain_name" {
   default     = "meet.ankitraj.cloud"
 }
 
-variable "enable_custom_domain" {
-  description = "Whether to provision the API Gateway custom domain + mapping. Requires a valid certificate_arn."
-  type        = bool
-  default     = true
-}
-
-variable "certificate_arn" {
-  description = "ACM certificate ARN for the custom domain, in the same region as aws_region. Created out-of-band because the shared deploy role has ACM read-only access."
-  type        = string
-  default     = ""
-}
-
 variable "log_retention_days" {
   description = "CloudWatch Logs retention (days) for the Lambda and API Gateway log groups. Lower values reduce storage cost."
   type        = number
