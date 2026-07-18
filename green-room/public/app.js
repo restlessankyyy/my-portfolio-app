@@ -1,28 +1,18 @@
 /* Green Room — senior SA interview practice. Everything runs in the browser.
-   Only the question + transcript text is sent to the Anthropic API for scoring. */
+   Only the question + transcript text is sent to the Gemini API for scoring. */
 (() => {
 "use strict";
 
-const CLAUDE_MODEL = "claude-sonnet-4-6";
-const CLAUDE_URL = "https://api.anthropic.com/v1/messages";
-const GEMINI_DEFAULT_MODEL = "gemini-3.5-flash";
-const GEMINI_MODELS = [
-  "gemini-3.5-flash",
-  "gemini-3.1-pro-preview",
-  "gemini-2.5-pro",
-  "gemini-2.5-flash",
-  "gemini-2.5-flash-lite",
-];
-const GEMINI_URL = (m) => `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`;
-// Provider is auto-detected from the key prefix: sk-ant-… → Anthropic, AIza… → Gemini.
-const detectProvider = (key) => key.startsWith("AIza") ? "gemini" : "anthropic";
+// Shared pure helpers (see gemini-core.js), loaded on window before this script.
+const Core = (typeof globalThis !== "undefined" && globalThis.GreenRoomCore) || {};
+const { GEMINI_MODELS, pickGeminiModel, geminiUrl, toGeminiSchema } = Core;
 const LS = {
   sessions: "gr_sessions",
   asked: "gr_asked_ids",
   geminiModel: "gr_gemini_model",
   interviewerVoice: "gr_interviewer_voice",
-  realisticVoice: "gr_realistic_voice",
   kokoroVoice: "gr_kokoro_voice",
+  videoAnalysis: "gr_video_analysis",
 };
 
 // The API key is held in memory only for the current page session and is never
@@ -48,13 +38,11 @@ const $ = (id) => document.getElementById(id);
 const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
 
 function getGeminiModel() {
-  const saved = localStorage.getItem(LS.geminiModel);
-  return GEMINI_MODELS.includes(saved) ? saved : GEMINI_DEFAULT_MODEL;
+  return pickGeminiModel(localStorage.getItem(LS.geminiModel));
 }
 
 function setGeminiModel(model) {
-  const picked = GEMINI_MODELS.includes(model) ? model : GEMINI_DEFAULT_MODEL;
-  localStorage.setItem(LS.geminiModel, picked);
+  localStorage.setItem(LS.geminiModel, pickGeminiModel(model));
 }
 
 // ───────────────────────── state ─────────────────────────
@@ -73,21 +61,16 @@ const state = {
   recog: null,
   recogWanted: false,
   viewingSaved: false,    // report screen showing a historical session
-  interviewerUtterance: null,
   kokoro: null,           // loaded KokoroTTS instance
   kokoroLoading: null,    // in-flight load promise
   audioCtx: null,
   voiceSource: null,      // active AudioBufferSourceNode
   mouthRAF: 0,            // requestAnimationFrame id for audio-driven mouth
   speakToken: 0,          // invalidates stale in-flight voice generations
+  frames: [],             // sampled webcam frames (base64 jpeg) for optional delivery analysis
+  frameInt: 0,            // interval id for frame sampling
 };
 
-function realisticVoiceEnabled() {
-  return localStorage.getItem(LS.realisticVoice) === "1";
-}
-function setRealisticVoiceEnabled(enabled) {
-  localStorage.setItem(LS.realisticVoice, enabled ? "1" : "0");
-}
 function getKokoroVoice() {
   const saved = localStorage.getItem(LS.kokoroVoice);
   return KOKORO_VOICES.some(v => v.id === saved) ? saved : KOKORO_DEFAULT_VOICE;
@@ -137,8 +120,6 @@ function setAvatarTalking(talking) {
 function stopInterviewerVoice() {
   // Invalidate any in-flight speech generation so it can't play late.
   state.speakToken = (state.speakToken || 0) + 1;
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  state.interviewerUtterance = null;
   if (state.voiceSource) {
     try { state.voiceSource.onended = null; state.voiceSource.stop(); } catch {}
     state.voiceSource = null;
@@ -223,48 +204,22 @@ async function speakWithKokoro(text, token) {
   source.start();
 }
 
-function speakWithWebSpeech(text) {
-  if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === "undefined") {
-    setAvatarStatus("Interviewer voice is unavailable in this browser.");
-    return;
-  }
-  const utter = new SpeechSynthesisUtterance(text);
-  const voices = window.speechSynthesis.getVoices();
-  const preferred = voices.find(v => /en-US/i.test(v.lang) && /Female|Samantha|Google US English/i.test(v.name))
-    || voices.find(v => /en-US/i.test(v.lang))
-    || voices[0];
-  if (preferred) utter.voice = preferred;
-  utter.rate = 0.95;
-  utter.pitch = 1.0;
-  utter.onstart = () => setAvatarTalking(true);
-  utter.onend = () => setAvatarTalking(false);
-  utter.onerror = () => setAvatarTalking(false);
-  state.interviewerUtterance = utter;
-  window.speechSynthesis.speak(utter);
-}
-
 function speakQuestion(questionText) {
   if (!interviewerVoiceEnabled()) return;
   stopInterviewerVoice();                 // bumps state.speakToken
   const token = state.speakToken;
   const text = `Let's begin. ${questionText}`;
-  if (realisticVoiceEnabled()) {
-    speakWithKokoro(text, token).catch((e) => {
-      if (token !== state.speakToken) return;
-      console.warn("Kokoro voice failed, falling back:", e);
-      setAvatarStatus("Realistic voice unavailable — using standard voice.");
-      speakWithWebSpeech(text);
-    });
-    return;
-  }
-  speakWithWebSpeech(text);
+  // Human-like neural voice only (Kokoro). No robotic system-TTS fallback.
+  speakWithKokoro(text, token).catch((e) => {
+    if (token !== state.speakToken) return;
+    console.warn("Interviewer voice failed:", e);
+    setAvatarStatus("Interviewer voice unavailable right now. Read the question above.");
+  });
 }
 
 function syncInterviewerControls() {
   const chk = $("chkInterviewerVoice");
   if (chk) chk.checked = interviewerVoiceEnabled();
-  const rchk = $("chkRealisticVoice");
-  if (rchk) rchk.checked = realisticVoiceEnabled();
   const sel = $("selKokoroVoice");
   if (sel) {
     const selected = getKokoroVoice();
@@ -275,7 +230,7 @@ function syncInterviewerControls() {
       if (v.id === selected) opt.selected = true;
       sel.appendChild(opt);
     });
-    sel.disabled = !realisticVoiceEnabled();
+    sel.disabled = !interviewerVoiceEnabled();
   }
 }
 
@@ -373,9 +328,10 @@ function renderModelPicker() {
 function renderKeyStatus() {
   const key = apiKey;
   $("inpApiKey").value = key;
-  $("keyStatus").textContent = key
-    ? `Key saved in this browser. AI feedback via ${detectProvider(key) === "gemini" ? `Gemini (${getGeminiModel()})` : `Claude (${CLAUDE_MODEL})`}.`
-    : "";
+  if (!key) { $("keyStatus").textContent = ""; return; }
+  // Any non-empty key is accepted; the Gemini API validates it for real on
+  // the first request, so we never block or scare the user on the prefix.
+  $("keyStatus").textContent = `Key set for this session. AI feedback via Gemini (${getGeminiModel()}).`;
 }
 
 function renderHistory() {
@@ -455,6 +411,32 @@ function pickQuestions(track, count, difficulty) {
 
 // ───────────────────────── session flow ─────────────────────────
 function startSession() {
+  // Capture a key that was typed but not yet committed (the input only
+  // commits apiKey on its "change"/blur event, so a click straight after
+  // typing would otherwise start keyless).
+  const typedKey = $("inpApiKey").value.trim();
+  if (typedKey !== apiKey) { apiKey = typedKey; renderKeyStatus(); }
+
+  // No key: warn before entering. Keyless practice mode is allowed, but the
+  // user should make that choice knowingly rather than discover it only when
+  // the first answer comes back without AI feedback.
+  if (!apiKey) {
+    const proceed = confirm(
+      "No Gemini key set.\n\n" +
+      "Gemini has a free tier, so you can get a key at aistudio.google.com/apikey " +
+      "(no card) and run entirely on your own free quota.\n\n" +
+      "Without a key you can still run the interview and record answers, " +
+      "but you won't get AI scoring or feedback.\n\n" +
+      "OK = practice without AI feedback   •   Cancel = add your key first"
+    );
+    if (!proceed) {
+      const i = $("inpApiKey");
+      i.scrollIntoView({ behavior: "smooth", block: "center" });
+      i.focus();
+      return;
+    }
+  }
+
   const count = parseInt($("selLength").value, 10);
   const difficulty = $("selDifficulty").value;
   const questions = pickQuestions(state.track, count, difficulty);
@@ -470,14 +452,19 @@ function startSession() {
   state.qIndex = 0;
   state.viewingSaved = false;
   show("screen-session");
-  renderQuestion();
+  renderQuestion({ autoSpeak: false });
+  // Gate the interviewer voice behind an explicit Start: browsers block audio
+  // until a user gesture, and it reads better to begin on the candidate's cue.
+  $("btnBeginInterview").classList.remove("hidden");
+  $("avatarState").textContent = "Press Start when you're ready.";
   if (!state.stream) tryEnableCamera(true); // quiet attempt; overlay stays if denied
 }
 
 function currentQ() { return state.session.questions[state.qIndex]; }
 function targetFor(q) { return (window.TARGETS[q.track] || {})[q.tier] || [90, 180]; }
 
-function renderQuestion() {
+function renderQuestion(opts = {}) {
+  const autoSpeak = opts.autoSpeak !== false;
   const q = currentQ();
   $("qProgress").textContent = `Question ${state.qIndex + 1} of ${state.session.questions.length}`;
   const chip = $("qTier");
@@ -492,6 +479,7 @@ function renderQuestion() {
   $("interim").textContent = "";
   $("recState").textContent = "";
   state.answering = false; state.answered = false; state.elapsed = 0; state.chunks = [];
+  stopFrameSampling(); state.frames = [];
   $("btnAnswer").textContent = "● Start answer";
   $("btnAnswer").classList.remove("recording");
   $("btnAnswer").disabled = false;
@@ -500,8 +488,9 @@ function renderQuestion() {
   ["fbLoading","fbError","fbBody","btnNext","btnRetryEval"].forEach(id => $(id).classList.add("hidden"));
   syncInterviewerControls();
   setAvatarTalking(false);
+  $("btnBeginInterview").classList.add("hidden");
   $("avatarState").textContent = "Interviewer is ready.";
-  speakQuestion(q.q);
+  if (autoSpeak) speakQuestion(q.q);
 }
 
 const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
@@ -586,8 +575,17 @@ function startSpeech() {
     $("interim").textContent = interim;
   };
   r.onerror = (e) => {
-    if (e.error === "not-allowed") $("micNote").textContent = "Microphone permission denied — transcription off. Type your answer.";
-    else if (e.error !== "no-speech" && e.error !== "aborted") $("micNote").textContent = `Transcription hiccup (${e.error}) — keep talking or type.`;
+    if (e.error === "not-allowed") {
+      state.recogWanted = false;   // stop the auto-restart loop
+      $("micNote").textContent = "Microphone permission denied, so transcription is off. Type your answer.";
+    } else if (e.error === "network" || e.error === "service-not-allowed") {
+      // Brave (and some Chromium builds) block Google's speech backend, so
+      // recognition can never succeed. Stop retrying and tell the user.
+      state.recogWanted = false;
+      $("micNote").textContent = "Live transcription is unavailable in this browser (Brave blocks the speech service). Type your answer, or use Chrome for voice.";
+    } else if (e.error !== "no-speech" && e.error !== "aborted") {
+      $("micNote").textContent = `Transcription hiccup (${e.error}). Keep talking or type your answer.`;
+    }
   };
   r.onend = () => { if (state.recogWanted) { try { r.start(); } catch {} } }; // Chrome auto-stops on silence
   state.recog = r;
@@ -600,6 +598,40 @@ function stopSpeech() {
   $("interim").textContent = "";
 }
 
+// ───────────────────────── optional on-camera delivery analysis ─────────────────────────
+function videoAnalysisEnabled() {
+  return localStorage.getItem(LS.videoAnalysis) === "1";
+}
+function setVideoAnalysisEnabled(enabled) {
+  localStorage.setItem(LS.videoAnalysis, enabled ? "1" : "0");
+}
+// Grab the current webcam frame as a compact base64 JPEG (no data: prefix).
+function captureFrame() {
+  const v = $("preview");
+  if (!v || !v.videoWidth) return null;
+  const w = 512, h = Math.round(w * (v.videoHeight / v.videoWidth)) || 384;
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  c.getContext("2d").drawImage(v, 0, 0, w, h);
+  return c.toDataURL("image/jpeg", 0.6).split(",")[1];
+}
+const MAX_FRAMES = 5;
+function startFrameSampling() {
+  stopFrameSampling();
+  state.frames = [];
+  if (!videoAnalysisEnabled() || !state.stream) return;
+  const grab = () => {
+    if (state.frames.length >= MAX_FRAMES) return stopFrameSampling();
+    const f = captureFrame();
+    if (f) state.frames.push(f);
+  };
+  grab();                                   // one right away
+  state.frameInt = setInterval(grab, 4000);  // then every ~4s, capped at MAX_FRAMES
+}
+function stopFrameSampling() {
+  if (state.frameInt) { clearInterval(state.frameInt); state.frameInt = 0; }
+}
+
 // ───────────────────────── answer lifecycle ─────────────────────────
 async function toggleAnswer() {
   if (!state.answering) {
@@ -610,6 +642,7 @@ async function toggleAnswer() {
     state.timerInt = setInterval(tickTimer, 250);
     startRecording();
     startSpeech();
+    startFrameSampling();
     $("btnAnswer").textContent = "■ Done answering";
     $("btnAnswer").classList.add("recording");
     $("recState").textContent = state.stream ? "● recording" : "";
@@ -619,6 +652,7 @@ async function toggleAnswer() {
     state.answered = true;
     clearInterval(state.timerInt);
     stopSpeech();
+    stopFrameSampling();
     $("btnAnswer").textContent = "● Re-record answer";
     $("btnAnswer").classList.remove("recording");
     $("recState").textContent = "";
@@ -701,58 +735,17 @@ const EVAL_TOOL = {
   },
 };
 
-// Convert our Anthropic tool input_schema to Gemini's responseSchema dialect
-// (drop additionalProperties / minimum / maximum, keep structure + descriptions).
-function toGeminiSchema(node) {
-  if (Array.isArray(node)) return node.map(toGeminiSchema);
-  if (node && typeof node === "object") {
-    const out = {};
-    for (const [k, v] of Object.entries(node)) {
-      if (["additionalProperties","minimum","maximum"].includes(k)) continue;
-      out[k] = toGeminiSchema(v);
-    }
-    return out;
-  }
-  return node;
-}
-
-async function callAnthropic(key, system, tool, userContent, maxTokens) {
-  const resp = await fetch(CLAUDE_URL, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "x-api-key": key,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true",
-    },
-    body: JSON.stringify({
-      model: CLAUDE_MODEL,
-      max_tokens: maxTokens || 2000,
-      system,
-      tools: [tool],
-      tool_choice: { type: "tool", name: tool.name },
-      messages: [{ role: "user", content: userContent }],
-    }),
-  });
-  if (!resp.ok) {
-    let detail = "";
-    try { detail = (await resp.json()).error?.message || ""; } catch {}
-    throw new Error(`API ${resp.status}: ${detail || resp.statusText}`);
-  }
-  const data = await resp.json();
-  const block = data.content.find(b => b.type === "tool_use" && b.name === tool.name);
-  if (!block) throw new Error("No structured evaluation returned.");
-  return block.input;
-}
-
-async function callGemini(key, system, tool, userContent, maxTokens) {
+async function callGemini(key, system, tool, userContent, maxTokens, images) {
   const model = getGeminiModel();
-  const resp = await fetch(GEMINI_URL(model), {
+  const parts = [{ text: userContent }];
+  (images || []).forEach(b64 => parts.push({ inlineData: { mimeType: "image/jpeg", data: b64 } }));
+  if (images && images.length) console.info(`[green-room] sending ${images.length} on-camera frame(s) to Gemini (${model}).`);
+  const resp = await fetch(geminiUrl(model), {
     method: "POST",
     headers: { "content-type": "application/json", "x-goog-api-key": key },
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: system }] },
-      contents: [{ role: "user", parts: [{ text: userContent }] }],
+      contents: [{ role: "user", parts }],
       generationConfig: {
         responseMimeType: "application/json",
         responseSchema: toGeminiSchema(tool.input_schema),
@@ -767,6 +760,10 @@ async function callGemini(key, system, tool, userContent, maxTokens) {
     throw new Error(`API ${resp.status}: ${detail || resp.statusText}`);
   }
   const data = await resp.json();
+  if (images && images.length) {
+    const imgTokens = (data.usageMetadata?.promptTokensDetails || []).find(d => d.modality === "IMAGE");
+    console.info("[green-room] Gemini image tokens (proof frames were read):", imgTokens || "none reported", "| full usage:", data.usageMetadata);
+  }
   const cand = data.candidates?.[0];
   const text = cand?.content?.parts?.map(p => p.text).join("") || "";
   if (!text) throw new Error(cand?.finishReason ? `Gemini returned no content (${cand.finishReason}).` : "Gemini returned no content.");
@@ -774,12 +771,10 @@ async function callGemini(key, system, tool, userContent, maxTokens) {
   catch { throw new Error("Gemini returned malformed JSON — retry."); }
 }
 
-async function callAI(system, tool, userContent, maxTokens) {
+async function callAI(system, tool, userContent, maxTokens, images) {
   const key = apiKey;
   if (!key) throw new Error("NO_KEY");
-  return detectProvider(key) === "gemini"
-    ? callGemini(key, system, tool, userContent, maxTokens)
-    : callAnthropic(key, system, tool, userContent, maxTokens);
+  return callGemini(key, system, tool, userContent, maxTokens, images);
 }
 
 async function submitAnswer() {
@@ -834,8 +829,19 @@ ${transcript}
 
 Evaluate this answer against the rubric and submit via the tool.`;
 
+  // Optional: attach a few sampled webcam frames so the model can comment on
+  // visible delivery. Only used when the user opted in and frames were captured.
+  const frames = videoAnalysisEnabled() ? state.frames.slice(0, MAX_FRAMES) : [];
+  if (videoAnalysisEnabled()) {
+    console.info(`[green-room] on-camera analysis is ON. Captured ${state.frames.length} frame(s); attaching ${frames.length}.` +
+      (frames.length ? "" : " (0 means camera was off or the answer was too short.)"));
+  }
+  const content = frames.length
+    ? userContent + `\n\nON-CAMERA FRAMES: ${frames.length} still frame(s) sampled during the answer are attached. Add 1-3 brief, fair notes on visible delivery (eye contact, posture, facial expression, energy) to the "delivery" field. Do not guess identity or appearance beyond delivery.`
+    : userContent;
+
   try {
-    const ev = await callAI(EVAL_SYSTEM, EVAL_TOOL, userContent, 2500);
+    const ev = await callAI(EVAL_SYSTEM, EVAL_TOOL, content, 2500, frames);
     answer.eval = ev;
     state.session.answers.push(answer);
     renderFeedback(ev);
@@ -910,6 +916,7 @@ async function endSessionEarly() {
 function teardownMedia() {
   stopInterviewerVoice();
   stopSpeech();
+  stopFrameSampling();
   if (state.recorder && state.recorder.state !== "inactive") try { state.recorder.stop(); } catch {}
   if (state.stream) { state.stream.getTracks().forEach(t => t.stop()); state.stream = null; }
   $("preview").srcObject = null;
@@ -1117,24 +1124,30 @@ $("btnNext").onclick = nextQuestion;
 $("btnRetryEval").onclick = () => { state.pendingAnswer = null; submitAnswer(); };
 $("btnEndSession").onclick = endSessionEarly;
 $("btnEnableCam").onclick = () => tryEnableCamera(false);
+$("chkVideoAnalysis").checked = videoAnalysisEnabled();
+$("chkVideoAnalysis").addEventListener("change", () => {
+  setVideoAnalysisEnabled($("chkVideoAnalysis").checked);
+});
 $("chkInterviewerVoice").addEventListener("change", () => {
   const enabled = $("chkInterviewerVoice").checked;
   setInterviewerVoiceEnabled(enabled);
-  if (!enabled) stopInterviewerVoice();
-  else if (!$("screen-session").classList.contains("hidden")) speakQuestion(currentQ().q);
-});
-$("chkRealisticVoice").addEventListener("change", () => {
-  const enabled = $("chkRealisticVoice").checked;
-  setRealisticVoiceEnabled(enabled);
   syncInterviewerControls();
-  if (enabled) {
-    // warm up the model so the first question is ready
-    loadKokoro().then(() => setAvatarStatus("Realistic interviewer voice ready.")).catch(() => {});
-  }
+  if (!enabled) { stopInterviewerVoice(); return; }
+  // Warm up the neural voice so the first question speaks without delay.
+  loadKokoro().then(() => setAvatarStatus("Interviewer voice ready.")).catch(() => {});
+  if (!$("screen-session").classList.contains("hidden")) speakQuestion(currentQ().q);
 });
 $("selKokoroVoice").addEventListener("change", () => {
   setKokoroVoice($("selKokoroVoice").value);
 });
+$("btnBeginInterview").onclick = () => {
+  $("btnBeginInterview").classList.add("hidden");
+  // This click is the user gesture that unlocks audio playback in the browser.
+  const ctx = getAudioCtx();
+  if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch {} }
+  loadKokoro().catch(() => {});   // warm the voice so the first question is prompt
+  speakQuestion(currentQ().q);
+};
 $("btnReplayQuestion").onclick = () => speakQuestion(currentQ().q);
 $("btnStopQuestionVoice").onclick = () => stopInterviewerVoice();
 $("btnPrint").onclick = () => window.print();

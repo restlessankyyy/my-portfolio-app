@@ -56,20 +56,24 @@
     <aside class="home-side">
       <div class="panel">
         <h3>AI evaluator</h3>
-        <p class="small">Paste an Anthropic key (<code>sk-ant-…</code>) or a Google Gemini key (<code>AIza…</code>) — the provider is auto-detected. Your key is stored only in this browser; only the question + your transcript are sent to the AI API.</p>
+        <p class="small">Paste a free Google Gemini key (<code>AIza…</code>). Gemini has a free tier, so you run on your own free quota. Your key is held only in this browser tab; only the question + your transcript are sent to the Gemini API.</p>
         <label class="setup-field">
           <span>Gemini model</span>
           <select id="selGeminiModel"></select>
         </label>
         <label class="setup-field">
-          <span>API key (Anthropic or Gemini)</span>
+          <span>Gemini API key (free)</span>
           <div class="key-row">
-            <input id="inpApiKey" type="password" placeholder="sk-ant-… or AIza…" autocomplete="off" spellcheck="false">
+            <input id="inpApiKey" type="password" placeholder="AIza… (your free Gemini key)" autocomplete="off" spellcheck="false">
             <button id="btnToggleKey" class="btn btn-ghost btn-sm" title="Show/hide">👁</button>
           </div>
         </label>
         <p id="keyStatus" class="small muted"></p>
-        <p class="small muted">No key? You can still run sessions — answers are timed and recorded, AI scoring is skipped.</p>
+        <label class="iv-toggle">
+          <input id="chkVideoAnalysis" type="checkbox">
+          <span>Also analyze my on-camera delivery (samples a few frames, uses more Gemini quota)</span>
+        </label>
+        <p class="small muted">No key? You can still run sessions: answers are timed and recorded, AI scoring is skipped. Get a free key (no card) at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.</p>
       </div>
 
       <div class="panel" id="progressPanel">
@@ -152,14 +156,11 @@
           <span class="avatar-mouth"></span>
         </div>
         <p id="avatarState" class="small muted center">Interviewer is ready.</p>
+        <button id="btnBeginInterview" class="btn btn-primary hidden">▶ Start interview</button>
         <div class="interviewer-controls small">
           <label class="iv-toggle">
             <input id="chkInterviewerVoice" type="checkbox" checked>
-            <span>Interviewer voice</span>
-          </label>
-          <label class="iv-toggle">
-            <input id="chkRealisticVoice" type="checkbox">
-            <span>Realistic AI voice (downloads once)</span>
+            <span>Interviewer voice (realistic, downloads once)</span>
           </label>
           <label class="setup-field">
             <span>Interviewer</span>
@@ -214,6 +215,7 @@
 
 </main>
 
+<script src="gemini-core.js"></script>
 <script src="questions.js"></script>
 <script src="app.js"></script>
 </body>

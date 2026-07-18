@@ -78,6 +78,8 @@ jobs:
           cache: 'npm'
           cache-dependency-path: green-room/package-lock.json
       - run: npm ci
+      - name: Syntax check browser scripts
+        run: node --check public/gemini-core.js && node --check public/app.js
       - run: npm test
       - name: Start server and health check
         run: |
