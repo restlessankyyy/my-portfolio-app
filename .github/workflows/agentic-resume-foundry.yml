@@ -77,10 +77,10 @@ jobs:
 
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: 🟢 Setup Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -90,7 +90,7 @@ jobs:
 
       - name: ♻️ Cache Puppeteer Chromium
         id: puppeteer-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.cache/puppeteer
           key: puppeteer-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
@@ -175,7 +175,7 @@ jobs:
 
       - name: 📤 Upload Resume PDF
         if: success()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: resume-pdf-foundry
           path: public/assets/Profile-*.pdf
@@ -183,7 +183,7 @@ jobs:
 
       - name: 📤 Upload ATS Report
         if: success()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: ats-report-foundry
           path: public/assets/*-ats-report.json
@@ -191,7 +191,7 @@ jobs:
 
       - name: 📤 Upload Debug HTML
         if: success()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: debug-html-foundry
           path: public/assets/resume-debug.html
