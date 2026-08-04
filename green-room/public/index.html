@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Green Room — SA Interview Practice</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand" id="brandHome" title="Home">
+    <span class="brand-dot"></span> Green Room
+    <span class="brand-sub">senior SA interview practice</span>
+  </div>
+  <div class="topbar-right">
+    <span id="privacyNote" class="privacy-note">Recordings never leave this device</span>
+  </div>
+</header>
+
+<main>
+
+<!-- ════════════════ HOME / SETUP ════════════════ -->
+<section id="screen-home" class="screen">
+  <div class="home-grid">
+    <div class="home-main">
+      <h1>Take a seat.</h1>
+      <p class="lede">Pick a track. Answer out loud, on camera. Get scored like it's the real room.</p>
+
+      <div class="track-grid" id="trackGrid"><!-- track cards injected --></div>
+
+      <div class="setup-row">
+        <label class="setup-field">
+          <span>Session length</span>
+          <select id="selLength">
+            <option value="3">Quick — 3 questions</option>
+            <option value="5" selected>Standard — 5 questions</option>
+            <option value="8">Deep — 8 questions</option>
+          </select>
+        </label>
+        <label class="setup-field">
+          <span>Difficulty</span>
+          <select id="selDifficulty">
+            <option value="gentle">Gentle — more warm-ups</option>
+            <option value="standard" selected>Standard — ramp to curveballs</option>
+            <option value="gauntlet">Gauntlet — mostly curveballs</option>
+          </select>
+        </label>
+      </div>
+
+      <button id="btnStart" class="btn btn-primary btn-lg" disabled>Begin session</button>
+      <p id="startHint" class="hint">Select a track to begin.</p>
+    </div>
+
+    <aside class="home-side">
+      <div class="panel">
+        <h3>AI evaluator</h3>
+        <p class="small">Paste a free Google Gemini key (<code>AIza…</code>). Gemini has a free tier, so you run on your own free quota. Your key is held only in this browser tab; only the question + your transcript are sent to the Gemini API.</p>
+        <label class="setup-field">
+          <span>Gemini model</span>
+          <select id="selGeminiModel"></select>
+        </label>
+        <label class="setup-field">
+          <span>Gemini API key (free)</span>
+          <div class="key-row">
+            <input id="inpApiKey" type="password" placeholder="AIza… (your free Gemini key)" autocomplete="off" spellcheck="false">
+            <button id="btnToggleKey" class="btn btn-ghost btn-sm" title="Show/hide">👁</button>
+          </div>
+        </label>
+        <p id="keyStatus" class="small muted"></p>
+        <label class="iv-toggle">
+          <input id="chkVideoAnalysis" type="checkbox">
+          <span>Also analyze my on-camera delivery (samples a few frames, uses more Gemini quota)</span>
+        </label>
+        <p class="small muted">No key? You can still run sessions: answers are timed and recorded, AI scoring is skipped. Get a free key (no card) at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.</p>
+      </div>
+
+      <div class="panel" id="progressPanel">
+        <h3>Progress</h3>
+        <div id="progressSummary" class="small muted">No sessions yet.</div>
+        <div id="historyList"></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ════════════════ SESSION ════════════════ -->
+<section id="screen-session" class="screen hidden">
+  <div class="session-head">
+    <div>
+      <span id="qProgress" class="q-progress"></span>
+      <span id="qTier" class="tier-chip"></span>
+    </div>
+    <div class="session-head-right">
+      <span id="timerTarget" class="timer-target"></span>
+      <span id="timer" class="timer">0:00</span>
+      <button id="btnEndSession" class="btn btn-ghost btn-sm">End session</button>
+    </div>
+  </div>
+
+  <h2 id="qText" class="question-text"></h2>
+
+  <div class="session-grid">
+    <div class="answer-col">
+      <div class="rec-row">
+        <button id="btnAnswer" class="btn btn-primary">● Start answer</button>
+        <button id="btnSubmit" class="btn btn-accent" disabled>Submit for feedback</button>
+        <button id="btnSkip" class="btn btn-ghost">Skip</button>
+        <span id="recState" class="rec-state"></span>
+      </div>
+      <div id="interim" class="interim"></div>
+      <textarea id="transcript" placeholder="Your answer transcript appears here as you speak — or type it directly."></textarea>
+      <div id="micNote" class="small muted"></div>
+
+      <div id="feedbackPanel" class="feedback hidden">
+        <div id="fbLoading" class="fb-loading hidden">
+          <span class="pulse"></span> The interviewer is writing notes…
+        </div>
+        <div id="fbError" class="fb-error hidden"></div>
+        <div id="fbBody" class="hidden">
+          <div class="fb-head">
+            <div id="fbOverall" class="fb-overall"></div>
+            <div id="fbVerdict" class="fb-verdict"></div>
+          </div>
+          <div id="fbScores" class="fb-scores"></div>
+          <div class="fb-cols">
+            <div>
+              <h4>What was missing</h4>
+              <ul id="fbGaps"></ul>
+              <h4>What worked</h4>
+              <ul id="fbStrengths"></ul>
+              <h4>Delivery</h4>
+              <ul id="fbDelivery"></ul>
+            </div>
+            <div>
+              <h4>A strong answer's shape</h4>
+              <ol id="fbOutline"></ol>
+              <h4>Likely follow-ups</h4>
+              <ul id="fbFollowups"></ul>
+            </div>
+          </div>
+        </div>
+        <div class="fb-actions">
+          <button id="btnRetryEval" class="btn btn-ghost btn-sm hidden">Retry evaluation</button>
+          <button id="btnNext" class="btn btn-primary hidden">Next question →</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="video-col">
+      <div class="interviewer-card">
+        <div id="avatarFace" class="avatar-face" aria-label="Virtual interviewer avatar" role="img">
+          <span class="avatar-eye left"></span>
+          <span class="avatar-eye right"></span>
+          <span class="avatar-mouth"></span>
+        </div>
+        <p id="avatarState" class="small muted center">Interviewer is ready.</p>
+        <button id="btnBeginInterview" class="btn btn-primary hidden">▶ Start interview</button>
+        <div class="interviewer-controls small">
+          <label class="iv-toggle">
+            <input id="chkInterviewerVoice" type="checkbox" checked>
+            <span>Interviewer voice (realistic, downloads once)</span>
+          </label>
+          <label class="setup-field">
+            <span>Interviewer</span>
+            <select id="selKokoroVoice"></select>
+          </label>
+          <div class="iv-actions">
+            <button id="btnReplayQuestion" class="btn btn-ghost btn-sm">Replay question</button>
+            <button id="btnStopQuestionVoice" class="btn btn-ghost btn-sm">Stop voice</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-frame">
+        <video id="preview" autoplay muted playsinline></video>
+        <div id="videoOverlay" class="video-overlay">
+          <button id="btnEnableCam" class="btn btn-ghost">Enable camera & mic</button>
+          <p id="camError" class="small"></p>
+        </div>
+      </div>
+      <p class="small muted center">You, as the interviewer sees you.</p>
+      <div class="shortcuts small muted">
+        <b>R</b> start/stop · <b>⌘/Ctrl+Enter</b> submit · <b>N</b> next · <b>S</b> skip
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ════════════════ REPORT ════════════════ -->
+<section id="screen-report" class="screen hidden">
+  <div class="report-head">
+    <div>
+      <h1 id="reportTitle">Session report</h1>
+      <p id="reportMeta" class="muted"></p>
+    </div>
+    <div class="report-actions no-print">
+      <button id="btnPrint" class="btn btn-ghost">Export PDF</button>
+      <button id="btnHome" class="btn btn-primary">Done</button>
+    </div>
+  </div>
+
+  <div class="report-stats" id="reportStats"></div>
+
+  <div class="panel" id="summaryPanel">
+    <h3>Coach's summary</h3>
+    <div id="summaryLoading" class="fb-loading hidden"><span class="pulse"></span> Reviewing the whole session…</div>
+    <div id="summaryBody"></div>
+  </div>
+
+  <h3 class="report-section-title">Question by question</h3>
+  <div id="reportQuestions"></div>
+</section>
+
+</main>
+
+<script src="gemini-core.js"></script>
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

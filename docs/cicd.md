@@ -4,33 +4,38 @@
 
 | Workflow | Trigger | Purpose |
 |----------|---------|---------|
-| `ci-cd.yml` | Push to `main`, PRs to `main` | Full pipeline: lint → scan → test → build → deploy → smoke test |
+| `ci-cd.yml` | Push to `main`, PRs to `main` | Full pipeline: detect changes → quality → scan → test → terraform → build → deploy → smoke |
 | `codeql.yml` | Push/PR to `main` + weekly | CodeQL static analysis for JavaScript |
-| `security-audit.yml` | Push/PR (package changes) | npm audit + outdated packages |
 | `resume-pdf.yml` | Push (`resume-aws-sa.html`) + manual | Auto-regenerate Profile.pdf |
 | `resume-nordic-pdf.yml` | Push (`resume-photo.html`) + manual | Auto-regenerate Profile-Nordic.pdf |
 | `agentic-resume.yml` | Push (`jds/*.txt`) + manual | 4-agent resume pipeline via Anthropic Claude |
 | `agentic-resume-foundry.yml` | Push (`jds/*.txt`) + manual | 4-agent resume pipeline via Azure OpenAI (Foundry) |
-| `dependency-update.yml` | Weekly (Sunday 2am UTC) | Check for dependency updates |
+| `docs-lint.yml` | Push/PR (docs changes) | Markdown lint and link check |
+| `dependabot-automerge.yml` | Dependabot PRs | Auto-merge dependency updates once checks pass |
 
 ## Main CI/CD Pipeline Stages
 
 ```text
-Code Quality → Security Scan → Tests → Terraform Validate → Build → Deploy → Smoke Tests → Notify
+Detect Changes → Code Quality → Security Scan → Tests → Terraform Validate* → Build → Deploy → Smoke Tests → Notify
 ```
+
+`*` Terraform Validation is conditional (see the gate below).
 
 ```mermaid
 flowchart TD
-    PR[Pull Request to main]:::trigger --> CQ
-    PUSH[Push to main]:::trigger --> CQ
+    PR[Pull Request to main]:::trigger --> DET
+    PUSH[Push to main]:::trigger --> DET
 
+    DET[0. Detect Changes<br/>infra path filter] --> CQ
     CQ[1. Code Quality<br/>ESLint, Prettier, npm audit] --> SS[2. Security Scan<br/>Dependency Review, Secret Scanning]
     SS --> TST[3. Tests<br/>8 unit tests]
-    TST --> TFV[4. Terraform Validate<br/>fmt, init, validate, plan]
+    TST --> TFV{4. Terraform Validate<br/>run this job?}
+    TFV -- "push to main / infra changed" --> TFRUN[fmt, init, validate, plan]
+    TFV -. "app-only PR / Dependabot: skipped" .-> BLD
 
-    TFV -. OIDC AssumeRoleWithWebIdentity .-> AWS[(AWS<br/>eu-north-1)]:::aws
+    TFRUN -. OIDC AssumeRoleWithWebIdentity .-> AWS[(AWS<br/>eu-north-1)]:::aws
 
-    TFV --> GATE{Push to main?}
+    TFRUN --> GATE{Push to main?}
     GATE -- "PR only" --> STOP[Stop: plan posted as PR comment]:::stop
     GATE -- "yes" --> BLD[5. Build<br/>Lambda package]
     BLD --> DEP[6. Deploy<br/>terraform apply + Lambda update]
@@ -45,12 +50,21 @@ flowchart TD
 
 > AWS access is keyless: every AWS-touching job assumes the `portfolio-ankit-github-deploy` IAM role via GitHub OIDC (`id-token: write` + `AWS_ROLE_ARN`). No static AWS keys are stored.
 
+### Path-aware Terraform Validation
+
+The `detect-changes` job (using `dorny/paths-filter`) decides whether the Terraform job runs:
+
+- **Push to `main` / manual dispatch** — always runs, producing the plan the `deploy` job applies.
+- **Pull request** — runs only when infra files changed (`terraform/**`, `scripts/build-lambda.sh`, or `ci-cd.yml`). App-only PRs skip it, and the `build` gate accepts the skipped result.
+- **Dependabot PRs** — always skipped (read-only token cannot assume the AWS role via OIDC).
+
 | Stage | Job | What it does |
 |-------|-----|-------------|
+| 0 | `detect-changes` | Path filter: did infra files change? |
 | 1 | `code-quality` | ESLint, Prettier, npm audit |
 | 2 | `security-scan` | Dependency Review (GitHub Advisory DB) + Secret Scanning |
 | 3 | `test` | Unit tests (8 cases) |
-| 4 | `terraform-validate` | IaC format check + plan |
+| 4 | `terraform-validate` | IaC format check + plan (conditional) |
 | 5 | `build` | Lambda package creation |
 | 6 | `deploy` | Terraform apply + Lambda update |
 | 7 | `smoke-tests` | Post-deploy health checks |
@@ -87,8 +101,9 @@ Changes to `scripts/agent/**` do **not** trigger the main CI/CD pipeline (docs/a
 
 ## Dependabot
 
-- **npm** — Weekly Monday updates, grouped by dev/prod
-- **GitHub Actions** — Weekly Monday updates
+- **npm** — weekly Monday updates, grouped by dev/prod; minor + patch auto-merge, majors manual.
+- **GitHub Actions** — weekly Monday updates, grouped into one PR; all update types (including majors) auto-merge.
+- **Auto-merge** — `dependabot-automerge.yml` enables auto-merge (squash) once checks pass, gated on update type + ecosystem; requires the repo `Allow auto-merge` setting.
 - **Labels**: `dependencies`, `ci`
 - **PR limit**: 10 open PRs max
 

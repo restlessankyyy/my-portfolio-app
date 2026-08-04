@@ -1,0 +1,20 @@
+# Cloudflare DNS configuration for meet.ankitraj.cloud (Green Room).
+# Copy to terraform.tfvars and fill in. Do NOT commit terraform.tfvars.
+
+# Cloudflare API token with Zone:DNS:Edit for ankitraj.cloud (keep secret).
+cloudflare_api_token = "YOUR_CLOUDFLARE_API_TOKEN"
+
+# Cloudflare Zone ID for ankitraj.cloud.
+cloudflare_zone_id = "YOUR_ZONE_ID"
+
+# API Gateway default endpoint host from the AWS stack:
+#   terraform -chdir=green-room/terraform output -raw api_endpoint_host
+origin_host = "xxxxxxxxxx.execute-api.eu-north-1.amazonaws.com"
+
+# CI probe secret (shared with the GitHub Actions secret CF_PROBE_SECRET).
+# Generate a random value (e.g. openssl rand -hex 24). Leave empty to disable.
+ci_probe_secret = ""
+
+# Opt-in WAF bypass ruleset. Keep false unless the token has
+# Zone > Firewall Services > Edit.
+enable_ci_probe_ruleset = false

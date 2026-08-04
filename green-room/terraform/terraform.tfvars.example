@@ -1,0 +1,8 @@
+# Green Room deployment variables.
+# Copy to terraform.tfvars and customise. Do NOT commit terraform.tfvars.
+
+aws_region   = "eu-north-1"
+environment  = "prod"
+project_name = "portfolio-ankit-greenroom"
+
+domain_name = "meet.ankitraj.cloud"
