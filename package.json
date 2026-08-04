@@ -17,6 +17,8 @@
     "terraform:apply": "cd terraform && terraform apply",
     "test": "node tests/server.test.js",
     "test:ci": "npm test",
+    "generate-resume": "node scripts/agent/generate.js",
+    "bulk-apply": "node scripts/agent/bulk-apply.js",
     "lint": "eslint public/js/*.js --ignore-pattern '*.min.js'",
     "lint:fix": "eslint public/js/*.js --fix --ignore-pattern '*.min.js'",
     "format": "prettier --write public/js/*.js public/css/*.css",

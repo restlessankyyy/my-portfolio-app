@@ -55,17 +55,58 @@ A 4-agent AI system that generates ATS-optimized, tailored resume PDFs from a jo
 
 ```text
 scripts/agent/
-├── generate.js           # Orchestrator — CLI entry point
+├── generate.js           # Single-JD orchestrator — CLI entry point (CI-triggered)
+├── bulk-apply.js         # Batch orchestrator — many job URLs in one run
+├── pipeline.js           # Shared Agents 1-4 core, reused by both orchestrators
+├── pdf-render.js         # Shared puppeteer PDF renderer
+├── jd-fetcher.js         # Loads a job posting URL → extracted JD text (bulk-apply only)
 ├── jd-analyzer.js        # Agent 1: parse JD → requirements
 ├── experience-mapper.js  # Agent 2: map profile → JD bullets + skills grid
 ├── resume-writer.js      # Agent 3: enhance bullets (ENHANCE mode)
 ├── ats-scorer.js         # Agent 4: score resume vs JD (0-100)
+├── cover-letter-writer.js # Agent 5: draft cover letter (bulk-apply only)
+├── application-kit.js    # Builds the per-job assisted-fill review sheet
 ├── client.js             # Unified AI client (Azure OpenAI + Anthropic)
 ├── candidate-profile.yaml # Single source of truth for candidate data
 ├── estimate-tokens.js    # Token estimation utility
+├── jobs.example.txt      # Bulk Apply input format example (URLs)
+├── jobs.example.yaml     # Bulk Apply input format example (URLs + metadata)
 └── jds/                  # Job description text files (trigger pipeline)
     └── microsoft-csa.txt
 ```
+
+## Bulk Apply — Batch Mode
+
+`bulk-apply.js` runs the same 4 agents across a list of job posting URLs, plus a 5th agent for a cover letter, and writes review-ready output per job to `applications/<company-role-slug>/` (gitignored — these are personal drafts, not part of the deployed portfolio site under `public/`):
+
+```text
+applications/<slug>/
+├── jd.txt                 # Extracted job description text
+├── resume.pdf              # Tailored resume
+├── cover-letter.pdf        # Tailored cover letter
+├── ats-report.json         # Score + keyword coverage
+└── application-kit.json    # Contact info, doc paths, key skills — fields
+                             # needing a human decision (salary, work auth,
+                             # start date, relocation) are always left null
+applications/manifest.json  # Tracker for every job run (status, score, path)
+```
+
+```bash
+# jobs.txt: one job posting URL per line ('#' comments OK)
+node scripts/agent/bulk-apply.js --input scripts/agent/jobs.txt
+
+# Full options
+node scripts/agent/bulk-apply.js \
+  --input <path>       # jobs.txt (one URL/line) or jobs.yaml ({ jobs: [{url, company?, role?}] })
+  --model <model>       # AI model (default: claude-sonnet-4-20250514)
+  --max-loops <n>       # Max ATS feedback iterations per job (default: 2)
+  --threshold <n>       # ATS score target (default: 80)
+  --delay <ms>          # Delay between jobs, be polite to target sites (default: 3000)
+  --out-dir <path>      # Output root (default: ./applications)
+  --verbose             # Print intermediate agent outputs
+```
+
+**This tool never logs into a job board and never submits an application.** It loads the public posting page (via puppeteer, same as a browser would), tailors documents from `candidate-profile.yaml`, and stops at a reviewable draft. You check each `application-kit.json` + PDF pair and apply yourself on the employer's site. A failed job (bad URL, login-gated posting, JD too short to parse) is recorded in `manifest.json` with `status: "failed"` and the run continues with the next job.
 
 ## AI Providers
 

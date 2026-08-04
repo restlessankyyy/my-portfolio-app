@@ -1,0 +1,10 @@
+# Bulk Apply — job list with optional metadata overrides.
+# company/role are only used as a fallback if JD analysis can't extract them.
+#
+# Copy this file (e.g. to jobs.yaml, gitignored) and fill in real posting URLs:
+
+jobs:
+  - url: https://boards.greenhouse.io/example-co/jobs/1234567
+  - url: https://jobs.lever.co/example-co/abcdef12-3456-7890
+    company: Example Co
+    role: Senior Cloud Architect

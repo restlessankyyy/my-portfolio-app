@@ -147,3 +147,10 @@ modernise.js
 
 # Accidentally nested git repo (not a submodule)
 restlessankyyy/
+
+# Bulk Apply — personal, per-employer application drafts (resumes, cover
+# letters, fetched JD text, application kits). Not part of the public site.
+/applications/
+scripts/agent/jobs.txt
+scripts/agent/jobs.yaml
+scripts/agent/jobs.yml
