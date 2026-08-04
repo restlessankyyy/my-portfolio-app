@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ankit Raj - Lead Platform Engineer Resume</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 10.2px; }
+  body {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    color: #1a1a1a;
+    line-height: 1.45;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 38px;
+  }
+
+  /* -- Header -- */
+  .header { text-align: center; margin-bottom: 10px; border-bottom: 2.5px solid #111; padding-bottom: 7px; }
+  .header h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+  .header .subtitle { font-size: 1.05rem; color: #333; font-weight: 600; margin-top: 2px; }
+  .contact-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 3px 12px; font-size: 0.88rem; color: #444; margin-top: 4px; }
+  .contact-row a { color: #e50010; text-decoration: none; }
+  .contact-row span { white-space: nowrap; }
+
+  /* -- Sections -- */
+  .section { margin-bottom: 9px; }
+  .section-title {
+    font-size: 0.92rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.14em; color: #111;
+    border-bottom: 1.5px solid #d0d0d0; padding-bottom: 3px; margin-bottom: 6px;
+  }
+
+  /* -- Summary -- */
+  .summary { font-size: 0.93rem; color: #222; line-height: 1.42; }
+
+  /* -- Experience -- */
+  .job { margin-bottom: 8px; break-inside: avoid; page-break-inside: avoid; }
+  .job-header { display: flex; justify-content: space-between; align-items: baseline; }
+  .job-title { font-size: 0.94rem; font-weight: 600; color: #111; }
+  .job-date { font-size: 0.84rem; color: #666; font-weight: 500; white-space: nowrap; }
+  .job-company { font-size: 0.89rem; color: #e50010; font-weight: 500; margin-bottom: 1px; }
+  .job ul { padding-left: 15px; }
+  .job li { font-size: 0.87rem; color: #222; margin-bottom: 1.5px; line-height: 1.4; }
+
+  /* -- Skills -- */
+  .skills-grid { break-inside: avoid; }
+  .skill-row { display: flex; gap: 6px; font-size: 0.88rem; margin-bottom: 2px; }
+  .skill-label { font-weight: 600; color: #111; min-width: 165px; }
+  .skill-value { color: #333; }
+
+  /* -- Certs -- */
+  .certs-list { padding-left: 15px; }
+  .certs-list li { font-size: 0.87rem; color: #222; margin-bottom: 1.5px; }
+
+  /* -- Education -- */
+  .edu-header { display: flex; justify-content: space-between; align-items: baseline; }
+  .edu-title { font-size: 0.94rem; font-weight: 600; }
+  .edu-date { font-size: 0.84rem; color: #666; }
+  .edu-school { font-size: 0.89rem; color: #e50010; font-weight: 500; }
+
+  /* -- Print -- */
+  @media print {
+    html { font-size: 10.2px; }
+    body { background: none; }
+    .page { padding: 14px 34px; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Ankit Raj</h1>
+    <div class="subtitle">Senior Technical Engineer - GISC</div>
+    <div class="contact-row">
+      <span>Stockholm, Sweden</span>
+      <span>|</span>
+      <span><a href="mailto:ankit.raj@hm.com">ankit.raj@hm.com</a></span>
+      <span>|</span>
+      <span><a href="https://github.com/ankit-raj_hmgroup">github.com/ankit-raj_hmgroup</a></span>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="section">
+    <div class="section-title">Professional Summary</div>
+    <p class="summary">Platform engineering leader with 10+ years building, automating, and operating hosting platforms at scale across hybrid environments - Azure, Google Cloud, and on-premises datacenters. I turn architectural vision into working services: cloud-native and containerised platforms, infrastructure-as-code, and self-service developer experiences that let 200+ product teams ship faster. Hands-on across Kubernetes, Terraform, Ansible, and CI/CD, with a strong track record driving legacy-to-cloud-native transitions, FinOps-led cost optimisation (35% reduction), and secure-by-design platforms aligned to PCI-DSS, GDPR, and ISO 27001. I pair strong execution with stakeholder engagement, partnering with architects, product owners, security, and FinOps to align hosting capabilities with business, digital, and sustainability goals.</p>
+  </div>
+
+  <!-- CORE COMPETENCIES -->
+  <div class="section">
+    <div class="section-title">Core Competencies</div>
+    <div class="skills-grid">
+      <div class="skill-row"><span class="skill-label">Platform Engineering</span><span class="skill-value">Internal Developer Platforms, Self-Service Provisioning, Golden-Path Stacks, Reusable Reference Patterns, Developer Experience</span></div>
+      <div class="skill-row"><span class="skill-label">Hybrid Hosting</span><span class="skill-value">Microsoft Azure, Google Cloud, On-Premises Datacenters, Virtualisation, Hybrid Connectivity, Legacy-to-Cloud-Native Migration</span></div>
+      <div class="skill-row"><span class="skill-label">Containers &amp; Orchestration</span><span class="skill-value">Kubernetes (AKS, GKE, OpenShift), Docker, Helm, Service Mesh, Auto-Scaling</span></div>
+      <div class="skill-row"><span class="skill-label">IaC &amp; Automation</span><span class="skill-value">Terraform, Ansible, GitHub Actions, Azure DevOps, CI/CD Pipelines, GitOps</span></div>
+      <div class="skill-row"><span class="skill-label">FinOps &amp; Optimisation</span><span class="skill-value">Cost Optimisation, Right-Sizing, Demand Forecasting, Reserved Capacity, Cloud Spend Governance</span></div>
+      <div class="skill-row"><span class="skill-label">Security &amp; Compliance</span><span class="skill-value">Secure-by-Design, PCI-DSS, GDPR, ISO 27001, Zero Trust, RBAC, Policy-as-Code</span></div>
+      <div class="skill-row"><span class="skill-label">Data &amp; Analytics</span><span class="skill-value">Microsoft Fabric, BigQuery, Real-Time Analytics, Platform Observability (ELK, Grafana, Prometheus)</span></div>
+      <div class="skill-row"><span class="skill-label">Leadership &amp; Advisory</span><span class="skill-value">Technical Roadmaps, Strategic Planning &amp; Execution, Stakeholder Engagement, Governance Frameworks, Mentoring</span></div>
+    </div>
+  </div>
+
+  <!-- PROFESSIONAL EXPERIENCE -->
+  <div class="section">
+    <div class="section-title">Professional Experience</div>
+
+    <!-- Role 1 -->
+    <div class="job">
+      <div class="job-header">
+        <span class="job-title">Senior Technical Engineer - GISC</span>
+        <span class="job-date">2025 - Present</span>
+      </div>
+      <div class="job-company">H&amp;M Group, Stockholm</div>
+      <ul>
+        <li>Drive technical execution of the enterprise hosting strategy across Azure, Google Cloud, and on-premises datacenters - translating long-term business, digital, and sustainability goals into an actionable technical roadmap for 200+ product teams</li>
+        <li>Led cloud observability for the Mozart, Google Cloud, and Azure platforms on Microsoft Fabric - unified telemetry, dashboards, and alerting across the hybrid estate</li>
+        <li>Built an AI-powered coding platform for focus groups - accelerating team transition to managed services and improving developer productivity</li>
+        <li>Led a SonarQube proof-of-concept - establishing code quality gates, static analysis, and security scanning integrated into CI/CD pipelines across teams</li>
+        <li>Led a GenAI proof-of-concept for engineering productivity - evaluating LLM-assisted workflows for code, documentation, and operational tasks</li>
+        <li>Established enterprise governance frameworks - policies, security baselines, RBAC, and compliance controls across 1600+ subscriptions, partnering with cybersecurity teams on secure-by-design hosting</li>
+        <li>Built enterprise data and analytics foundations on Microsoft Fabric - governed, self-service access enabling analytics and reporting across business units</li>
+        <li>Mentored and upskilled 8+ engineers and architects on platform design, IaC, and operational excellence - helping new PMs and engineers understand the product lifecycle and promoting a culture of continuous improvement</li>
+      </ul>
+    </div>
+
+    <!-- Role 2 -->
+    <div class="job">
+      <div class="job-header">
+        <span class="job-title">Senior Platform Engineer - Azure Engineering</span>
+        <span class="job-date">2022 - 2025</span>
+      </div>
+      <div class="job-company">H&amp;M Group, Stockholm</div>
+      <ul>
+        <li>Engineered the platform backbone on Azure - achieving 99.9% uptime SLA for 200+ product teams across global operations</li>
+        <li>Led a multi-million SEK FinOps programme with the FinOps team - right-sizing, reserved capacity, demand forecasting, and automated governance reducing cloud spend by 35%</li>
+        <li>Designed and built an Internal Developer Platform with self-service provisioning (EventGrid + Functions) - reducing team onboarding from days to minutes and accelerating product delivery</li>
+        <li>Automated infrastructure and platform operations with Terraform and CI/CD, embedding DevOps practices and self-service golden paths across teams</li>
+        <li>Conducted deep-dive architecture reviews and design exercises, creating reusable patterns and best-practice guidance for cross-team adoption</li>
+      </ul>
+    </div>
+
+    <!-- Role 3 -->
+    <div class="job">
+      <div class="job-header">
+        <span class="job-title">Senior Software Engineer - Integrations Platform</span>
+        <span class="job-date">2020 - 2022</span>
+      </div>
+      <div class="job-company">H&amp;M Group, Stockholm</div>
+      <ul>
+        <li>Led HAPI integration platform infrastructure development on Azure API Management - handling 2 billion+ requests during peak sales with high availability and auto-scaling</li>
+        <li>Led the transition from legacy infrastructure to cloud-native, containerised platforms - standardising Kubernetes (AKS, GKE), Terraform IaC, and DevOps automation to enable self-service and agility</li>
+        <li>Designed Zero Trust microservices architecture - 15+ services with sub-100ms p99 latency, demonstrating deep infrastructure and networking expertise</li>
+        <li>Built high-throughput GraphQL &amp; REST APIs handling 50K+ RPM on Azure + GKE with automated scaling and rate limiting</li>
+        <li>Led CI/CD standardisation using GitHub Actions across 200+ repositories - 95% pipeline success rate, establishing DevOps best practices at enterprise scale</li>
+        <li>Resolved complex reliability issues through root-cause analysis across distributed systems, improving platform stability and developer experience</li>
+      </ul>
+    </div>
+
+    <!-- Role 4 -->
+    <div class="job">
+      <div class="job-header">
+        <span class="job-title">Cloud Architect - AML/KYC Modernisation</span>
+        <span class="job-date">2020</span>
+      </div>
+      <div class="job-company">Cognizant Technology Solutions - Ikano Bank, Stockholm</div>
+      <ul>
+        <li>Architected and delivered proof-of-concept migration of AML &amp; KYC APIs from an on-premises datacenter (Axway API gateway) to AWS serverless - reducing latency by 70%</li>
+        <li>Designed the hybrid migration path from on-prem infrastructure to event-driven cloud services (Lambda, API Gateway, DynamoDB) processing 500K+ daily financial transactions with Terraform IaC</li>
+        <li>Managed on-prem to cloud connectivity, identity migration (Curity to AWS Cognito, OAuth 2.0/OIDC), and multi-account governance with AWS Organisations and CloudWatch observability</li>
+        <li>Built CI/CD with GitHub Actions and Terraform replacing legacy manual datacenter deployments - deployment frequency increased 10x with automated quality gates</li>
+        <li>Authored migration playbooks and ADRs enabling the bank's internal teams to continue the modernisation programme independently</li>
+      </ul>
+    </div>
+
+    <!-- Role 5 -->
+    <div class="job">
+      <div class="job-header">
+        <span class="job-title">DevOps Lead - Automotive</span>
+        <span class="job-date">2019 - 2020</span>
+      </div>
+      <div class="job-company">Volvo Cars, Gothenburg</div>
+      <ul>
+        <li>Led DevOps and platform delivery for engineering teams - designing and operating an enterprise observability platform (ELK, Grafana, Prometheus) on AKS monitoring 100+ automotive microservices</li>
+        <li>Operated hybrid infrastructure across on-premises datacenters and cloud - managing CI/CD pipelines for on-prem OpenShift &amp; Kubernetes clusters and reducing deployment cycle time from hours to 15 minutes</li>
+        <li>Managed datacenter capacity, virtualisation, and cluster lifecycle for production automotive workloads - authoring runbooks and incident response achieving 99.5% SLA compliance</li>
+        <li>Partnered with cross-functional teams to resolve infrastructure bottlenecks, translating automotive requirements into optimised hybrid hosting solutions</li>
+      </ul>
+    </div>
+
+    <!-- Role 6 -->
+    <div class="job">
+      <div class="job-header">
+        <span class="job-title">Cloud DevOps Engineer to Cloud Developer</span>
+        <span class="job-date">2016 - 2019</span>
+      </div>
+      <div class="job-company">Cognizant Technology Solutions</div>
+      <ul>
+        <li>Designed and implemented AWS cloud architectures for 5+ enterprise clients - CI/CD pipelines with CodePipeline, Docker, ECS/Fargate across diverse verticals</li>
+        <li>Automated server configuration and application deployments with Ansible playbooks - standardising provisioning across on-prem and cloud environments and reducing manual configuration effort</li>
+        <li>Automated resource tagging and policy governance across AWS and Azure using AWS Config Rules, Azure Policy, and Lambda - ensuring compliance and cost attribution</li>
+        <li>Won 1st place at Enterprise AWS Game Day 2018 (200+ participants) and led knowledge transfer building cloud fluency across client teams</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CERTIFICATIONS -->
+  <div class="section">
+    <div class="section-title">Certifications</div>
+    <ul class="certs-list">
+      <li><strong>AWS Certified DevOps Engineer - Professional</strong></li>
+      <li><strong>AWS Certified Developer - Associate</strong></li>
+      <li><strong>Google Cloud Certified - Associate Cloud Engineer</strong></li>
+      <li><strong>Microsoft Certified Professional (MCP) - Exam 533: Azure Infrastructure</strong></li>
+      <li><strong>Microsoft Certified: Azure Fundamentals (AZ-900)</strong></li>
+      <li>Microsoft OpenHack: AI-Powered Knowledge Mining &middot; Containers &middot; Security, Compliance &amp; Identity &middot; DevOps</li>
+      <li>Google India Udacity Scholar</li>
+    </ul>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="section">
+    <div class="section-title">Education</div>
+    <div class="edu-header">
+      <span class="edu-title">Bachelor of Technology - Computer Science &amp; Engineering</span>
+      <span class="edu-date">2012 - 2016</span>
+    </div>
+    <div class="edu-school">Galgotias University, Greater Noida, India</div>
+    <p style="font-size:0.87rem;color:#333;margin-top:2px">Specialisation in Cloud Computing &amp; Virtualisation.</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "servers": {
+    "aws-billing-cost": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["awslabs.billing-cost-management-mcp-server@latest"],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR",
+        "AWS_REGION": "eu-north-1"
+      }
+    },
+    "aws-pricing": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["awslabs.aws-pricing-mcp-server@latest"],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR",
+        "AWS_REGION": "eu-north-1"
+      }
+    }
+  }
+}
