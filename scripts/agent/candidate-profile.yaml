@@ -85,31 +85,6 @@ experience:
         tags: [enterprise-architecture, strategic-planning, technical-excellence]
         metrics: {}
 
-  - title: Lead Cloud Architect - AML/KYC Modernisation
-    company: Ikano Bank
-    location: Stockholm
-    dates: "2025 - 2026"
-    tags: [cloud-architecture, serverless, ai, migration, technical-delivery, financial-services]
-    bullets:
-      - text: "Led end-to-end cloud migration of AML & KYC APIs from on-premises monolith to serverless architecture - reduced latency by 70% and improved system resilience"
-        tags: [end-to-end-delivery, cloud-migration, technical-blockers, scalable, resilient]
-        metrics: { latency_reduction_pct: 70 }
-      - text: "Designed scalable, flexible architecture using Lambda, Fargate, API Gateway, DynamoDB, and Step Functions - handling 500K+ daily financial transactions with Terraform IaC"
-        tags: [architecture-design, scalable, secure, infrastructure-as-code, terraform]
-        metrics: { daily_transactions: 500000 }
-      - text: "Built LLM-powered autonomous migration agent using Bedrock + Claude for automated API policy conversion, code analysis, and IaC scaffolding - cutting migration delivery time by 60%"
-        tags: [ai, genai, repeatable-ip, delivery-acceleration, production-scale-ai]
-        metrics: { delivery_time_reduction_pct: 60 }
-      - text: "Architected prompt engineering framework with chain-of-thought templates - reusable components accelerating implementation across parallel workstreams"
-        tags: [repeatable-ip, ai, delivery-acceleration]
-        metrics: {}
-      - text: "Delivered proof-of-concept demonstrations to executive stakeholders showcasing serverless cost savings and performance improvements, driving consensus for full cloud adoption"
-        tags: [executive-stakeholders, delivery-proposals, customer-facing, azure-adoption]
-        metrics: {}
-      - text: "Established CI/CD pipeline with GitHub Actions replacing legacy manual deployments - deployment frequency increased 10x"
-        tags: [github, ci-cd, devops, technical-excellence]
-        metrics: { deployment_frequency_increase: "10x" }
-
   - title: Lead Software Engineer - Platform Engineering
     company: H&M Group
     location: Stockholm
@@ -148,8 +123,27 @@ experience:
         tags: [technical-blockers, technical-excellence, performance, resilient]
         metrics: {}
 
-  - title: DevOps Engineer Consultant - Automotive
-    company: Volvo Cars
+  - title: Cloud Solutions Architect Consultant - FSI Data & AI
+    company: Cognizant - Ikano Bank
+    location: Stockholm
+    dates: "2019 - 2020"
+    tags: [consulting, cloud-architecture, serverless, data, integration, migration, financial-services, customer-facing]
+    bullets:
+      - text: "Strategic technical advisor to a financial services client - architected migration of AML & KYC data and APIs from on-premises to a serverless, event-driven platform, reducing latency by 70%"
+        tags: [trusted-advisor, customer-facing, cloud-migration, event-driven, financial-services, end-to-end-delivery]
+        metrics: { latency_reduction_pct: 70 }
+      - text: "Designed scalable data and integration architecture (Lambda, API Gateway, DynamoDB, Step Functions) handling 500K+ daily transactions with Terraform IaC and CloudWatch observability"
+        tags: [architecture-design, scalable, data, integration, infrastructure-as-code, terraform]
+        metrics: { daily_transactions: 500000 }
+      - text: "Designed a scripted, rules-based automation framework for code and API policy conversion - reusable IP that cut migration delivery time by 60% through templated, repeatable tooling"
+        tags: [repeatable-ip, automation, delivery-acceleration]
+        metrics: { delivery_time_reduction_pct: 60 }
+      - text: "Delivered executive proof-of-concept demonstrations, driving alignment and commitment for full cloud and data adoption under shifting priorities"
+        tags: [executive-stakeholders, delivery-proposals, customer-facing]
+        metrics: {}
+
+  - title: Cloud Solutions Architect Consultant - Automotive
+    company: Cognizant - Volvo Cars
     location: Gothenburg
     dates: "2019 - 2020"
     tags: [consulting, customer-facing, aks, kubernetes, observability, automotive]
