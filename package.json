@@ -55,7 +55,7 @@
     "openai": "^6.49.0",
     "prettier": "^3.9.6",
     "puppeteer": "^24.37.5",
-    "serverless": "^4.40.0",
+    "serverless": "^4.41.1",
     "serverless-http": "^4.0.0",
     "uglify-js": "^3.17.0"
   },
