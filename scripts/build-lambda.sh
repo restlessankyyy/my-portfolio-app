@@ -28,10 +28,10 @@ cat > .lambda-build/package.json << EOF
   "version": "2.0.0",
   "main": "lambda.js",
   "dependencies": {
-    "express": "^4.18.2",
+    "express": "^4.22.3",
     "@vendia/serverless-express": "^4.12.6",
-    "helmet": "^8.0.0",
-    "express-rate-limit": "^7.0.0"
+    "helmet": "^8.3.0",
+    "express-rate-limit": "^8.7.1"
   }
 }
 EOF
