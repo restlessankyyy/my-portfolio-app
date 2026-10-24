@@ -78,14 +78,21 @@ This repository implements an **enterprise-grade CI/CD pipeline** using GitHub A
 
 ### 5. Release (`release.yml`)
 
-**Manual CalVer releases (`vYYYY.MAJOR.MINOR`):**
+**CalVer releases (`vYYYY.MAJOR.MINOR`):**
 
-- Run from **Actions → 🏷️ Release → Run workflow** on `main`
 - `major` → `vYYYY.(MAJOR+1).0`, `minor` → `vYYYY.MAJOR.(MINOR+1)`
 - First release of each calendar year is `vYYYY.1.0`
 - Creates the tag and a GitHub Release with generated notes (categories in `.github/release.yml`)
-- Dry run computes the version without creating anything
-- Preview locally: `git fetch --tags && scripts/next-version.sh minor`
+
+**Automatic:** after the CI/CD Pipeline successfully deploys a push to `main`
+
+- Skipped when only bot commits (`[bot]` authors or `[skip ci]`) landed since the last release
+- `major` if a human commit is marked breaking (`feat!: ...` or `BREAKING CHANGE:` in the body), otherwise `minor`
+
+**Manual:** **Actions → 🏷️ Release → Run workflow** on `main`
+
+- Choose `major` or `minor`; dry run computes the version without creating anything
+- Preview locally: `git fetch --tags && scripts/release-type.sh origin/main <last-tag>` and `scripts/next-version.sh minor`
 
 ## 🔧 Setup
 

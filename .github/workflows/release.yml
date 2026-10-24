@@ -1,9 +1,15 @@
 name: 🏷️ Release
 
-# Manually cut a CalVer release: vYYYY.MAJOR.MINOR
+# Cut a CalVer release: vYYYY.MAJOR.MINOR
 #   major -> vYYYY.(MAJOR+1).0
 #   minor -> vYYYY.MAJOR.(MINOR+1)
 # The first release of each calendar year is vYYYY.1.0.
+#
+# Manual: choose major or minor from the Actions tab.
+# Automatic: after the CI/CD Pipeline deploys a push to main. Skipped when
+# only bot commits landed since the last release; major when a human commit
+# is marked breaking (type!: or BREAKING CHANGE), otherwise minor.
+#
 # Creates the tag and a GitHub Release with generated notes; no commits are
 # pushed, so branch protection on main is unaffected.
 
@@ -24,6 +30,11 @@ on:
         type: boolean
         default: false
 
+  workflow_run:
+    workflows: ['🚀 CI/CD Pipeline']
+    types: [completed]
+    branches: [main]
+
 permissions:
   contents: write
 
@@ -36,6 +47,11 @@ jobs:
   release:
     name: 🏷️ Create Release
     runs-on: ubuntu-latest
+    # Automatic runs only follow successful pipeline runs for pushes to main
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push')
     steps:
       - name: 🛑 Require main branch
         if: github.ref != 'refs/heads/main'
@@ -52,15 +68,33 @@ jobs:
       - name: 🔢 Compute Version
         id: version
         env:
-          RELEASE_TYPE: ${{ inputs.release_type }}
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TYPE: ${{ inputs.release_type }}
+          # workflow_run executes on the latest main; release the commit that was deployed
+          TARGET: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
-          VERSION=$(scripts/next-version.sh "$RELEASE_TYPE")
-
           # Most recent CalVer tag across all years, used as the notes baseline
           PREVIOUS=$(git tag --list 'v*' \
             | grep -E '^v[0-9]{4}\.[0-9]+\.[0-9]+$' \
             | sort -t. -k1.2,1n -k2,2n -k3,3n \
             | tail -n 1 || true)
+
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            RELEASE_TYPE="$INPUT_TYPE"
+          else
+            RELEASE_TYPE=$(scripts/release-type.sh "$TARGET" "$PREVIOUS")
+          fi
+
+          echo "previous=${PREVIOUS}" >> "$GITHUB_OUTPUT"
+          echo "target=${TARGET}" >> "$GITHUB_OUTPUT"
+          echo "type=${RELEASE_TYPE}" >> "$GITHUB_OUTPUT"
+
+          if [ "$RELEASE_TYPE" = "none" ]; then
+            echo "⏭️ No human commits since ${PREVIOUS:-the beginning}; skipping release"
+            exit 0
+          fi
+
+          VERSION=$(scripts/next-version.sh "$RELEASE_TYPE")
 
           if git rev-parse -q --verify "refs/tags/${VERSION}" >/dev/null; then
             echo "::error::Tag ${VERSION} already exists"
@@ -68,36 +102,39 @@ jobs:
           fi
 
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-          echo "previous=${PREVIOUS}" >> "$GITHUB_OUTPUT"
-          echo "🔢 ${RELEASE_TYPE} release: ${PREVIOUS:-none} -> ${VERSION}"
+          echo "🔢 ${RELEASE_TYPE} release: ${PREVIOUS:-none} -> ${VERSION} (${TARGET::8})"
 
       - name: 🚀 Create GitHub Release
-        if: ${{ !inputs.dry_run }}
+        if: ${{ steps.version.outputs.version != '' && !inputs.dry_run }}
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.version }}
           PREVIOUS: ${{ steps.version.outputs.previous }}
+          TARGET: ${{ steps.version.outputs.target }}
         run: |
-          ARGS=(--target "$GITHUB_SHA" --title "$VERSION" --generate-notes)
+          ARGS=(--target "$TARGET" --title "$VERSION" --generate-notes)
           if [ -n "$PREVIOUS" ]; then
             ARGS+=(--notes-start-tag "$PREVIOUS")
           fi
           gh release create "$VERSION" "${ARGS[@]}"
 
       - name: 📊 Release Summary
-        if: always() && steps.version.outputs.version != ''
+        if: always() && steps.version.outputs.type != ''
         env:
-          RELEASE_TYPE: ${{ inputs.release_type }}
-          DRY_RUN: ${{ inputs.dry_run }}
+          EVENT_NAME: ${{ github.event_name }}
+          RELEASE_TYPE: ${{ steps.version.outputs.type }}
+          DRY_RUN: ${{ inputs.dry_run || false }}
           VERSION: ${{ steps.version.outputs.version }}
           PREVIOUS: ${{ steps.version.outputs.previous }}
+          TARGET: ${{ steps.version.outputs.target }}
         run: |
-          echo "## 🏷️ Release ${VERSION}" >> $GITHUB_STEP_SUMMARY
+          echo "## 🏷️ Release ${VERSION:-skipped}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Trigger | ${EVENT_NAME} |" >> $GITHUB_STEP_SUMMARY
           echo "| Type | ${RELEASE_TYPE} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Version | ${VERSION} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Version | ${VERSION:-none} |" >> $GITHUB_STEP_SUMMARY
           echo "| Previous | ${PREVIOUS:-none} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Commit | ${GITHUB_SHA::8} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | ${TARGET::8} |" >> $GITHUB_STEP_SUMMARY
           echo "| Dry Run | ${DRY_RUN} |" >> $GITHUB_STEP_SUMMARY
