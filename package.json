@@ -15,7 +15,7 @@
     "terraform:init": "cd terraform && terraform init",
     "terraform:plan": "cd terraform && terraform plan",
     "terraform:apply": "cd terraform && terraform apply",
-    "test": "node tests/server.test.js",
+    "test": "node tests/server.test.js && node tests/lambda.test.js",
     "test:ci": "npm test",
     "lint": "eslint public/js/*.js --ignore-pattern '*.min.js'",
     "lint:fix": "eslint public/js/*.js --fix --ignore-pattern '*.min.js'",
