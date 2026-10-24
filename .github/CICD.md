@@ -76,6 +76,17 @@ This repository implements an **enterprise-grade CI/CD pipeline** using GitHub A
 - Lambda-only updates
 - Infrastructure-only updates
 
+### 5. Release (`release.yml`)
+
+**Manual CalVer releases (`vYYYY.MAJOR.MINOR`):**
+
+- Run from **Actions → 🏷️ Release → Run workflow** on `main`
+- `major` → `vYYYY.(MAJOR+1).0`, `minor` → `vYYYY.MAJOR.(MINOR+1)`
+- First release of each calendar year is `vYYYY.1.0`
+- Creates the tag and a GitHub Release with generated notes (categories in `.github/release.yml`)
+- Dry run computes the version without creating anything
+- Preview locally: `git fetch --tags && scripts/next-version.sh minor`
+
 ## 🔧 Setup
 
 ### Required GitHub Secrets
