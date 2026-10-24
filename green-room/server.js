@@ -47,8 +47,9 @@ app.get('/health', (req, res) => {
 const publicDir = path.join(__dirname, 'public');
 app.use(express.static(publicDir, { maxAge: '1h', extensions: ['html'] }));
 
-// SPA fallback: any unmatched GET returns index.html.
-app.get('*', (req, res) => {
+// SPA fallback: any unmatched GET returns index.html. Express 5 requires a
+// named wildcard; the braces make it optional so "/" also matches.
+app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(publicDir, 'index.html'));
 });
 
