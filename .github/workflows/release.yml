@@ -1,0 +1,103 @@
+name: 🏷️ Release
+
+# Manually cut a CalVer release: vYYYY.MAJOR.MINOR
+#   major -> vYYYY.(MAJOR+1).0
+#   minor -> vYYYY.MAJOR.(MINOR+1)
+# The first release of each calendar year is vYYYY.1.0.
+# Creates the tag and a GitHub Release with generated notes; no commits are
+# pushed, so branch protection on main is unaffected.
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type'
+        required: true
+        type: choice
+        options:
+          - minor
+          - major
+        default: minor
+      dry_run:
+        description: 'Dry run (compute the version only, do not create the release)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# Two releases computed at once would pick the same tag.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: 🏷️ Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Require main branch
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Releases can only be created from main (got ${GITHUB_REF})"
+          exit 1
+
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: 🔢 Compute Version
+        id: version
+        env:
+          RELEASE_TYPE: ${{ inputs.release_type }}
+        run: |
+          VERSION=$(scripts/next-version.sh "$RELEASE_TYPE")
+
+          # Most recent CalVer tag across all years, used as the notes baseline
+          PREVIOUS=$(git tag --list 'v*' \
+            | grep -E '^v[0-9]{4}\.[0-9]+\.[0-9]+$' \
+            | sort -t. -k1.2,1n -k2,2n -k3,3n \
+            | tail -n 1 || true)
+
+          if git rev-parse -q --verify "refs/tags/${VERSION}" >/dev/null; then
+            echo "::error::Tag ${VERSION} already exists"
+            exit 1
+          fi
+
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "previous=${PREVIOUS}" >> "$GITHUB_OUTPUT"
+          echo "🔢 ${RELEASE_TYPE} release: ${PREVIOUS:-none} -> ${VERSION}"
+
+      - name: 🚀 Create GitHub Release
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          PREVIOUS: ${{ steps.version.outputs.previous }}
+        run: |
+          ARGS=(--target "$GITHUB_SHA" --title "$VERSION" --generate-notes)
+          if [ -n "$PREVIOUS" ]; then
+            ARGS+=(--notes-start-tag "$PREVIOUS")
+          fi
+          gh release create "$VERSION" "${ARGS[@]}"
+
+      - name: 📊 Release Summary
+        if: always() && steps.version.outputs.version != ''
+        env:
+          RELEASE_TYPE: ${{ inputs.release_type }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          VERSION: ${{ steps.version.outputs.version }}
+          PREVIOUS: ${{ steps.version.outputs.previous }}
+        run: |
+          echo "## 🏷️ Release ${VERSION}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Type | ${RELEASE_TYPE} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Version | ${VERSION} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Previous | ${PREVIOUS:-none} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | ${GITHUB_SHA::8} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dry Run | ${DRY_RUN} |" >> $GITHUB_STEP_SUMMARY

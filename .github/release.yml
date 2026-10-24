@@ -1,0 +1,18 @@
+# Categories for GitHub's generated release notes (used by workflows/release.yml)
+changelog:
+  categories:
+    - title: 🚀 Features
+      labels:
+        - enhancement
+    - title: 🐛 Fixes
+      labels:
+        - bug
+    - title: 📦 Dependencies
+      labels:
+        - dependencies
+    - title: ⚙️ CI
+      labels:
+        - ci
+    - title: 📝 Other Changes
+      labels:
+        - '*'
