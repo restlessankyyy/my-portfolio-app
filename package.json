@@ -37,11 +37,11 @@
   "author": "Ankit Raj <rajankit749@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@anthropic-ai/sdk": "^1.8.0",
-    "@aws-sdk/client-ses": "^3.1168.0",
+    "@anthropic-ai/sdk": "^1.11.0",
+    "@aws-sdk/client-ses": "^3.1173.0",
     "@vendia/serverless-express": "^4.12.6",
     "express": "^4.22.3",
-    "express-rate-limit": "^8.7.4",
+    "express-rate-limit": "^8.7.5",
     "helmet": "^8.3.0"
   },
   "devDependencies": {
