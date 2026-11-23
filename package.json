@@ -52,9 +52,9 @@
     "http-server": "^14.1.0",
     "js-yaml": "^5.5.0",
     "nodemon": "^3.0.0",
-    "openai": "^7.56.0",
+    "openai": "^7.62.0",
     "prettier": "^3.10.1",
-    "puppeteer": "^25.17.0",
+    "puppeteer": "^25.18.1",
     "serverless": "^4.46.0",
     "serverless-http": "^4.0.0",
     "uglify-js": "^3.17.0"
